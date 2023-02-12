@@ -3,7 +3,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
-
+import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
 import javax.ws.rs.core.Response;
 
 public class IdentityVerificationProviderService {
@@ -11,7 +11,7 @@ public class IdentityVerificationProviderService {
     public void deleteIDV(String identityVerificationProviderId) {
 
         try {
-            IdentityProviderServiceHolder.getIdentityProviderManager().deleteIdPByResourceId(identityProviderId,
+            IdVProviderServiceHolder.getIdVProviderManager().deleteIdPByResourceId(identityProviderId,
                     ContextLoader.getTenantDomainFromContext());
         } catch (IdentityProviderManagementException e) {
             throw handleIdPException(e, Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDP, identityProviderId);

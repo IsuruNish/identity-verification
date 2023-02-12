@@ -2,11 +2,11 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
-import org.wso2.carbon.extension.identity.v1.provider.mgt.api.rest.v1.model.VerificationClaimResponse;
-import org.wso2.carbon.extension.identity.v1.provider.mgt.api.rest.v1.model.VerificationGetResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
-import org.wso2.carbon.extension.identity.v1.provider.mgt.api.rest.v1.model.VerificationPostRequest;
-import org.wso2.carbon.extension.identity.v1.provider.mgt.api.rest.v1.model.VerificationPostResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 
 import javax.ws.rs.core.Response;
 

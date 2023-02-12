@@ -80,6 +80,12 @@
             <version>${jackson-jaxrs-json-provider.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.verification.provider.mgt</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

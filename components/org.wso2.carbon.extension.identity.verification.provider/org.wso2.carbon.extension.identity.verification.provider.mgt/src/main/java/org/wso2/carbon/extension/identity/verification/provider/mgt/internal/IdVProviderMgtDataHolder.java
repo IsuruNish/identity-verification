@@ -1,25 +1,32 @@
 package org.wso2.carbon.extension.identity.verification.provider.mgt.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
+import org.wso2.carbon.user.core.service.RealmService;
 
-@Component(
-        name = "org.wso2.carbon.extension.identity.verification.provider.mgt",
-        immediate = true
-)
 public class IdVProviderMgtDataHolder {
 
-    private static Log log = LogFactory.getLog(IdVProviderMgtDataHolder.class);
+    private static RealmService realmService;
 
-    @Activate
-    protected void activate(ComponentContext ctxt) {
+    /**
+     * Get the RealmService.
+     *
+     * @return RealmService.
+     */
+    public static RealmService getRealmService() {
 
-        UserTenantAssociationManager userTenantAssociationManager = new DefaultUserTenantAssociationManager();
-        ctxt.getBundleContext().registerService(UserTenantAssociationManager.class.getName(),
-                userTenantAssociationManager, null);
-        log.info("Asgardeo UserTenantAssociationManager bundle activated successfully.");
+        if (realmService == null) {
+            throw new RuntimeException("RealmService was not set during the " +
+                    "IdVProviderMgtServiceComponent startup");
+        }
+        return realmService;
+    }
+
+    /**
+     * Set the RealmService.
+     *
+     * @param realmService RealmService.
+     */
+    public static void setRealmService(RealmService realmService) {
+
+        IdVProviderMgtDataHolder.realmService = realmService;
     }
 }

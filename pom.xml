@@ -11,6 +11,7 @@
     <modules>
         <module>components/org.wso2.carbon.extension.identity.verification.api</module>
         <module>components/org.wso2.carbon.extension.identity.verification.provider</module>
+        <module>components/org.wso2.carbon.extension.identity.verifier</module>
     </modules>
 
     <dependencyManagement>
