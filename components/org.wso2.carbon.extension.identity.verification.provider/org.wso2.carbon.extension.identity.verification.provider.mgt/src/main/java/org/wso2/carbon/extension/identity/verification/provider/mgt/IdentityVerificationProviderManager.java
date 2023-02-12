@@ -1,15 +1,34 @@
 package org.wso2.carbon.extension.identity.verification.provider.mgt;
 
-import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
+import org.wso2.carbon.extension.identity.verification.provider.mgt.dao.IdVProviderManagementDAO;
+import org.wso2.carbon.extension.identity.verification.provider.mgt.model.IdentityVerificationProvider;
+
+import java.util.List;
 
 public class IdentityVerificationProviderManager implements IdVProviderManager {
 
-    private void deleteIDV(String idvID, String idpName, String tenantDomain) throws
-            IdVProviderMgtException {
+    IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
-        int tenantId = IdentityTenantUtil.getTenantId(tenantDomain);
+    public void addIdV(IdentityVerificationProvider identityVerificationProvider, String tenantDomain)
+            throws IdVProviderMgtException {
 
-        IdVProviderManagementDAO.deleteIdV(idvID, tenantId, tenantDomain);
+    }
+
+    public IdentityVerificationProvider getIdV(String idVProviderId) throws IdVProviderMgtException {
+
+    }
+
+    public void deleteIdV(String idVProviderId) throws IdVProviderMgtException {
+
+        idVProviderManagementDAO.deleteIdVProvider(idVProviderId);
+    }
+
+    public void updateIdV() throws IdVProviderMgtException {
+
+    }
+
+    List<IdentityVerificationProvider> getIdVs() throws IdVProviderMgtException {
+
     }
 
 }
