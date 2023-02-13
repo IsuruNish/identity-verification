@@ -32,7 +32,7 @@ public class VerificationApiServiceImpl implements VerificationApiService {
     public Response getIdentityVerificationInfo(String userId) {
 
         identityVerificationService.getIdentityVerificationInfo(userId);
-        return Response.ok().entity("magic!").build();
+        return Response.ok().entity("").build();
     }
 
     @Override

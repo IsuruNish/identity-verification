@@ -33,8 +33,8 @@ public class IdentityVerificationProvidersApiServiceImpl implements IdentityVeri
     @Override
     public Response addIDV(IdentityVerificationProvider identityVerificationProvider) {
 
-        identityVerificationProviderService.addIDV();
-        return Response.ok().entity().build();
+//        identityVerificationProviderService.();
+        return Response.ok().entity("").build();
     }
 
     @Override

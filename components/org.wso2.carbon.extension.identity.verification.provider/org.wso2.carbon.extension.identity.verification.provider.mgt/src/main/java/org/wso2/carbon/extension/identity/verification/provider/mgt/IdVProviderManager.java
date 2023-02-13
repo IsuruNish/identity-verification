@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface IdVProviderManager {
 
-    void addIdV(IdentityVerificationProvider identityVerificationProvider, String tenantDomain)
+    void addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException;
 
-    IdentityVerificationProvider getIdV(String idVProviderId) throws IdVProviderMgtException;
+    IdentityVerificationProvider getIdVProvider(String idVProviderId) throws IdVProviderMgtException;
 
-    void deleteIdV(String idVProviderId) throws IdVProviderMgtException;
+    void deleteIdVProvider(String idVProviderId) throws IdVProviderMgtException;
 
-    void updateIdV() throws IdVProviderMgtException;
+    void updateIdVProvider(IdentityVerificationProvider identityVerificationProvider) throws IdVProviderMgtException;
 
-    List<IdentityVerificationProvider> getIdVs() throws IdVProviderMgtException;
+    List<IdentityVerificationProvider> getIdVProviders(String tenantDomain) throws IdVProviderMgtException;
 }

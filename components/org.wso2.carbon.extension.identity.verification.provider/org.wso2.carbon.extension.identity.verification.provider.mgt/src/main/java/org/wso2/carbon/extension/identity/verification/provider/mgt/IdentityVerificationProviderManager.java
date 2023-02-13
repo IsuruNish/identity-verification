@@ -9,26 +9,31 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
 
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
-    public void addIdV(IdentityVerificationProvider identityVerificationProvider, String tenantDomain)
+    public void addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException {
 
+        idVProviderManagementDAO.addIdVProvider(identityVerificationProvider);
     }
 
-    public IdentityVerificationProvider getIdV(String idVProviderId) throws IdVProviderMgtException {
+    public IdentityVerificationProvider getIdVProvider(String idVProviderId) throws IdVProviderMgtException {
 
+        return idVProviderManagementDAO.getIdVProvider(idVProviderId);
     }
 
-    public void deleteIdV(String idVProviderId) throws IdVProviderMgtException {
+    public void deleteIdVProvider(String idVProviderId) throws IdVProviderMgtException {
 
         idVProviderManagementDAO.deleteIdVProvider(idVProviderId);
     }
 
-    public void updateIdV() throws IdVProviderMgtException {
+    public void updateIdVProvider(IdentityVerificationProvider identityVerificationProvider)
+            throws IdVProviderMgtException {
 
+        idVProviderManagementDAO.updateIdVProvider(identityVerificationProvider);
     }
 
-    List<IdentityVerificationProvider> getIdVs() throws IdVProviderMgtException {
+    public List<IdentityVerificationProvider> getIdVProviders(String tenantDomain)
+            throws IdVProviderMgtException {
 
+        return idVProviderManagementDAO.getIdVProviders(tenantDomain);
     }
-
 }
