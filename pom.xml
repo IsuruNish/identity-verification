@@ -12,6 +12,10 @@
         <module>components/org.wso2.carbon.extension.identity.verification.api</module>
         <module>components/org.wso2.carbon.extension.identity.verification.provider</module>
         <module>components/org.wso2.carbon.extension.identity.verifier</module>
+        <module>components/org.wso2.carbon.extension.identity.verification.claim</module>
+        <module>
+            components/org.wso2.carbon.extension.identity.verification.claim/org.wso2.carbon.extension.identity.verification.claim.mgt
+        </module>
     </modules>
 
     <dependencyManagement>
@@ -106,6 +110,11 @@
                 <artifactId>org.wso2.carbon.identity.core</artifactId>
                 <version>${carbon.identity.framework.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.json.wso2</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.wso2.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -182,6 +191,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <json.wso2.version>3.0.0.wso2v1</json.wso2.version>
     </properties>
 
 </project>

@@ -16,36 +16,31 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationService;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
-
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.*;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.*;
+import java.util.List;
 import javax.ws.rs.core.Response;
 
 public class VerificationApiServiceImpl implements VerificationApiService {
 
-    @Autowired
-    private IdentityVerificationService identityVerificationService;
-
     @Override
     public Response getIdentityVerificationInfo(String userId) {
 
-        identityVerificationService.getIdentityVerificationInfo(userId);
-        return Response.ok().entity("").build();
+        // do some magic!
+        return Response.ok().entity("magic!").build();
     }
 
     @Override
     public Response getVerificationClaimMetadata(String userId, String claimId) {
 
-        identityVerificationService.getVerificationClaimMetadata(userId, claimId);
+        // do some magic!
         return Response.ok().entity("magic!").build();
     }
 
     @Override
     public Response verifyIdentity(VerificationPostRequest verificationPostRequest) {
 
-        identityVerificationService.verifyIdentity(verificationPostRequest);
+        // do some magic!
         return Response.ok().entity("magic!").build();
     }
 }

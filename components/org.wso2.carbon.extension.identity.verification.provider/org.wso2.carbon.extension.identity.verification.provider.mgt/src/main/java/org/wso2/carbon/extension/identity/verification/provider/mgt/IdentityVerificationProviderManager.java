@@ -9,10 +9,11 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
 
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
-    public void addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
+    public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException {
 
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider);
+        return identityVerificationProvider;
     }
 
     public IdentityVerificationProvider getIdVProvider(String idVProviderId) throws IdVProviderMgtException {
@@ -25,10 +26,12 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         idVProviderManagementDAO.deleteIdVProvider(idVProviderId);
     }
 
-    public void updateIdVProvider(IdentityVerificationProvider identityVerificationProvider)
+    public IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider
+                                                                  identityVerificationProvider)
             throws IdVProviderMgtException {
 
         idVProviderManagementDAO.updateIdVProvider(identityVerificationProvider);
+        return identityVerificationProvider;
     }
 
     public List<IdentityVerificationProvider> getIdVProviders(String tenantDomain)
