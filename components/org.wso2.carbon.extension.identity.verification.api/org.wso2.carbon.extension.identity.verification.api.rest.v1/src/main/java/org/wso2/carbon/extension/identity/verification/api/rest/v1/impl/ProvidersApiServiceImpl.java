@@ -18,8 +18,12 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.*;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.ProvidersApiService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationProviderService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
+
 import javax.ws.rs.core.Response;
 
 /**
@@ -27,25 +31,29 @@ import javax.ws.rs.core.Response;
  */
 public class ProvidersApiServiceImpl implements ProvidersApiService {
 
+    @Autowired
+    IdentityVerificationProviderService identityVerificationProviderService;
+
     @Override
     public Response addIdVProvider(IdVProviderRequest idVProviderRequest) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        IdVProviderResponse idVProviderResponse =
+                identityVerificationProviderService.addIdVProvider(idVProviderRequest);
+        return Response.ok().entity(idVProviderResponse).build();
     }
 
     @Override
     public Response deleteIdVProvider(String idvProviderId) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        identityVerificationProviderService.deleteIdVProvider(idvProviderId);
+        return Response.noContent().build();
     }
 
     @Override
     public Response getIdVProvider(String idvProviderId) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        IdVProviderResponse idVProviderResponse = identityVerificationProviderService.getIdVProvider(idvProviderId);
+        return Response.ok().entity(idVProviderResponse).build();
     }
 
     @Override
@@ -58,7 +66,8 @@ public class ProvidersApiServiceImpl implements ProvidersApiService {
     @Override
     public Response updateIdVProviders(String idvProviderId, IdVProviderRequest idVProviderRequest) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        IdVProviderResponse idVProviderResponse =
+                identityVerificationProviderService.updateIdVProvider(idvProviderId, idVProviderRequest);
+        return Response.ok().entity(idVProviderResponse).build();
     }
 }

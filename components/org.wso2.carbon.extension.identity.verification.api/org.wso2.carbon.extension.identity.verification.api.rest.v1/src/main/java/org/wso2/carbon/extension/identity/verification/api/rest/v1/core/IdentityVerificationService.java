@@ -15,6 +15,12 @@ import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierRespons
  */
 public class IdentityVerificationService {
 
+    /**
+     * Get identity verification info.
+     *
+     * @param userId User id.
+     * @return Identity verification info.
+     */
     public VerificationGetResponse getIdentityVerificationInfo(String userId) {
 
         IdVClaim[] idVClaim;
@@ -26,6 +32,13 @@ public class IdentityVerificationService {
         return getVerificationInfoResponse(userId, idVClaim);
     }
 
+    /**
+     * Get verification claim metadata.
+     *
+     * @param userId User id.
+     * @param claimId Claim id.
+     * @return Verification claim response.
+     */
     public VerificationClaimResponse getVerificationClaimMetadata(String userId, String claimId) {
 
         IdVClaim idVClaim;
@@ -37,6 +50,12 @@ public class IdentityVerificationService {
         return getVerificationClaimResponse(idVClaim);
     }
 
+    /**
+     * Verify an identity.
+     *
+     * @param verificationPostRequest Verification post request.
+     * @return Verification post response.
+     */
     public VerificationPostResponse verifyIdentity(VerificationPostRequest verificationPostRequest) {
 
         IdentityVerifierResponse identityVerifierResponse;

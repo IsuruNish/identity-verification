@@ -18,8 +18,14 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.*;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
+
 import javax.ws.rs.core.Response;
 
 /**
@@ -27,24 +33,30 @@ import javax.ws.rs.core.Response;
  */
 public class VerificationApiServiceImpl implements VerificationApiService {
 
+    @Autowired
+    IdentityVerificationService identityVerificationService;
+
     @Override
     public Response getIdentityVerificationInfo(String userId) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        VerificationGetResponse verificationGetResponse =
+                identityVerificationService.getIdentityVerificationInfo(userId);
+        return Response.ok().entity(verificationGetResponse).build();
     }
 
     @Override
     public Response getVerificationClaimMetadata(String userId, String claimId) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        VerificationClaimResponse verificationClaimResponse =
+                identityVerificationService.getVerificationClaimMetadata(userId, claimId);
+        return Response.ok().entity(verificationClaimResponse).build();
     }
 
     @Override
     public Response verifyIdentity(VerificationPostRequest verificationPostRequest) {
 
-        // do some magic!
-        return Response.ok().entity("magic!").build();
+        VerificationPostResponse verificationPostResponse =
+                identityVerificationService.verifyIdentity(verificationPostRequest);
+        return Response.ok().entity(verificationPostResponse).build();
     }
 }

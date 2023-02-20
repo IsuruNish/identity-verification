@@ -36,6 +36,12 @@ import java.util.stream.Collectors;
  */
 public class IdentityVerificationProviderService {
 
+    /**
+     * Add an identity verification provider.
+     *
+     * @param idVProviderRequest Identity verification provider request.
+     * @return Identity verification providers.
+     */
     public IdVProviderResponse addIdVProvider(IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider;
@@ -48,6 +54,13 @@ public class IdentityVerificationProviderService {
         return getIdVProviderResponse(identityVerificationProvider);
     }
 
+    /**
+     * Update identity verification provider.
+     *
+     * @param idVProviderId Identity verification provider id.
+     * @param idVProviderRequest Identity verification provider request.
+     * @return Identity verification provider response.
+     */
     public IdVProviderResponse updateIdVProvider(String idVProviderId, IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider;
@@ -68,6 +81,12 @@ public class IdentityVerificationProviderService {
         return getIdVProviderResponse(identityVerificationProvider);
     }
 
+    /**
+     * Get identity verification provider by id.
+     *
+     * @param idVProviderId Identity verification provider id.
+     * @return Identity verification provider response.
+     */
     public IdVProviderResponse getIdVProvider(String idVProviderId) {
 
         try {
@@ -91,6 +110,11 @@ public class IdentityVerificationProviderService {
         }
     }
 
+    /**
+     * Delete identity verification provider by id.
+     *
+     * @param identityVerificationProviderId Identity verification provider id.
+     */
     public void deleteIdVProvider(String identityVerificationProviderId) {
 
         try {
