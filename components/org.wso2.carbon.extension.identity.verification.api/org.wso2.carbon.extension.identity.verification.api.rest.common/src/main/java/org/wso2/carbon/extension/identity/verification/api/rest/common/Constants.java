@@ -1,10 +1,19 @@
 /*
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
  *
- * This software is the property of WSO2 Inc. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.common;
@@ -15,6 +24,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.common;
 public class Constants {
 
     public static final String CORRELATION_ID_MDC = "Correlation-ID";
+    // todo
     public static final String CONFLICT_ASSOCIATION_CODE = "10004";
     public static final String INVALID_IDP_CODE = "10007";
     public static final String NON_EXISTING_USER_CODE = "30007 - ";
@@ -35,6 +45,7 @@ public class Constants {
      */
     public enum ErrorMessage {
 
+        // todo
         // Server errors.
         ERROR_CODE_CREATING_FEDERATED_USER_ASSOCIATIONS("FUA-15001", "Error creating federated user association",
                 "Error occurred while creating federated user association for local user: %s with " +

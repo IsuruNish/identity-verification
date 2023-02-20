@@ -1,12 +1,8 @@
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
-import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
-import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
-import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
@@ -14,11 +10,9 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.core.Response;
-
+/**
+ * Service class for identity verification.
+ */
 public class IdentityVerificationService {
 
     public VerificationGetResponse getIdentityVerificationInfo(String userId) {
@@ -89,21 +83,9 @@ public class IdentityVerificationService {
 
         VerificationGetResponse verificationGetResponse = new VerificationGetResponse();
         verificationGetResponse.setUserId(userId);
-        List<VerificationClaimResponse> claims = new ArrayList<>();
         for (IdVClaim idVClaim : idVClaims) {
             verificationGetResponse.addClaimsItem(getVerificationClaimResponse(idVClaim));
         }
         return verificationGetResponse;
-    }
-
-    private APIError handleError(Response.Status status, Constants.ErrorMessage error) {
-
-        return new APIError(status, getErrorBuilder(error).build());
-    }
-
-    private ErrorResponse.Builder getErrorBuilder(Constants.ErrorMessage errorEnum) {
-
-        return new ErrorResponse.Builder().withCode(errorEnum.getCode()).withMessage(errorEnum.getMessage())
-                .withDescription(errorEnum.getDescription());
     }
 }
