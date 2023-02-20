@@ -4,9 +4,9 @@ import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProvid
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ConfigProperty;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
-import org.wso2.carbon.extension.identity.verification.provider.mgt.IdVProviderMgtException;
-import org.wso2.carbon.extension.identity.verification.provider.mgt.model.IdVConfigProperty;
-import org.wso2.carbon.extension.identity.verification.provider.mgt.model.IdentityVerificationProvider;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
+import org.wso2.carbon.extension.identity.verification.provider.model.IdVConfigProperty;
+import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 
 import java.util.Arrays;
 import java.util.List;

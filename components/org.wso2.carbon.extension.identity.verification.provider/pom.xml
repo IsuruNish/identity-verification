@@ -11,11 +11,17 @@
     </parent>
 
     <artifactId>org.wso2.carbon.extension.identity.verification.provider</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>org.wso2.carbon.extension.identity.verification.provider.mgt</module>
-    </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.framework</groupId>
+            <artifactId>org.wso2.carbon.identity.base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.framework</groupId>
+            <artifactId>org.wso2.carbon.identity.core</artifactId>
+        </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>

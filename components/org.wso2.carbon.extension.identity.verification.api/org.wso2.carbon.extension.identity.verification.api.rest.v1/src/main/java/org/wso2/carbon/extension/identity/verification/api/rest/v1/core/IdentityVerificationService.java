@@ -4,7 +4,6 @@ import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ClaimMetadata;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
@@ -12,6 +11,11 @@ import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verific
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
+import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
+import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -41,11 +45,35 @@ public class IdentityVerificationService {
 
     public VerificationPostResponse verifyIdentity(VerificationPostRequest verificationPostRequest) {
 
+        IdentityVerifierResponse identityVerifierResponse;
+        try {
+            identityVerifierResponse = IdVProviderServiceHolder.getIdentityVerifierFactory().getIdentityVerifier("ONFIDO").
+                    verifyIdentity(verificationPostRequest.getUsername(),
+                            verificationPostRequest.getIdentityVerificationProvider());
+        } catch (IdentityVerificationException e) {
+            throw new RuntimeException(e);
+        }
+        return getVerificationPostResponse(identityVerifierResponse);
     }
 
-    private APIError handleInvalidInput(Constants.ErrorMessage errorEnum, String... data) {
+    private VerificationPostResponse getVerificationPostResponse(IdentityVerifierResponse identityVerifierResponse) {
 
-        return handleError(Response.Status.BAD_REQUEST, errorEnum);
+        VerificationPostResponse verificationPostResponse = new VerificationPostResponse();
+        verificationPostResponse.username(identityVerifierResponse.getUserId());
+        verificationPostResponse.setIdentityVerificationProvider(identityVerifierResponse.getIdentityVerifierName());
+        for (IdVClaim idVClaim : identityVerifierResponse.getIdVClaims()) {
+            verificationPostResponse.addClaimsItem(getVerificationClaimAttributeResponse(idVClaim));
+        }
+        return verificationPostResponse;
+    }
+
+    private VerificationClaimResponse getVerificationClaimAttributeResponse(IdVClaim idVClaim) {
+
+        VerificationClaimResponse verificationClaimResponse = new VerificationClaimResponse();
+        verificationClaimResponse.setId(idVClaim.getIdVClaimId());
+        verificationClaimResponse.setStatus(idVClaim.getIdVStatus());
+        verificationClaimResponse.setClaimMetadata(idVClaim.getIdVClaimMetadata());
+        return verificationClaimResponse;
     }
 
     private VerificationClaimResponse getVerificationClaimResponse(IdVClaim idVClaim) {
@@ -61,20 +89,11 @@ public class IdentityVerificationService {
 
         VerificationGetResponse verificationGetResponse = new VerificationGetResponse();
         verificationGetResponse.setUserId(userId);
-        // conver
-        verificationGetResponse.setClaims(idVClaims);
+        List<VerificationClaimResponse> claims = new ArrayList<>();
+        for (IdVClaim idVClaim : idVClaims) {
+            verificationGetResponse.addClaimsItem(getVerificationClaimResponse(idVClaim));
+        }
         return verificationGetResponse;
-    }
-
-    private
-
-    private VerificationPostResponse getVerificationPostResponse(IdVClaim idVClaim) {
-
-        VerificationPostResponse verificationPostResponse = new VerificationPostResponse();
-        verificationPostResponse.setId(idVClaim.getIdVClaimId());
-        verificationPostResponse.setStatus(idVClaim.getIdVStatus());
-        verificationPostResponse.setClaimMetadata(idVClaim.getIdVClaimMetadata());
-        return verificationPostResponse;
     }
 
     private APIError handleError(Response.Status status, Constants.ErrorMessage error) {

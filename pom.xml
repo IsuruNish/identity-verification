@@ -16,6 +16,8 @@
         <module>
             components/org.wso2.carbon.extension.identity.verification.claim/org.wso2.carbon.extension.identity.verification.claim.mgt
         </module>
+        <module>components/org.wso2.carbon.extension.idv.manager</module>
+
     </modules>
 
     <dependencyManagement>
@@ -115,6 +117,26 @@
                 <artifactId>json</artifactId>
                 <version>${json.wso2.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi.services</artifactId>
+                <version>${org.eclipse.osgi.services.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>${org.eclipse.osgi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>7.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -192,6 +214,14 @@
         <maven.compiler.target>14</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <json.wso2.version>3.0.0.wso2v1</json.wso2.version>
+        <org.eclipse.osgi.services.version>3.3.100.v20130513-1956</org.eclipse.osgi.services.version>
+        <org.eclipse.osgi.version>3.9.1.v20130814-1242</org.eclipse.osgi.version>
+        <osgi.framework.imp.pkg.version.range>[1.7.0, 2.0.0)</osgi.framework.imp.pkg.version.range>
+        <osgi.service.component.imp.pkg.version.range>[1.2.0, 2.0.0)</osgi.service.component.imp.pkg.version.range>
+        <commons-logging.osgi.version.range>[1.2.0, 2.0.0)</commons-logging.osgi.version.range>
+        <commons-collections.wso2.osgi.version.range>[3.2.0, 4.0.0)</commons-collections.wso2.osgi.version.range>
+        <commons-lang.osgi.version.range>[2.6.0, 3.0.0)</commons-lang.osgi.version.range>
+        <carbon.commons.imp.pkg.version>[4.7.2, 5.0.0)</carbon.commons.imp.pkg.version>
     </properties>
 
 </project>
