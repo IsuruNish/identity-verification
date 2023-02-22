@@ -25,5 +25,4 @@ public interface IdentityVerifierFactory {
     IdentityVerifier getIdentityVerifier(String identityVerifierName);
 
     String getIdentityVerifierName();
-
 }

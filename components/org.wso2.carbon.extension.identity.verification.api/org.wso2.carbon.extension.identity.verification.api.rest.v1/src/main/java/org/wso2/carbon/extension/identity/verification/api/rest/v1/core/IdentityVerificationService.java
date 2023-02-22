@@ -17,7 +17,10 @@
  */
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
+import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
+import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
+import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
@@ -26,6 +29,8 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtExce
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
+
+import javax.ws.rs.core.Response;
 
 /**
  * Service class for identity verification.
@@ -44,7 +49,8 @@ public class IdentityVerificationService {
         try {
             idVClaim = IdVProviderServiceHolder.getIdVClaimManager().getIDVClaims(userId);
         } catch (IdVClaimMgtException e) {
-            return null;
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_USER_IDV_CLAIMS);
         }
         return getVerificationInfoResponse(userId, idVClaim);
     }
@@ -62,7 +68,8 @@ public class IdentityVerificationService {
         try {
             idVClaim = IdVProviderServiceHolder.getIdVClaimManager().getIDVClaim(userId, claimId);
         } catch (IdVClaimMgtException e) {
-            return null;
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA);
         }
         return getVerificationClaimResponse(idVClaim);
     }
@@ -76,12 +83,14 @@ public class IdentityVerificationService {
     public VerificationPostResponse verifyIdentity(VerificationPostRequest verificationPostRequest) {
 
         IdentityVerifierResponse identityVerifierResponse;
+        String identityVerifierName = verificationPostRequest.getIdentityVerificationProvider();
         try {
             identityVerifierResponse = IdVProviderServiceHolder.getIdentityVerifierFactory().
-                    getIdentityVerifier("ONFIDO").verifyIdentity(verificationPostRequest.getUsername(),
-                            verificationPostRequest.getIdentityVerificationProvider());
+                    getIdentityVerifier(identityVerifierName).verifyIdentity(verificationPostRequest.getUsername(),
+                            identityVerifierName);
         } catch (IdentityVerificationException e) {
-            throw new RuntimeException(e);
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA);
         }
         return getVerificationPostResponse(identityVerifierResponse);
     }
@@ -123,5 +132,16 @@ public class IdentityVerificationService {
             verificationGetResponse.addClaimsItem(getVerificationClaimResponse(idVClaim));
         }
         return verificationGetResponse;
+    }
+
+    private APIError handleError(Response.Status status, Constants.ErrorMessage error) {
+
+        return new APIError(status, getErrorBuilder(error).build());
+    }
+
+    private ErrorResponse.Builder getErrorBuilder(Constants.ErrorMessage errorEnum) {
+
+        return new ErrorResponse.Builder().withCode(errorEnum.getCode()).withMessage(errorEnum.getMessage())
+                .withDescription(errorEnum.getDescription());
     }
 }

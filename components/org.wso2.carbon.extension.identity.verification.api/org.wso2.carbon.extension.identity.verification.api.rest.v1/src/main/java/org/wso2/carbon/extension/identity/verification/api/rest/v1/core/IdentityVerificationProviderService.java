@@ -69,20 +69,21 @@ public class IdentityVerificationProviderService {
      */
     public IdVProviderResponse updateIdVProvider(String idVProviderId, IdVProviderRequest idVProviderRequest) {
 
-        IdentityVerificationProvider identityVerificationProvider = null;
-        //todo
+        IdentityVerificationProvider identityVerificationProvider ;
         try {
             identityVerificationProvider =
                     IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId);
 
             if (identityVerificationProvider == null) {
-                //throw new RuntimeException("e");
+                throw handleError(Response.Status.NOT_FOUND,
+                        Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND);
             }
 
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
-                    updateIdVProvider(createIdVProvider(idVProviderRequest));
+                    updateIdVProvider(idVProviderId, createIdVProvider(idVProviderRequest));
         } catch (IdVProviderMgtException e) {
-            //throw new RuntimeException(e);
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_UPDATING_IDVP);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -112,9 +113,9 @@ public class IdentityVerificationProviderService {
 
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
-            // todo
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP);
         }
-        return null; //todo
     }
 
     /**
@@ -127,7 +128,8 @@ public class IdentityVerificationProviderService {
         try {
             IdVProviderServiceHolder.getIdVProviderManager().deleteIdVProvider(identityVerificationProviderId);
         } catch (IdVProviderMgtException e) {
-            //;
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDVP);
         }
     }
 

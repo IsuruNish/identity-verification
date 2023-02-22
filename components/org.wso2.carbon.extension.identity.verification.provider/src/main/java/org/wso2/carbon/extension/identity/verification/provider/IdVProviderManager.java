@@ -33,7 +33,9 @@ public interface IdVProviderManager {
 
     void deleteIdVProvider(String idVProviderId) throws IdVProviderMgtException;
 
-    IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider identityVerificationProvider) throws IdVProviderMgtException;
+    IdentityVerificationProvider updateIdVProvider(String idVProviderId,
+                                                   IdentityVerificationProvider identityVerificationProvider)
+            throws IdVProviderMgtException;
 
     List<IdentityVerificationProvider> getIdVProviders(String tenantDomain) throws IdVProviderMgtException;
 }

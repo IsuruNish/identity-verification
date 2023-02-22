@@ -45,27 +45,34 @@ public class Constants {
      */
     public enum ErrorMessage {
 
+        // todo
+        // Client errors.
+        ERROR_CODE_IDVP_NOT_FOUND("IDV-60000",
+                "Unable to find identity verification provider.",
+                "Server encountered an error while finding the identity verification provider."),
+
+        // Server errors.
         ERROR_CODE_ERROR_ADDING_IDVP("IDV-65000",
                 "Unable to add identity verification provider.",
                 "Server encountered an error while adding the identity verification provider."),
-
-        // todo
-        // Server errors.
-        ERROR_CODE_CREATING_FEDERATED_USER_ASSOCIATIONS("FUA-15001", "Error creating federated user association",
-                "Error occurred while creating federated user association for local user: %s with " +
-                        "federated user: %s in IDP: %s"),
-        ERROR_CODE_RETRIEVE_USER_NAME_BY_ID("FUA-15002", "Error occurred while retrieving username",
-                "Error occurred while retrieving username by userid: %s."),
-        ERROR_CODE_RETRIEVING_USERSTORE_MANAGER("FUA-15003", "Error retrieving userstore manager.",
-                "Error occurred while retrieving userstore manager."),
-
-        // Client errors.
-        ERROR_CODE_NON_EXISTING_USER_ID("FUA-10001", "User not found",
-                "Non exiting user for the given userid: %s."),
-        ERROR_CODE_CONFLICT_ASSOCIATION("FUA-10002", "Association already exists.",
-                "User: %s has a federated association against the given idp: %s."),
-        ERROR_CODE_INVALID_IDP("FUA-10003", "Invalid federated IDP.",
-                "Could not find an identity provider by id: %s.");
+        ERROR_CODE_ERROR_UPDATING_IDVP("IDV-65001",
+                "Unable to update identity verification provider.",
+                "Server encountered an error while updating the identity verification provider."),
+        ERROR_CODE_ERROR_RETRIEVING_IDVP("IDV-65002",
+                "Unable to retrieve identity verification provider.",
+                "Server encountered an error while retrieving the identity verification provider."),
+        ERROR_CODE_ERROR_DELETING_IDVP("IDV-65003",
+                "Unable to delete identity verification provider.",
+                "Server encountered an error while deleting the identity verification provider."),
+        ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA("IDV-65004",
+                "Unable to retrieve identity verification claim metadata.",
+                "Server encountered an error while retrieving the identity verification claim metadata."),
+        ERROR_CODE_ERROR_RETRIEVING_USER_IDV_CLAIMS("IDV-65005",
+                "Unable to retrieve identity verification claims of the user %s.",
+                "Server encountered an error while retrieving the identity verification claim of the user."),
+        ERROR_CODE_ERROR_VERIFYING_IDENTITY("IDV-65006",
+                "Unable to verify the identity of the user %s.",
+                "Server encountered an error while verifying the identity of the user.");
 
         private final String code;
         private final String message;
