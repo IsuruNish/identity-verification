@@ -19,19 +19,17 @@ package org.wso2.carbon.extension.identity.verifier.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
 
-import java.util.Collection;
-
+/**
+ * OSGi declarative services component which handles registration and un-registration of
+ * IdentityVerifier.
+ */
 public class IdentityVerifierServiceComponent {
 
     private static final Log log = LogFactory.getLog(IdentityVerifierServiceComponent.class);
@@ -61,7 +59,4 @@ public class IdentityVerifierServiceComponent {
             log.debug("IdentityVerifierManager bundle is deactivated ");
         }
     }
-
-
-
 }

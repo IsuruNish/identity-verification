@@ -17,7 +17,10 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider;
 
-public class IdvProviderMgtServerException extends IdVProviderMgtException{
+/**
+ * This class contains the implementation for the server exceptions.
+ */
+public class IdvProviderMgtServerException extends IdVProviderMgtException {
 
     public IdvProviderMgtServerException(String message) {
 

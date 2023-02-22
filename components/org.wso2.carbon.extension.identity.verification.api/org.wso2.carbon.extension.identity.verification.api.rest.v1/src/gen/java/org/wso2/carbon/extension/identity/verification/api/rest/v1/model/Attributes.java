@@ -30,43 +30,43 @@ import javax.xml.bind.annotation.*;
 
 public class Attributes  {
   
-    private String httpColonWso2OrgClaimsUsername;
-    private String httpColonWso2OrgClaimsAddress;
+    private String claimUri;
+    private String claimValue;
 
     /**
     **/
-    public Attributes httpColonWso2OrgClaimsUsername(String httpColonWso2OrgClaimsUsername) {
+    public Attributes claimUri(String claimUri) {
 
-        this.httpColonWso2OrgClaimsUsername = httpColonWso2OrgClaimsUsername;
+        this.claimUri = claimUri;
         return this;
     }
     
     @ApiModelProperty(value = "")
-    @JsonProperty("http://wso2.org/claims/username")
+    @JsonProperty("claim-uri")
     @Valid
-    public String getHttpColonWso2OrgClaimsUsername() {
-        return httpColonWso2OrgClaimsUsername;
+    public String getClaimUri() {
+        return claimUri;
     }
-    public void setHttpColonWso2OrgClaimsUsername(String httpColonWso2OrgClaimsUsername) {
-        this.httpColonWso2OrgClaimsUsername = httpColonWso2OrgClaimsUsername;
+    public void setClaimUri(String claimUri) {
+        this.claimUri = claimUri;
     }
 
     /**
     **/
-    public Attributes httpColonWso2OrgClaimsAddress(String httpColonWso2OrgClaimsAddress) {
+    public Attributes claimValue(String claimValue) {
 
-        this.httpColonWso2OrgClaimsAddress = httpColonWso2OrgClaimsAddress;
+        this.claimValue = claimValue;
         return this;
     }
     
     @ApiModelProperty(value = "")
-    @JsonProperty("http://wso2.org/claims/address")
+    @JsonProperty("claim-value")
     @Valid
-    public String getHttpColonWso2OrgClaimsAddress() {
-        return httpColonWso2OrgClaimsAddress;
+    public String getClaimValue() {
+        return claimValue;
     }
-    public void setHttpColonWso2OrgClaimsAddress(String httpColonWso2OrgClaimsAddress) {
-        this.httpColonWso2OrgClaimsAddress = httpColonWso2OrgClaimsAddress;
+    public void setClaimValue(String claimValue) {
+        this.claimValue = claimValue;
     }
 
 
@@ -81,13 +81,13 @@ public class Attributes  {
             return false;
         }
         Attributes attributes = (Attributes) o;
-        return Objects.equals(this.httpColonWso2OrgClaimsUsername, attributes.httpColonWso2OrgClaimsUsername) &&
-            Objects.equals(this.httpColonWso2OrgClaimsAddress, attributes.httpColonWso2OrgClaimsAddress);
+        return Objects.equals(this.claimUri, attributes.claimUri) &&
+            Objects.equals(this.claimValue, attributes.claimValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(httpColonWso2OrgClaimsUsername, httpColonWso2OrgClaimsAddress);
+        return Objects.hash(claimUri, claimValue);
     }
 
     @Override
@@ -96,8 +96,8 @@ public class Attributes  {
         StringBuilder sb = new StringBuilder();
         sb.append("class Attributes {\n");
         
-        sb.append("    httpColonWso2OrgClaimsUsername: ").append(toIndentedString(httpColonWso2OrgClaimsUsername)).append("\n");
-        sb.append("    httpColonWso2OrgClaimsAddress: ").append(toIndentedString(httpColonWso2OrgClaimsAddress)).append("\n");
+        sb.append("    claimUri: ").append(toIndentedString(claimUri)).append("\n");
+        sb.append("    claimValue: ").append(toIndentedString(claimValue)).append("\n");
         sb.append("}");
         return sb.toString();
     }

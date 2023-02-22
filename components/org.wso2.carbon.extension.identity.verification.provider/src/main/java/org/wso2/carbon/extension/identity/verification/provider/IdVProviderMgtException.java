@@ -19,6 +19,9 @@ package org.wso2.carbon.extension.identity.verification.provider;
 
 import org.wso2.carbon.identity.base.IdentityException;
 
+/**
+ * This class contains the implementation of IdVProviderMgtException.
+ */
 public class IdVProviderMgtException extends IdentityException {
 
     public IdVProviderMgtException(String message) {

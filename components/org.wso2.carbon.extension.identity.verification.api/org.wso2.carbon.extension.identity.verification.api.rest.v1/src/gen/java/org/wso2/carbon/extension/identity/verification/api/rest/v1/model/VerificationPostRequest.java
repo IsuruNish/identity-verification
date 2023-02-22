@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Attributes;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Property;
 import javax.validation.constraints.*;
 
 
@@ -36,6 +37,8 @@ public class VerificationPostRequest  {
     private String username;
     private String identityVerificationProvider;
     private List<Attributes> claims = null;
+
+    private List<Property> properties = null;
 
 
     /**
@@ -102,6 +105,32 @@ public class VerificationPostRequest  {
         return this;
     }
 
+        /**
+    **/
+    public VerificationPostRequest properties(List<Property> properties) {
+
+        this.properties = properties;
+        return this;
+    }
+    
+    @ApiModelProperty(value = "")
+    @JsonProperty("properties")
+    @Valid
+    public List<Property> getProperties() {
+        return properties;
+    }
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
+    public VerificationPostRequest addPropertiesItem(Property propertiesItem) {
+        if (this.properties == null) {
+            this.properties = new ArrayList<>();
+        }
+        this.properties.add(propertiesItem);
+        return this;
+    }
+
     
 
     @Override
@@ -116,12 +145,13 @@ public class VerificationPostRequest  {
         VerificationPostRequest verificationPostRequest = (VerificationPostRequest) o;
         return Objects.equals(this.username, verificationPostRequest.username) &&
             Objects.equals(this.identityVerificationProvider, verificationPostRequest.identityVerificationProvider) &&
-            Objects.equals(this.claims, verificationPostRequest.claims);
+            Objects.equals(this.claims, verificationPostRequest.claims) &&
+            Objects.equals(this.properties, verificationPostRequest.properties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, identityVerificationProvider, claims);
+        return Objects.hash(username, identityVerificationProvider, claims, properties);
     }
 
     @Override
@@ -133,6 +163,7 @@ public class VerificationPostRequest  {
         sb.append("    username: ").append(toIndentedString(username)).append("\n");
         sb.append("    identityVerificationProvider: ").append(toIndentedString(identityVerificationProvider)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
+        sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
         sb.append("}");
         return sb.toString();
     }

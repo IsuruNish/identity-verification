@@ -532,25 +532,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/attributes'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Property'
+        
     attributes:
       type: object
       properties:
-        "http://wso2.org/claims/username":
+        claim-uri:
           type: string
-        "http://wso2.org/claims/address":
+        claim-value:
           type: string
-    verifiedAttributes:
-      type: object
-      properties:
-        "claim":
-          type: string
-          example: "http://wso2.org/claims/country"
-        "value":
-          type: string
-          example: "Sri Lanka"
-        "status":
-          type: string
-          example: "Verified"
     initVerificationResponse:
       required:
         - identityVerificationProvider
@@ -630,6 +623,13 @@ components:
         value:
           type: string
           example: somePropertyValue
+    Property:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
     verificationclaim:
       type: object
       properties:

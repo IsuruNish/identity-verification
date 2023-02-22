@@ -19,6 +19,9 @@ package org.wso2.carbon.extension.identity.verifier;
 
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
 
+/**
+ * This interface contains the implementation of IdentityVerifier.
+ */
 public interface IdentityVerifier {
 
     IdentityVerifierResponse verifyIdentity(String userId, String identityVerifierName)

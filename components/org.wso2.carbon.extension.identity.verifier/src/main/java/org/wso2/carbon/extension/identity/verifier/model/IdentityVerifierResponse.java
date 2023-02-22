@@ -19,6 +19,9 @@ package org.wso2.carbon.extension.identity.verifier.model;
 
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 
+/**
+ * This class contains the implementation of IdentityVerifierResponse.
+ */
 public class IdentityVerifierResponse {
 
     String userId;

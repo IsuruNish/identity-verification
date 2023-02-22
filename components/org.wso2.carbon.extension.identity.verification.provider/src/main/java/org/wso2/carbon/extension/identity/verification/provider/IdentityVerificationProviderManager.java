@@ -22,6 +22,9 @@ import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVe
 
 import java.util.List;
 
+/**
+ * This class contains the implementation for the IdVProviderManager.
+ */
 public class IdentityVerificationProviderManager implements IdVProviderManager {
 
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();

@@ -22,6 +22,9 @@ import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service holder class for Identity Verifier.
+ */
 public class IdentityVerifierDataHolder {
 
     private static final IdentityVerifierDataHolder instance = new IdentityVerifierDataHolder();

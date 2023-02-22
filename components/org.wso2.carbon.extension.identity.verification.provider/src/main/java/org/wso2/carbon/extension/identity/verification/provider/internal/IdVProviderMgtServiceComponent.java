@@ -30,6 +30,10 @@ import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManag
 import org.wso2.carbon.extension.identity.verification.provider.IdentityVerificationProviderManager;
 import org.wso2.carbon.user.core.service.RealmService;
 
+/**
+ * OSGi declarative services component which handles registration and un-registration of
+ * IdentityVerificationProviderManager.
+ */
 @Component(
         name = "org.wso2.carbon.extension.identity.verification.provider.mgt",
         immediate = true

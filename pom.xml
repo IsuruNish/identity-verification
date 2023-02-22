@@ -29,10 +29,10 @@
         <module>components/org.wso2.carbon.extension.identity.verification.api</module>
         <module>components/org.wso2.carbon.extension.identity.verification.provider</module>
         <module>components/org.wso2.carbon.extension.identity.verifier</module>
-        <module>components/org.wso2.carbon.extension.identity.verification.claim</module>
         <module>
-            components/org.wso2.carbon.extension.identity.verification.claim/org.wso2.carbon.extension.identity.verification.claim.mgt
+            components/org.wso2.carbon.extension.identity.verification.claim.mgt
         </module>
+        <module>components/org.wso2.carbon.extension.identity.verifier.Onfido</module>
     </modules>
 
     <dependencyManagement>
@@ -151,6 +151,11 @@
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
                 <version>7.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20210307</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

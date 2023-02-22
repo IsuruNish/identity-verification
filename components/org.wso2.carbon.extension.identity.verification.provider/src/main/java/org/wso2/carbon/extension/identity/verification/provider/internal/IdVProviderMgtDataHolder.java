@@ -19,6 +19,9 @@ package org.wso2.carbon.extension.identity.verification.provider.internal;
 
 import org.wso2.carbon.user.core.service.RealmService;
 
+/**
+ * Service holder class for IdV Provider Mgt.
+ */
 public class IdVProviderMgtDataHolder {
 
     private static RealmService realmService;

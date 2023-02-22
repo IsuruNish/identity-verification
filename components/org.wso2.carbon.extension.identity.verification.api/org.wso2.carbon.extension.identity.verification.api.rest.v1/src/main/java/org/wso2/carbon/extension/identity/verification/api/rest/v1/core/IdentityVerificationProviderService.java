@@ -18,7 +18,10 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
+import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
+import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
+import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ConfigProperty;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
@@ -30,6 +33,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.ws.rs.core.Response;
 
 /**
  * Service class for identity verification providers.
@@ -49,7 +54,8 @@ public class IdentityVerificationProviderService {
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
                     addIdVProvider(createIdVProvider(idVProviderRequest));
         } catch (IdVProviderMgtException e) {
-            throw new RuntimeException(e);
+            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -63,20 +69,20 @@ public class IdentityVerificationProviderService {
      */
     public IdVProviderResponse updateIdVProvider(String idVProviderId, IdVProviderRequest idVProviderRequest) {
 
-        IdentityVerificationProvider identityVerificationProvider;
+        IdentityVerificationProvider identityVerificationProvider = null;
         //todo
         try {
             identityVerificationProvider =
                     IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId);
 
             if (identityVerificationProvider == null) {
-                throw new RuntimeException("e");
+                //throw new RuntimeException("e");
             }
 
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
                     updateIdVProvider(createIdVProvider(idVProviderRequest));
         } catch (IdVProviderMgtException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -106,8 +112,9 @@ public class IdentityVerificationProviderService {
 
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
-            throw new RuntimeException(e);
+            // todo
         }
+        return null; //todo
     }
 
     /**
@@ -120,10 +127,9 @@ public class IdentityVerificationProviderService {
         try {
             IdVProviderServiceHolder.getIdVProviderManager().deleteIdVProvider(identityVerificationProviderId);
         } catch (IdVProviderMgtException e) {
-            throw new RuntimeException(e);
+            //;
         }
     }
-
 
     private IdVProviderResponse getIdVProviderResponse(IdentityVerificationProvider
                                                                identityVerificationProvider) {
@@ -171,4 +177,20 @@ public class IdentityVerificationProviderService {
         configProperty.setValue(apiProperty.getValue());
         return configProperty;
     };
+
+    private APIError handleInvalidInput(Constants.ErrorMessage errorEnum, String... data) {
+
+        return handleError(Response.Status.BAD_REQUEST, errorEnum);
+    }
+
+    private APIError handleError(Response.Status status, Constants.ErrorMessage error) {
+
+        return new APIError(status, getErrorBuilder(error).build());
+    }
+
+    private ErrorResponse.Builder getErrorBuilder(Constants.ErrorMessage errorEnum) {
+
+        return new ErrorResponse.Builder().withCode(errorEnum.getCode()).withMessage(errorEnum.getMessage())
+                .withDescription(errorEnum.getDescription());
+    }
 }

@@ -36,23 +36,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Layer functionality for Identity Verification Provider management.
+ */
 public class IdVProviderManagementDAO {
 
     private static final Log log = LogFactory.getLog(IdVProviderManagementDAO.class);
 
-    public void getIdP(int idVProviderUID) throws IdVProviderMgtException {
+    /**
+     * Get Identity Verification Provider.
+     *
+     * @param idVProviderId Identity Verification Provider ID.
+     * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
+     */
+    public void getIdP(int idVProviderId) throws IdVProviderMgtException {
 
         try (Connection conn = IdentityDatabaseUtil.getDBConnection(false)) {
             PreparedStatement prepStmt = conn.prepareStatement(
                     IdVProviderMgtConstants.SQLQueries.ADD_IDV_SQL);
-            prepStmt.setInt(1, idVProviderUID);
+            prepStmt.setInt(1, idVProviderId);
             prepStmt.executeUpdate();
         } catch (SQLException e) {
             throw new IdVProviderMgtException("Error occurred while deleting Identity " +
-                    "Verification Provider" + idVProviderUID, e);
+                    "Verification Provider" + idVProviderId, e);
         }
     }
 
+    /**
+     * Add Identity Verification Provider.
+     *
+     * @param identityVerificationProvider Identity Verification Provider.
+     * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
+     */
     public void addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException {
 
@@ -89,6 +104,12 @@ public class IdVProviderManagementDAO {
         }
     }
 
+    /**
+     * Update Identity Verification Provider.
+     *
+     * @param identityVerificationProvider Identity Verification Provider.
+     * @throws IdVProviderMgtException Error when updating Identity Verification Provider configs.
+     */
     public void updateIdVProvider(IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException {
 
@@ -157,7 +178,7 @@ public class IdVProviderManagementDAO {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             try (PreparedStatement getIdVProvidersStmt = connection
-                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVS_SQL)) {
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVPS_SQL)) {
                 getIdVProvidersStmt.setInt(1, tenantID);
 
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
@@ -193,7 +214,7 @@ public class IdVProviderManagementDAO {
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             try (PreparedStatement getIdVProvidersStmt = connection
-                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDV_SQL)) {
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_SQL)) {
                 getIdVProvidersStmt.setString(1, idvProviderId);
 
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {

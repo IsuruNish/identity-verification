@@ -21,6 +21,9 @@ import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVe
 
 import java.util.List;
 
+/**
+ * This interface contains the methods to manage the IdentityVerificationProvider.
+ */
 public interface IdVProviderManager {
 
     IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider)

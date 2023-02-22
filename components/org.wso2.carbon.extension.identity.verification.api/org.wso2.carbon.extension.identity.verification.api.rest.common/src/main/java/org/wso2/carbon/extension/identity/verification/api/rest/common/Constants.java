@@ -45,6 +45,10 @@ public class Constants {
      */
     public enum ErrorMessage {
 
+        ERROR_CODE_ERROR_ADDING_IDVP("IDV-65000",
+                "Unable to add identity verification provider.",
+                "Server encountered an error while adding the identity verification provider."),
+
         // todo
         // Server errors.
         ERROR_CODE_CREATING_FEDERATED_USER_ASSOCIATIONS("FUA-15001", "Error creating federated user association",

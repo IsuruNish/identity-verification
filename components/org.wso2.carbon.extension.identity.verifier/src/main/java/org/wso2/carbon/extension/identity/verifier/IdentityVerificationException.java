@@ -17,6 +17,9 @@
  */
 package org.wso2.carbon.extension.identity.verifier;
 
+/**
+ * This class contains the implementation for the IdentityVerificationException.
+ */
 public class IdentityVerificationException extends Exception {
 
     //todo
