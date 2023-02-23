@@ -20,21 +20,25 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
-import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
-import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ConfigProperty;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verificationclaim;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdVConfigProperty;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
+
+import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
+import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleException;
 
 /**
  * Service class for identity verification providers.
@@ -50,12 +54,13 @@ public class IdentityVerificationProviderService {
     public IdVProviderResponse addIdVProvider(IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider;
+        int tenantId = getTenantId();
         try {
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
-                    addIdVProvider(createIdVProvider(idVProviderRequest));
+                    addIdVProvider(createIdVProvider(idVProviderRequest), tenantId);
         } catch (IdVProviderMgtException e) {
-            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP);
+            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -70,20 +75,21 @@ public class IdentityVerificationProviderService {
     public IdVProviderResponse updateIdVProvider(String idVProviderId, IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider ;
+        int tenantId = getTenantId();
         try {
             identityVerificationProvider =
-                    IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId);
+                    IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId, tenantId);
 
             if (identityVerificationProvider == null) {
-                throw handleError(Response.Status.NOT_FOUND,
-                        Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND);
+                throw handleException(Response.Status.NOT_FOUND,
+                        Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND, null);
             }
 
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
-                    updateIdVProvider(idVProviderId, createIdVProvider(idVProviderRequest));
+                    updateIdVProvider(idVProviderId, createIdVProvider(idVProviderRequest), tenantId);
         } catch (IdVProviderMgtException e) {
-            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_UPDATING_IDVP);
+            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_UPDATING_IDVP, null);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -97,8 +103,9 @@ public class IdentityVerificationProviderService {
     public IdVProviderResponse getIdVProvider(String idVProviderId) {
 
         try {
+            int tenantId = getTenantId();
             IdentityVerificationProvider identityVerificationProvider =
-                    IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId);
+                    IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId, tenantId);
             IdVProviderResponse idVProviderResponse = new IdVProviderResponse();
             idVProviderResponse.setId(identityVerificationProvider.getIdVProviderId());
             idVProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
@@ -113,8 +120,8 @@ public class IdentityVerificationProviderService {
 
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
-            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP);
+            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP, null);
         }
     }
 
@@ -125,11 +132,13 @@ public class IdentityVerificationProviderService {
      */
     public void deleteIdVProvider(String identityVerificationProviderId) {
 
+        int tenantId = getTenantId();
         try {
-            IdVProviderServiceHolder.getIdVProviderManager().deleteIdVProvider(identityVerificationProviderId);
+            IdVProviderServiceHolder.getIdVProviderManager().
+                    deleteIdVProvider(identityVerificationProviderId, tenantId);
         } catch (IdVProviderMgtException e) {
-            throw handleError(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDVP);
+            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDVP, null);
         }
     }
 
@@ -155,7 +164,8 @@ public class IdentityVerificationProviderService {
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
-
+        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnable());
+        identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));
         List<ConfigProperty> properties = idVProviderRequest.getConfigProperties();
 
         identityVerificationProvider.setIdVConfigProperties(
@@ -180,19 +190,12 @@ public class IdentityVerificationProviderService {
         return configProperty;
     };
 
-    private APIError handleInvalidInput(Constants.ErrorMessage errorEnum, String... data) {
+    private Map<String, String> getClaimMap(List<Verificationclaim> verificationclaimList) {
 
-        return handleError(Response.Status.BAD_REQUEST, errorEnum);
-    }
-
-    private APIError handleError(Response.Status status, Constants.ErrorMessage error) {
-
-        return new APIError(status, getErrorBuilder(error).build());
-    }
-
-    private ErrorResponse.Builder getErrorBuilder(Constants.ErrorMessage errorEnum) {
-
-        return new ErrorResponse.Builder().withCode(errorEnum.getCode()).withMessage(errorEnum.getMessage())
-                .withDescription(errorEnum.getDescription());
+        Map<String, String> claimMap = new HashMap<>();
+        for (Verificationclaim verificationclaim : verificationclaimList) {
+            claimMap.put(verificationclaim.getLocalClaim(), verificationclaim.getIdvpClaim());
+        }
+        return claimMap;
     }
 }

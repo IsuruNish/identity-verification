@@ -37,6 +37,7 @@ public class IdVProviderRequest  {
     private String name;
     private String displayName;
     private String description;
+    private Boolean isEnable;
     private List<Verificationclaim> claims = null;
 
     private List<ConfigProperty> configProperties = null;
@@ -94,6 +95,24 @@ public class IdVProviderRequest  {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+    **/
+    public IdVProviderRequest isEnable(Boolean isEnable) {
+
+        this.isEnable = isEnable;
+        return this;
+    }
+    
+    @ApiModelProperty(example = "true", value = "")
+    @JsonProperty("isEnable")
+    @Valid
+    public Boolean getIsEnable() {
+        return isEnable;
+    }
+    public void setIsEnable(Boolean isEnable) {
+        this.isEnable = isEnable;
     }
 
     /**
@@ -163,13 +182,14 @@ public class IdVProviderRequest  {
         return Objects.equals(this.name, idVProviderRequest.name) &&
             Objects.equals(this.displayName, idVProviderRequest.displayName) &&
             Objects.equals(this.description, idVProviderRequest.description) &&
+            Objects.equals(this.isEnable, idVProviderRequest.isEnable) &&
             Objects.equals(this.claims, idVProviderRequest.claims) &&
             Objects.equals(this.configProperties, idVProviderRequest.configProperties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, displayName, description, claims, configProperties);
+        return Objects.hash(name, displayName, description, isEnable, claims, configProperties);
     }
 
     @Override
@@ -181,6 +201,7 @@ public class IdVProviderRequest  {
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("    isEnable: ").append(toIndentedString(isEnable)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
         sb.append("    configProperties: ").append(toIndentedString(configProperties)).append("\n");
         sb.append("}");

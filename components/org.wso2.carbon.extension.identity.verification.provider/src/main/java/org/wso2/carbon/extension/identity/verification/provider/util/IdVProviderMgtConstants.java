@@ -22,11 +22,13 @@ package org.wso2.carbon.extension.identity.verification.provider.util;
  */
 public class IdVProviderMgtConstants {
 
+    /**
+     * This class contains the constants used in the IdentityVerificationProvider.
+     */
     public static class SQLQueries {
 
-        public static final String GET_IDVP_SQL = "SELECT IDV_PROVIDER_UID, NAME, DESCRIPTION, CLAIMS, CONFIGS " +
-                "FROM IDVP WHERE IDV_UUID=?";
-
+        public static final String GET_IDVP_SQL = "SELECT UUID, NAME, DISPLAY_NAME, DESCRIPTION, IS_ENABLED, CLAIMS, " +
+                "CONFIGS FROM IDVP WHERE IDV_UUID=? AND TENANT_ID=?";
         public static final String GET_IDVPS_SQL = "SELECT IDVP_UID, NAME, DISPLAY_NAME, " +
                 "DESCRIPTION, IS_ENABLE FROM IDVP WHERE TENANT_ID=?";
 
@@ -35,8 +37,8 @@ public class IdVProviderMgtConstants {
         public static final String ADD_IDV_SQL =
                 "INSERT INTO IDVP(IDV_PROVIDER_UID, NAME, DISPLAY_NAME, DESCRIPTION) VALUES (?, ?, ?)";
 
-        public static final String ADD_IDV_CONFIG_SQL = "INSERT INTO IDVP_CONFIG_PROPERTY " +
-                "(IDVP_ID, TENANT_ID, PROPERTY_KEY, PROPERTY_VALUE) VALUES (?, ?, ?, ?)";
+        public static final String ADD_IDVP_CONFIG_SQL = "INSERT INTO IDVP_CONFIG " +
+                "(IDVP_ID, TENANT_ID, PROPERTY_KEY, PROPERTY_VALUE, IS_SECRET) VALUES (?, ?, ?, ?)";
 
         public static final String UPDATE_IDV_SQL = "UPDATE IDVP SET NAME=?, DESCRIPTION=? WHERE UUID=?";
     }

@@ -17,6 +17,9 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class contains the properties of the IdentityVerificationProvider.
  */
@@ -27,6 +30,7 @@ public class IdentityVerificationProvider {
     private boolean enable;
     private String displayName;
     private String idVProviderDescription;
+    private Map<String, String> claimMappings = new HashMap<>();
     private IdVConfigProperty[] idVConfigProperties = new IdVConfigProperty[0];
 
     public String getIdVProviderName() {
@@ -87,5 +91,15 @@ public class IdentityVerificationProvider {
     public void setIdVProviderDescription(String idVProviderDescription) {
 
         this.idVProviderDescription = idVProviderDescription;
+    }
+
+    public Map<String, String> getClaimMappings() {
+
+        return claimMappings;
+    }
+
+    public void setClaimMappings(Map<String, String> claimMappings) {
+
+        this.claimMappings = claimMappings;
     }
 }

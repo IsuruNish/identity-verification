@@ -23,6 +23,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.common;
  */
 public class Constants {
 
+    public static final String AUTH_USER_TENANT_DOMAIN = "authUserTenantDomain";
     public static final String CORRELATION_ID_MDC = "Correlation-ID";
     // todo
     public static final String CONFLICT_ASSOCIATION_CODE = "10004";
@@ -72,7 +73,11 @@ public class Constants {
                 "Server encountered an error while retrieving the identity verification claim of the user."),
         ERROR_CODE_ERROR_VERIFYING_IDENTITY("IDV-65006",
                 "Unable to verify the identity of the user %s.",
-                "Server encountered an error while verifying the identity of the user.");
+                "Server encountered an error while verifying the identity of the user."),
+
+        ERROR_COMMON_SERVER_ERROR("IDV-65006",
+                "Unable to complete operation.",
+                "Error occurred while performing operation.");
 
         private final String code;
         private final String message;

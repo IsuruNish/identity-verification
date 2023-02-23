@@ -29,34 +29,35 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
 
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
-    public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
-            throws IdVProviderMgtException {
+    public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider,
+                                                       int tenantId) throws IdVProviderMgtException {
 
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider);
         return identityVerificationProvider;
     }
 
-    public IdentityVerificationProvider getIdVProvider(String idVProviderId) throws IdVProviderMgtException {
+    public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
+            throws IdVProviderMgtException {
 
         return idVProviderManagementDAO.getIdVProvider(idVProviderId);
     }
 
-    public void deleteIdVProvider(String idVProviderId) throws IdVProviderMgtException {
+    public void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException {
 
         idVProviderManagementDAO.deleteIdVProvider(idVProviderId);
     }
 
-    public IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider
-                                                                  identityVerificationProvider)
-            throws IdVProviderMgtException {
+    public IdentityVerificationProvider updateIdVProvider(String idVProviderId,
+                                                          IdentityVerificationProvider identityVerificationProvider,
+                                                          int tenantId) throws IdVProviderMgtException {
 
-        idVProviderManagementDAO.updateIdVProvider(identityVerificationProvider);
+        idVProviderManagementDAO.updateIdVProvider(idVProviderId, identityVerificationProvider);
         return identityVerificationProvider;
     }
 
-    public List<IdentityVerificationProvider> getIdVProviders(String tenantDomain)
+    public List<IdentityVerificationProvider> getIdVProviders(int tenantId)
             throws IdVProviderMgtException {
 
-        return idVProviderManagementDAO.getIdVProviders(tenantDomain);
+        return idVProviderManagementDAO.getIdVProviders(tenantId);
     }
 }

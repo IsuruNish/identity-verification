@@ -24,13 +24,13 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
  */
 public interface IdVClaimManager {
 
-    IdVClaim getIDVClaim(String userId, String idvClaimId) throws IdVClaimMgtException;
+    IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 
-    IdVClaim[] getIDVClaims(String userId) throws IdVClaimMgtException;
+    IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException;
 
-    void addIDVClaim(String userId, IdVClaim idvClaim) throws IdVClaimMgtException;
+    void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
-    void updateIDVClaim(String userId, IdVClaim idvClaim) throws IdVClaimMgtException;
+    void updateIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
-    void deleteIDVClaim(String userId, String idvClaimId) throws IdVClaimMgtException;
+    void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 }

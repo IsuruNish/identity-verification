@@ -24,6 +24,7 @@ public class IdVConfigProperty {
 
     private String name;
     private String value;
+    private boolean isSecret;
 
     public String getValue() {
 
@@ -45,4 +46,13 @@ public class IdVConfigProperty {
         this.name = name;
     }
 
+    public boolean isSecret() {
+
+        return isSecret;
+    }
+
+    public void setSecret(boolean isSecret) {
+
+        this.isSecret = isSecret;
+    }
 }

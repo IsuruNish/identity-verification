@@ -114,11 +114,12 @@ public class IdentityVerificationClaimDAO {
     /**
      * Get the identity verification claim.
      *
+     * @param tenantId Identity verification claim id.
      * @param userId User id.
      * @return Identity verification claim.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    public IdVClaim[] getIDVClaims(String userId) throws IdVClaimMgtException {
+    public IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             try (PreparedStatement getIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.

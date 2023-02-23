@@ -28,32 +28,32 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     IdentityVerificationClaimDAO identityVerificationClaimDAO = new IdentityVerificationClaimDAO();
 
     @Override
-    public IdVClaim getIDVClaim(String userId, String idvClaimId) throws IdVClaimMgtException {
+    public IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
         return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId);
     }
 
     @Override
-    public void addIDVClaim(String userId, IdVClaim idvClaim) throws IdVClaimMgtException {
+    public void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
         identityVerificationClaimDAO.addIdVClaim(userId, idvClaim);
     }
 
     @Override
-    public void updateIDVClaim(String userId, IdVClaim idvClaim) throws IdVClaimMgtException {
+    public void updateIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
         identityVerificationClaimDAO.updateIdVClaim(userId, idvClaim);
     }
 
     @Override
-    public void deleteIDVClaim(String userId, String idvClaimId) throws IdVClaimMgtException {
+    public void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
         identityVerificationClaimDAO.deleteIdVClaim(userId, idvClaimId);
     }
 
     @Override
-    public IdVClaim[] getIDVClaims(String userId) throws IdVClaimMgtException {
+    public IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException {
 
-        return identityVerificationClaimDAO.getIDVClaims(userId);
+        return identityVerificationClaimDAO.getIDVClaims(userId, tenantId);
     }
 }

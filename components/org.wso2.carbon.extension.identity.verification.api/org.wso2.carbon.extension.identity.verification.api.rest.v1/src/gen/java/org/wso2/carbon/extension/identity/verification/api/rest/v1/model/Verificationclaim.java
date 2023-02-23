@@ -30,62 +30,43 @@ import javax.xml.bind.annotation.*;
 
 public class Verificationclaim  {
   
-    private String id;
-    private String uri;
-    private String displayName;
+    private String localClaim;
+    private String idvpClaim;
 
     /**
     **/
-    public Verificationclaim id(String id) {
+    public Verificationclaim localClaim(String localClaim) {
 
-        this.id = id;
+        this.localClaim = localClaim;
         return this;
     }
     
-    @ApiModelProperty(example = "aHR0cDovL3dzbzIub3JnL2NsYWltcy91c2VybmFtZQ", value = "")
-    @JsonProperty("id")
+    @ApiModelProperty(example = "http://wso2.org/claims/dob", value = "")
+    @JsonProperty("localClaim")
     @Valid
-    public String getId() {
-        return id;
+    public String getLocalClaim() {
+        return localClaim;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-    **/
-    public Verificationclaim uri(String uri) {
-
-        this.uri = uri;
-        return this;
-    }
-    
-    @ApiModelProperty(example = "http://wso2.org/claims/username", value = "")
-    @JsonProperty("uri")
-    @Valid
-    public String getUri() {
-        return uri;
-    }
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setLocalClaim(String localClaim) {
+        this.localClaim = localClaim;
     }
 
     /**
     **/
-    public Verificationclaim displayName(String displayName) {
+    public Verificationclaim idvpClaim(String idvpClaim) {
 
-        this.displayName = displayName;
+        this.idvpClaim = idvpClaim;
         return this;
     }
     
-    @ApiModelProperty(example = "Username", value = "")
-    @JsonProperty("displayName")
+    @ApiModelProperty(example = "birthday", value = "")
+    @JsonProperty("idvpClaim")
     @Valid
-    public String getDisplayName() {
-        return displayName;
+    public String getIdvpClaim() {
+        return idvpClaim;
     }
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setIdvpClaim(String idvpClaim) {
+        this.idvpClaim = idvpClaim;
     }
 
 
@@ -100,14 +81,13 @@ public class Verificationclaim  {
             return false;
         }
         Verificationclaim verificationclaim = (Verificationclaim) o;
-        return Objects.equals(this.id, verificationclaim.id) &&
-            Objects.equals(this.uri, verificationclaim.uri) &&
-            Objects.equals(this.displayName, verificationclaim.displayName);
+        return Objects.equals(this.localClaim, verificationclaim.localClaim) &&
+            Objects.equals(this.idvpClaim, verificationclaim.idvpClaim);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uri, displayName);
+        return Objects.hash(localClaim, idvpClaim);
     }
 
     @Override
@@ -116,9 +96,8 @@ public class Verificationclaim  {
         StringBuilder sb = new StringBuilder();
         sb.append("class Verificationclaim {\n");
         
-        sb.append("    id: ").append(toIndentedString(id)).append("\n");
-        sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
-        sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
+        sb.append("    localClaim: ").append(toIndentedString(localClaim)).append("\n");
+        sb.append("    idvpClaim: ").append(toIndentedString(idvpClaim)).append("\n");
         sb.append("}");
         return sb.toString();
     }

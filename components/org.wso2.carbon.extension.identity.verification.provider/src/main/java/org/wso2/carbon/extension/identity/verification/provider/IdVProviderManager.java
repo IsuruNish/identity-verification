@@ -26,16 +26,16 @@ import java.util.List;
  */
 public interface IdVProviderManager {
 
-    IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
+    IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider, int tenantId)
             throws IdVProviderMgtException;
 
-    IdentityVerificationProvider getIdVProvider(String idVProviderId) throws IdVProviderMgtException;
+    IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
-    void deleteIdVProvider(String idVProviderId) throws IdVProviderMgtException;
+    void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
     IdentityVerificationProvider updateIdVProvider(String idVProviderId,
-                                                   IdentityVerificationProvider identityVerificationProvider)
-            throws IdVProviderMgtException;
+                                                   IdentityVerificationProvider identityVerificationProvider,
+                                                   int tenantId) throws IdVProviderMgtException;
 
-    List<IdentityVerificationProvider> getIdVProviders(String tenantDomain) throws IdVProviderMgtException;
+    List<IdentityVerificationProvider> getIdVProviders(int tenantId) throws IdVProviderMgtException;
 }

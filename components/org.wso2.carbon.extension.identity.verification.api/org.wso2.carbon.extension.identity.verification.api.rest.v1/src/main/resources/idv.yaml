@@ -586,6 +586,9 @@ components:
         description:
           type: string
           example: identity verification provider
+        isEnable:
+          type: boolean
+          example: true
         claims:
           type: array
           items:
@@ -606,6 +609,9 @@ components:
         description:
           type: string
           example: identity verification provider
+        isEnable:
+          type: boolean
+          example: true
         claims:
           type: array
           items:
@@ -633,17 +639,12 @@ components:
     verificationclaim:
       type: object
       properties:
-        id:
+        localClaim:
           type: string
-          example: aHR0cDovL3dzbzIub3JnL2NsYWltcy91c2VybmFtZQ
-          readOnly: true
-        uri:
+          example: 'http://wso2.org/claims/dob'
+        idvpClaim:
           type: string
-          example: 'http://wso2.org/claims/username'
-        displayName:
-          type: string
-          example: Username
-          readOnly: true
+          example: birthday
   securitySchemes:
     BasicAuth:
       type: http
