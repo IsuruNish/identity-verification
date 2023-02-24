@@ -59,5 +59,4 @@ public class IdentityVerifierDataHolder {
 
         identityVerifierFactoryMap.remove(identityVerifierFactory.getIdentityVerifierName());
     }
-
 }

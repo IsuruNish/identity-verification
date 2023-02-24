@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>org.wso2.carbon.extension.identity.verification.provider</artifactId>
+    <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
@@ -64,5 +65,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

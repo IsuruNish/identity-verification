@@ -66,7 +66,7 @@ public class IdVProviderServiceHolder {
         IdVProviderServiceHolder.identityVerifierFactory = identityVerifierFactory;
     }
 
-    public static IdentityVerifierFactory getIdentityVerifierFactory (){
+    public static IdentityVerifierFactory getIdentityVerifierFactory () {
 
         return identityVerifierFactory;
     }

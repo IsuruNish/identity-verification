@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
+    <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
@@ -46,10 +47,28 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package>
+                            org.wso2.carbon.extension.identity.verification.claim.mgt.internal
+                        </Private-Package>
+                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Export-Package>
+                            !org.wso2.carbon.extension.identity.verification.claim.mgt.internal,
+                            org.wso2.carbon.extension.identity.verification.claim.mgt.*; version="${project.version}"
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
