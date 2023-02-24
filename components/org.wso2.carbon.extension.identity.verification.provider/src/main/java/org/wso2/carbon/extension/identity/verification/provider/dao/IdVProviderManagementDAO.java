@@ -17,24 +17,28 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider.dao;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pdfbox.util.MapUtil;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
+import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtServerException;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdVConfigProperty;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
 import org.wso2.carbon.identity.base.IdentityRuntimeException;
 import org.wso2.carbon.identity.core.util.IdentityDatabaseUtil;
-import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Data Access Layer functionality for Identity Verification Provider management.
@@ -46,33 +50,60 @@ public class IdVProviderManagementDAO {
     /**
      * Get Identity Verification Provider.
      *
-     * @param idVProviderId Identity Verification Provider ID.
-     * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
+     * @param idvProviderId Identity Verification Provider ID.
+     * @param tenantId      Tenant ID.
+     * @return Identity Verification Provider.
+     * @throws IdVProviderMgtException Error when getting Identity Verification Provider.
      */
-    public void getIdP(int idVProviderId) throws IdVProviderMgtException {
+    public IdentityVerificationProvider getIdVProvider(String idvProviderId, int tenantId)
+            throws IdVProviderMgtException {
 
-        try (Connection conn = IdentityDatabaseUtil.getDBConnection(false)) {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    IdVProviderMgtConstants.SQLQueries.ADD_IDV_SQL);
-            prepStmt.setInt(1, idVProviderId);
-            prepStmt.executeUpdate();
+        IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            try (PreparedStatement getIdVProvidersStmt = connection
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_SQL)) {
+                getIdVProvidersStmt.setString(1, idvProviderId);
+                getIdVProvidersStmt.setInt(2, tenantId);
+
+                try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                    identityVerificationProvider.setIdVProviderId(idVProviderResultSet.getString("UUID"));
+                    identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
+                    identityVerificationProvider.setDisplayName(idVProviderResultSet.getString("DISPLAY_NAME"));
+                    identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.
+                            getString("DESCRIPTION"));
+                    identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLE"));
+                }
+            } catch (SQLException e1) {
+                throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                        ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
+            }
+            // Get configs of identity verification provider.
+            getIdVProviderWithConfigs(identityVerificationProvider, idvProviderId, tenantId, connection);
+
+            // Get claim mappings of identity verification provider.
+            getIdVProvidersWithClaims(identityVerificationProvider, idvProviderId, tenantId, connection);
         } catch (SQLException e) {
-            throw new IdVProviderMgtException("Error occurred while deleting Identity " +
-                    "Verification Provider" + idVProviderId, e);
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
+        } catch (IdentityRuntimeException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_DATABASE_CONNECTION, e);
         }
+        return identityVerificationProvider;
     }
 
     /**
      * Add Identity Verification Provider.
      *
      * @param identityVerificationProvider Identity Verification Provider.
+     * @param tenantId                     Tenant ID.
      * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
      */
-    public void addIdVProvider(IdentityVerificationProvider identityVerificationProvider)
+    public void addIdVProvider(IdentityVerificationProvider identityVerificationProvider, int tenantId)
             throws IdVProviderMgtException {
 
-        String idvProviderId = identityVerificationProvider.getIdVProviderId();
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            connection.setAutoCommit(false);
             try (PreparedStatement addIdVProviderStmt = connection.prepareStatement(IdVProviderMgtConstants.
                     SQLQueries.ADD_IDV_SQL)) {
                 addIdVProviderStmt.setString(1, identityVerificationProvider.getIdVProviderId());
@@ -81,23 +112,17 @@ public class IdVProviderManagementDAO {
                 addIdVProviderStmt.setString(4,
                         identityVerificationProvider.getIdVProviderDescription());
                 addIdVProviderStmt.executeUpdate();
-
-                // TODO
-                //IdentityVerificationProvider createdIDP = getIdVProvider(dbConnection, resourceId, tenantId,
-                //        IdentityTenantUtil.getTenantDomain(tenantId));
-                // add federated authenticators.
-                addIDVProviderConfigs(identityVerificationProvider, connection);
-
-                IdentityDatabaseUtil.commitTransaction(connection);
-
-                if (log.isDebugEnabled()) {
-                    log.debug("");
-                }
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage
                         .ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e1);
             }
+            // Add configs of identity verification provider.
+            addIDVProviderConfigs(identityVerificationProvider, tenantId, connection);
+
+            // Add claims of identity verification provider.
+            addIDVProviderClaims(identityVerificationProvider, tenantId, connection);
+            connection.commit();
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e);
@@ -108,57 +133,39 @@ public class IdVProviderManagementDAO {
      * Update Identity Verification Provider.
      *
      * @param idVProviderId                Identity Verification Provider ID.
+     * @param tenantId                     Tenant ID.
      * @param identityVerificationProvider Identity Verification Provider.
      * @throws IdVProviderMgtException Error when updating Identity Verification Provider configs.
      */
-    public void updateIdVProvider(String idVProviderId, IdentityVerificationProvider identityVerificationProvider)
+    public void updateIdVProvider(String idVProviderId, int tenantId,
+                                  IdentityVerificationProvider identityVerificationProvider)
             throws IdVProviderMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
-            try (PreparedStatement addIdVProviderStmt = connection.prepareStatement(IdVProviderMgtConstants.
-                    SQLQueries.UPDATE_IDV_SQL)) {
-                addIdVProviderStmt.setString(1, identityVerificationProvider.getIdVProviderName());
-                addIdVProviderStmt.setString(2, identityVerificationProvider.getDisplayName());
-                addIdVProviderStmt.setString(3,
+            try (PreparedStatement updateIdVProviderStmt = connection.prepareStatement(IdVProviderMgtConstants.
+                    SQLQueries.UPDATE_IDVP_SQL)) {
+                updateIdVProviderStmt.setString(1, identityVerificationProvider.getIdVProviderName());
+                updateIdVProviderStmt.setString(2, identityVerificationProvider.getDisplayName());
+                updateIdVProviderStmt.setString(3,
                         identityVerificationProvider.getIdVProviderDescription());
-                addIdVProviderStmt.setString(4, idVProviderId);
-
-                addIdVProviderStmt.executeUpdate();
-
-                // TODO
-                addIDVProviderConfigs(identityVerificationProvider, connection);
-
-                IdentityDatabaseUtil.commitTransaction(connection);
-
-                if (log.isDebugEnabled()) {
-                    log.debug("");
-                }
+                updateIdVProviderStmt.setBoolean(4, identityVerificationProvider.isEnable());
+                updateIdVProviderStmt.setString(5, idVProviderId);
+                updateIdVProviderStmt.setInt(6, tenantId);
+                updateIdVProviderStmt.executeUpdate();
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage
                         .ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e1);
             }
+            // Update configs of identity verification provider.
+            updateIDVProviderConfigs(identityVerificationProvider, idVProviderId, tenantId, connection);
+
+            // Update claims of identity verification provider.
+            updateIDVProviderClaims(identityVerificationProvider, idVProviderId, tenantId, connection);
+            connection.commit();
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e);
-        }
-    }
-
-    private static void addIDVProviderConfigs(IdentityVerificationProvider identityVerificationProvider,
-                                              Connection connection) throws SQLException {
-
-        PreparedStatement prepStmt2;
-        String sqlStmt = IdVProviderMgtConstants.SQLQueries.ADD_IDVP_CONFIG_SQL;
-        if (identityVerificationProvider.getIdVConfigProperties() == null) {
-            identityVerificationProvider.setIdVConfigProperties(new IdVConfigProperty[0]);
-        }
-        for (IdVConfigProperty idVConfigProperty : identityVerificationProvider.getIdVConfigProperties()) {
-            prepStmt2 = connection.prepareStatement(sqlStmt);
-            prepStmt2.setString(1, identityVerificationProvider.getIdVProviderId());
-            prepStmt2.setString(2, idVConfigProperty.getName());
-            prepStmt2.setString(3, idVConfigProperty.getValue());
-            prepStmt2.setBoolean(4, idVConfigProperty.isSecret());
-            prepStmt2.executeUpdate();
         }
     }
 
@@ -175,7 +182,7 @@ public class IdVProviderManagementDAO {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
                         identityVerificationProvider.
-                                setIdVProviderId(idVProviderResultSet.getString("IDV_PROVIDER_UID"));
+                                setIdVProviderId(idVProviderResultSet.getString("UUID"));
                         identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
                         identityVerificationProvider.setDisplayName(idVProviderResultSet.getString("DISPLAY_NAME"));
                         identityVerificationProvider.
@@ -198,57 +205,156 @@ public class IdVProviderManagementDAO {
         return identityVerificationProviders;
     }
 
-    // TODO
-    public IdentityVerificationProvider getIdVProvider(String idvProviderId) throws IdVProviderMgtException {
-
-        IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
-        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
-            try (PreparedStatement getIdVProvidersStmt = connection
-                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_SQL)) {
-                getIdVProvidersStmt.setString(1, idvProviderId);
-
-                try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
-                    identityVerificationProvider.setIdVProviderId(idVProviderResultSet.getString("UUID"));
-                    identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
-                    identityVerificationProvider.setDisplayName(idVProviderResultSet.getString("DISPLAY_NAME"));
-                    identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.
-                            getString("DESCRIPTION"));
-                    identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLE"));
-                }
-            } catch (SQLException e1) {
-                throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                        ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
-            }
-            addIDVProviderConfigs(identityVerificationProvider, connection);
-        } catch (SQLException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
-        } catch (IdentityRuntimeException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_DATABASE_CONNECTION, e);
-        }
-        return identityVerificationProvider;
-    }
-
-    public void deleteIdVProvider(String idvUUID) throws IdVProviderMgtException {
+    /**
+     * Delete Identity Verification Provider by ID.
+     *
+     * @param idVProviderId Identity Verification Provider ID.
+     * @param tenantId      Tenant ID.
+     * @throws IdVProviderMgtException Error when getting Identity Verification Provider.
+     */
+    public void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             try (PreparedStatement deleteIdVProviderStmt =
                          connection.prepareStatement(IdVProviderMgtConstants.SQLQueries.DELETE_IDV_SQL)) {
-                deleteIdVProviderStmt.setString(1, idvUUID);
+                deleteIdVProviderStmt.setString(1, idVProviderId);
+                deleteIdVProviderStmt.setInt(2, tenantId);
                 deleteIdVProviderStmt.executeUpdate();
                 IdentityDatabaseUtil.commitTransaction(connection);
-                if (log.isDebugEnabled()) {
-                    log.debug("");
-                }
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                        ERROR_CODE_DELETING_IDV_PROVIDER, idvUUID, e1);
+                        ERROR_CODE_DELETING_IDV_PROVIDER, idVProviderId, e1);
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_CODE_DATABASE_CONNECTION, e);
+        }
+    }
+
+    private void addIDVProviderConfigs(IdentityVerificationProvider identityVerificationProvider,
+                                              int tenantId, Connection connection) throws SQLException {
+
+        if (identityVerificationProvider.getIdVConfigProperties() == null) {
+            identityVerificationProvider.setIdVConfigProperties(new IdVConfigProperty[0]);
+        }
+        try (PreparedStatement addIDVProviderConfigsStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.ADD_IDVP_CONFIG_SQL)) {
+            for (IdVConfigProperty idVConfigProperty : identityVerificationProvider.getIdVConfigProperties()) {
+                addIDVProviderConfigsStmt.setString(1, identityVerificationProvider.getIdVProviderId());
+                addIDVProviderConfigsStmt.setInt(2, tenantId);
+                addIDVProviderConfigsStmt.setString(3, idVConfigProperty.getName());
+                addIDVProviderConfigsStmt.setString(4, idVConfigProperty.getValue());
+                addIDVProviderConfigsStmt.executeUpdate();
+            }
+        }
+    }
+
+    private void addIDVProviderClaims(IdentityVerificationProvider identityVerificationProvider, int tenantId,
+                                             Connection connection) throws SQLException {
+
+        try (PreparedStatement addIDVProviderClaimsStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.ADD_IDVP_CLAIM_SQL)) {
+            for (Map.Entry<String, String> claimMapping : identityVerificationProvider.getClaimMappings().entrySet()) {
+                addIDVProviderClaimsStmt.setString(1, identityVerificationProvider.getIdVProviderId());
+                addIDVProviderClaimsStmt.setInt(2, tenantId);
+                addIDVProviderClaimsStmt.setString(3, claimMapping.getKey());
+                addIDVProviderClaimsStmt.setString(4, claimMapping.getValue());
+                addIDVProviderClaimsStmt.executeUpdate();
+            }
+        }
+    }
+
+    private void updateIDVProviderConfigs(IdentityVerificationProvider identityVerificationProvider,
+                                          String idVProviderId, int tenantId, Connection connection)
+            throws SQLException {
+
+        deleteIDVProviderConfigs (idVProviderId, tenantId, connection);
+        if (ArrayUtils.isEmpty(identityVerificationProvider.getIdVConfigProperties())) {
+            return;
+        }
+        addIDVProviderConfigs(identityVerificationProvider, tenantId, connection);
+    }
+
+    private void deleteIDVProviderConfigs (String idVProviderId, int tenantId, Connection connection)
+            throws SQLException {
+
+        try (PreparedStatement deleteIDVProviderConfigsStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.DELETE_IDVP_CONFIG_SQL)) {
+            deleteIDVProviderConfigsStmt.setString(1, idVProviderId);
+            deleteIDVProviderConfigsStmt.setInt(2, tenantId);
+            deleteIDVProviderConfigsStmt.executeUpdate();
+        }
+    }
+
+    private void deleteIDVProviderClaims (String idVProviderId, int tenantId, Connection connection)
+            throws SQLException {
+
+        try (PreparedStatement deleteIDVProviderClaimsStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.DELETE_IDVP_CLAIM_SQL)) {
+            deleteIDVProviderClaimsStmt.setString(1, idVProviderId);
+            deleteIDVProviderClaimsStmt.setInt(2, tenantId);
+            deleteIDVProviderClaimsStmt.executeUpdate();
+        }
+    }
+
+    private void updateIDVProviderClaims(IdentityVerificationProvider identityVerificationProvider,
+                                         String idVProviderId, int tenantId, Connection connection)
+            throws SQLException {
+
+        deleteIDVProviderClaims (idVProviderId, tenantId, connection);
+        if (MapUtils.isEmpty(identityVerificationProvider.getClaimMappings())) {
+            return;
+        }
+        addIDVProviderClaims(identityVerificationProvider, tenantId, connection);
+    }
+
+    private void getIdVProviderWithConfigs(IdentityVerificationProvider identityVerificationProvider,
+                                                  String idvProviderId, int tenantId, Connection connection)
+            throws IdvProviderMgtServerException {
+
+        IdVConfigProperty[] idVConfigProperties = new IdVConfigProperty[0];
+        List<IdVConfigProperty> idVConfigPropertyList = new ArrayList<>();
+        try (PreparedStatement getIdVProvidersStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_CONFIG_SQL)) {
+            getIdVProvidersStmt.setString(1, idvProviderId);
+            getIdVProvidersStmt.setInt(2, tenantId);
+
+            try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                if (idVProviderResultSet.next()) {
+                    IdVConfigProperty idVConfigProperty = new IdVConfigProperty();
+                    idVConfigProperty.setName(idVProviderResultSet.getString("PROPERTY_NAME"));
+                    idVConfigProperty.setValue(idVProviderResultSet.getString("PROPERTY_VALUE"));
+                    idVConfigPropertyList.add(idVConfigProperty);
+                }
+                identityVerificationProvider.setIdVConfigProperties(idVConfigPropertyList.toArray(idVConfigProperties));
+            }
+        } catch (SQLException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_RETRIEVING_IDV_PROVIDER_CONFIGS, e);
+        }
+    }
+
+    private void getIdVProvidersWithClaims(IdentityVerificationProvider identityVerificationProvider,
+                                           String idvProviderId, int tenantId, Connection connection)
+            throws IdvProviderMgtServerException {
+
+        Map<String, String> idVClaimMap = new HashMap<>();
+        try (PreparedStatement getIdVProvidersStmt = connection
+                .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_CLAIMS_SQL)) {
+            getIdVProvidersStmt.setString(1, idvProviderId);
+            getIdVProvidersStmt.setInt(2, tenantId);
+
+            try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                while (idVProviderResultSet.next()) {
+                    idVClaimMap.put(idVProviderResultSet.getString("CLAIM"),
+                            idVProviderResultSet.getString("LOCAL_CLAIM"));
+                }
+                identityVerificationProvider.setClaimMappings(idVClaimMap);
+            }
+        } catch (SQLException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_RETRIEVING_IDV_PROVIDER_CLAIMS, e);
         }
     }
 }

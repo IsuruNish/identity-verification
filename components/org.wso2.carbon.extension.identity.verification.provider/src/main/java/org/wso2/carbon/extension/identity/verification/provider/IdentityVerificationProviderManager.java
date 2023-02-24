@@ -32,26 +32,26 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
     public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider,
                                                        int tenantId) throws IdVProviderMgtException {
 
-        idVProviderManagementDAO.addIdVProvider(identityVerificationProvider);
+        idVProviderManagementDAO.addIdVProvider(identityVerificationProvider, tenantId);
         return identityVerificationProvider;
     }
 
     public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
             throws IdVProviderMgtException {
 
-        return idVProviderManagementDAO.getIdVProvider(idVProviderId);
+        return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
     }
 
     public void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException {
 
-        idVProviderManagementDAO.deleteIdVProvider(idVProviderId);
+        idVProviderManagementDAO.deleteIdVProvider(idVProviderId, tenantId);
     }
 
     public IdentityVerificationProvider updateIdVProvider(String idVProviderId,
                                                           IdentityVerificationProvider identityVerificationProvider,
                                                           int tenantId) throws IdVProviderMgtException {
 
-        idVProviderManagementDAO.updateIdVProvider(idVProviderId, identityVerificationProvider);
+        idVProviderManagementDAO.updateIdVProvider(idVProviderId, tenantId, identityVerificationProvider);
         return identityVerificationProvider;
     }
 
