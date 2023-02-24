@@ -13,7 +13,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: v1
 servers:
-  - url: 'https://{server-url}/t/{tenant-domain}/api/server/v1/idv'
+  - url: 'https://{server-url}/t/{tenant-domain}/api/idv/v1'
     variables:
       tenant-domain:
         default: "carbon.super"
