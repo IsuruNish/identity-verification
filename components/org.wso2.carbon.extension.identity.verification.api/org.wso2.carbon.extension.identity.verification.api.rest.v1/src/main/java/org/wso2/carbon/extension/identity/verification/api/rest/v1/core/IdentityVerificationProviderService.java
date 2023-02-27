@@ -118,7 +118,7 @@ public class IdentityVerificationProviderService {
                             map(propertyToExternal).collect(Collectors.toList());
             idVProviderResponse.setConfigProperties(configProperties);
 
-            identityVerificationProvider.setClaimMappings(identityVerificationProvider.getClaimMappings());
+            idVProviderResponse.setClaims(getIdVClaimMappings(identityVerificationProvider));
 
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
@@ -142,6 +142,20 @@ public class IdentityVerificationProviderService {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDVP, null);
         }
+    }
+
+    private List<Verificationclaim> getIdVClaimMappings(IdentityVerificationProvider identityVerificationProvider) {
+
+        Map<String, String> claimMappings = identityVerificationProvider.getClaimMappings();
+        if (claimMappings == null) {
+            return null;
+        }
+        return claimMappings.entrySet().stream().map(entry -> {
+            Verificationclaim verificationclaim = new Verificationclaim();
+            verificationclaim.setLocalClaim(entry.getKey());
+            verificationclaim.setIdvpClaim(entry.getValue());
+            return verificationclaim;
+        }).collect(Collectors.toList());
     }
 
     private IdVProviderResponse getIdVProviderResponse(IdentityVerificationProvider
