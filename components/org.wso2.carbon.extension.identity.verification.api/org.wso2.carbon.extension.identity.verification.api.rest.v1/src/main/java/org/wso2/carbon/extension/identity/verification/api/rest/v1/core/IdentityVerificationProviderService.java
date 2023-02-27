@@ -116,8 +116,9 @@ public class IdentityVerificationProviderService {
             List<ConfigProperty> configProperties =
                     Arrays.stream(identityVerificationProvider.getIdVConfigProperties()).
                             map(propertyToExternal).collect(Collectors.toList());
-
             idVProviderResponse.setConfigProperties(configProperties);
+
+            identityVerificationProvider.setClaimMappings(identityVerificationProvider.getClaimMappings());
 
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
