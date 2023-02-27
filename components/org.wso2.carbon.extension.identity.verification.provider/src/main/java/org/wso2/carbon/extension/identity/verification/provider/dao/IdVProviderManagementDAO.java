@@ -226,6 +226,42 @@ public class IdVProviderManagementDAO {
         return identityVerificationProviders;
     }
 
+    public IdentityVerificationProvider getIdVPByName(String idVPName, int tenantId)
+            throws IdvProviderMgtServerException {
+
+        IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            try (PreparedStatement getIdVProvidersStmt = connection
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_BY_NAME_SQL)) {
+                getIdVProvidersStmt.setString(1, idVPName);
+                getIdVProvidersStmt.setInt(2, tenantId);
+
+                try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                    while (idVProviderResultSet.next()) {
+                        identityVerificationProvider.setId(idVProviderResultSet.getString("ID"));
+                        identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString("UUID"));
+                        identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
+                        identityVerificationProvider.setDisplayName(idVProviderResultSet.getString("DISPLAY_NAME"));
+                        identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.
+                                getString("DESCRIPTION"));
+                        identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
+                    }
+                }
+            } catch (SQLException e1) {
+                throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                        ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
+            }
+        } catch (SQLException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
+            //todo
+        } catch (IdentityRuntimeException | IdvProviderMgtServerException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_DATABASE_CONNECTION, e);
+        }
+        return identityVerificationProvider;
+    }
+
     /**
      * Delete Identity Verification Provider by ID.
      *

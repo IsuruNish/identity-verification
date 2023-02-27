@@ -17,8 +17,12 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider;
 
+import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.extension.identity.verification.provider.dao.IdVProviderManagementDAO;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
+import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
+import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
+import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 
 import java.util.List;
 
@@ -32,6 +36,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
     public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider,
                                                        int tenantId) throws IdVProviderMgtException {
 
+        validateAddIdPVInputValues(identityVerificationProvider.getIdVProviderName(), tenantId);
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider, tenantId);
         return identityVerificationProvider;
     }
@@ -59,5 +64,34 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
             throws IdVProviderMgtException {
 
         return idVProviderManagementDAO.getIdVProviders(tenantId);
+    }
+
+    /**
+     * Validate input parameters for the addIdVProvider function.
+     *
+     * @param idVPName Identity Verification Provider name.
+     * @param tenantId Tenant Id.
+     * @throws IdVProviderMgtException IdVProviderMgtException
+     */
+    private void validateAddIdPVInputValues(String idVPName, int tenantId) throws
+            IdVProviderMgtException {
+
+        if (getIdVPByName(idVPName, tenantId) != null) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_IDVP_ALREADY_EXISTS, idVPName, null);
+        }
+    }
+
+    @Override
+    public IdentityVerificationProvider getIdVPByName(String idVPName, int tenantId)
+            throws IdVProviderMgtException {
+
+        if (StringUtils.isEmpty(idVPName)) {
+            // todo
+            String msg = "Invalid argument: Identity Verification Provider Name value is empty";
+            throw new IdVProviderMgtClientException(msg);
+        }
+
+        return idVProviderManagementDAO.getIdVPByName(idVPName, tenantId);
     }
 }

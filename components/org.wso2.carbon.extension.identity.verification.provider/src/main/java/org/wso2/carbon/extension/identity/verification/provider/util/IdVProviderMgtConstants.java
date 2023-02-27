@@ -29,6 +29,8 @@ public class IdVProviderMgtConstants {
 
         public static final String GET_IDVP_SQL = "SELECT ID, UUID, NAME, DISPLAY_NAME, DESCRIPTION, IS_ENABLED" +
                 " FROM IDVP WHERE UUID=? AND TENANT_ID=?";
+        public static final String GET_IDVP_BY_NAME_SQL = "SELECT ID, UUID, NAME, DISPLAY_NAME, DESCRIPTION, " +
+                "IS_ENABLED FROM IDVP WHERE NAME=? AND TENANT_ID=?";
         public static final String GET_IDVP_CONFIG_SQL = "SELECT PROPERTY_KEY, PROPERTY_VALUE FROM " +
                 "IDVP_CONFIG WHERE IDVP_ID=? AND TENANT_ID=?";
         public static final String GET_IDVP_CLAIMS_SQL = "SELECT CLAIM, LOCAL_CLAIM FROM " +
@@ -69,7 +71,10 @@ public class IdVProviderMgtConstants {
         ERROR_CODE_RETRIEVING_IDV_PROVIDER_CONFIGS("IDV-65002",
                 "An error occurred while retrieving Identity Verification Provider configs."),
         ERROR_CODE_RETRIEVING_IDV_PROVIDER_CLAIMS("IDV-65003",
-                "An error occurred while retrieving Identity Verification Provider claims.");
+                "An error occurred while retrieving Identity Verification Provider claims."),
+
+        ERROR_CODE_IDVP_ALREADY_EXISTS("IDV-65004",
+                "An Identity Verification Provider already exists with the name: %s.");
         private final String code;
         private final String message;
 

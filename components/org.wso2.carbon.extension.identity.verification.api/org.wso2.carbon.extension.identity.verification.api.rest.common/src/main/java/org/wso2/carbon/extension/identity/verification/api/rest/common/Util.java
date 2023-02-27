@@ -18,9 +18,7 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.common;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.MDC;
-import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 
 import java.util.UUID;
 

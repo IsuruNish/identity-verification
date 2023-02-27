@@ -38,4 +38,7 @@ public interface IdVProviderManager {
                                                    int tenantId) throws IdVProviderMgtException;
 
     List<IdentityVerificationProvider> getIdVProviders(int tenantId) throws IdVProviderMgtException;
+
+    IdentityVerificationProvider getIdVPByName(String idPName, int tenantId)
+            throws IdVProviderMgtException;
 }
