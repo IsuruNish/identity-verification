@@ -77,7 +77,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
             IdVProviderMgtException {
 
         if (getIdVPByName(idVPName, tenantId) != null) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_CODE_IDVP_ALREADY_EXISTS, idVPName, null);
         }
     }

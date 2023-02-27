@@ -25,6 +25,9 @@ import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants
 import org.wso2.carbon.extension.identity.verification.api.rest.common.ContextLoader;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtClientException;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
+import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtServerException;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 
 import javax.ws.rs.core.Response;
@@ -34,7 +37,59 @@ import javax.ws.rs.core.Response;
  */
 public class IdentityVerificationUtils {
 
-    private static final Log LOG = LogFactory.getLog(IdentityVerificationUtils.class);
+    private static final Log log = LogFactory.getLog(IdentityVerificationUtils.class);
+
+    /**
+     * Handle IdentityProviderManagementException, extract error code, error description and status code to be sent
+     * in the response.
+     *
+     * @param e         IdentityProviderManagementException
+     * @param errorEnum Error message Information.
+     * @return APIError.
+     */
+    public static APIError handleIdPException(IdVProviderMgtException e,
+                                        Constants.ErrorMessage errorEnum, String data) {
+
+        ErrorResponse errorResponse;
+        Response.Status status;
+
+        if (e instanceof IdVProviderMgtClientException) {
+//            if (ERROR_CODE_RESOURCE_LIMIT_REACHED.equals(e.getErrorCode())) {
+//                return handleResourceLimitReached();
+//            }
+            if (e.getErrorCode() != null) {
+                String errorCode = e.getErrorCode();
+                errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).build(log, e.getMessage(), true);
+                errorResponse.setCode(errorCode);
+            } else {
+                errorResponse = getErrorBuilder(errorEnum, data).build(log, e.getMessage(), true);
+            }
+            errorResponse.setDescription(e.getMessage());
+            status = Response.Status.BAD_REQUEST;
+        } else if (e instanceof IdvProviderMgtServerException) {
+            if (e.getErrorCode() != null) {
+                String errorCode = e.getErrorCode();
+                errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).build(log, e,
+                        includeData(e.getMessage(), data), false);
+                errorResponse.setCode(errorCode);
+            } else {
+                errorResponse = getErrorBuilder(errorEnum, data).
+                        build(log, e, includeData(e.getMessage(), data), false);
+            }
+            errorResponse.setDescription(e.getMessage());
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+        } else {
+            if (e.getErrorCode() != null) {
+                errorResponse = getErrorBuilder(e.getErrorCode(), e.getMessage(), data).build(log,
+                        e, includeData(e.getMessage(), data), false);
+            } else {
+                errorResponse = getErrorBuilder(errorEnum, data).
+                        build(log, e, includeData(e.getMessage(), data), false);
+            }
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+        }
+        return new APIError(status, errorResponse);
+    }
 
     /**
      * Handle exceptions generated in API.
@@ -53,7 +108,7 @@ public class IdentityVerificationUtils {
 
         Response.Status status = Response.Status.INTERNAL_SERVER_ERROR;
         ErrorResponse errorResponse = getErrorBuilder(errorCode, errorMessage, errorDescription)
-                .build(LOG, errorDescription, false);
+                .build(log, errorDescription, false);
         return new APIError(status, errorResponse);
     }
 
@@ -93,6 +148,15 @@ public class IdentityVerificationUtils {
         } else {
             return error.getDescription();
         }
+    }
+
+    public static String includeData(String errorMsg, String data) {
+
+        String message = errorMsg;
+        if (data != null) {
+            message = String.format(errorMsg, data);
+        }
+        return message;
     }
 
     public static int getTenantId() {

@@ -40,6 +40,7 @@ import javax.ws.rs.core.Response;
 
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleException;
+import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleIdPException;
 
 /**
  * Service class for identity verification providers.
@@ -60,8 +61,7 @@ public class IdentityVerificationProviderService {
             identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
                     addIdVProvider(createIdVProvider(idVProviderRequest), tenantId);
         } catch (IdVProviderMgtException e) {
-            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+            throw handleIdPException(e, Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }

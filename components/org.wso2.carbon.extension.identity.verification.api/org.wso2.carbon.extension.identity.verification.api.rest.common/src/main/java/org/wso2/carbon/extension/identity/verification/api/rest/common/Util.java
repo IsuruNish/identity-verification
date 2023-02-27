@@ -18,13 +18,14 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.common;
 
-import org.slf4j.MDC;
+import org.apache.log4j.MDC;
 
 import java.util.UUID;
 
 /**
  * Util class.
- */public class Util {
+ */
+public class Util {
 
     /**
      * Get correlation id of current thread.
