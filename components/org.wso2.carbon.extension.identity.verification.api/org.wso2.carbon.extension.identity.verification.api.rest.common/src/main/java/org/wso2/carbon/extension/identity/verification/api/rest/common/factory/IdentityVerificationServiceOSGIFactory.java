@@ -20,15 +20,15 @@ package org.wso2.carbon.extension.identity.verification.api.rest.common.factory;
 
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
+import org.wso2.carbon.extension.identity.verifier.IdentityVerificationService;
 
 /**
  * Factory Beans serves as a factory for creating other beans within the IOC container. This factory bean is used to
- * instantiate the IdentityVerifierFactory inside the container.
+ * instantiate the IdentityVerificationServiceOSGIFactory inside the container.
  */
-public class IdentityVerifierFactoryOSGIFactory extends AbstractFactoryBean<IdentityVerifierFactory> {
+public class IdentityVerificationServiceOSGIFactory extends AbstractFactoryBean<IdentityVerificationService> {
 
-    private IdentityVerifierFactory identityVerifierFactory;
+    private IdentityVerificationService identityVerificationService;
 
     @Override
     public Class<?> getObjectType() {
@@ -37,18 +37,20 @@ public class IdentityVerifierFactoryOSGIFactory extends AbstractFactoryBean<Iden
     }
 
     @Override
-    protected IdentityVerifierFactory createInstance() throws Exception {
+    protected IdentityVerificationService createInstance() throws Exception {
 
-        if (this.identityVerifierFactory == null) {
-            IdentityVerifierFactory identityVerifierFactory = (IdentityVerifierFactory)
+        if (this.identityVerificationService == null) {
+            IdentityVerificationService identityVerificationService = (IdentityVerificationService)
                     PrivilegedCarbonContext.getThreadLocalCarbonContext()
-                            .getOSGiService(IdentityVerifierFactory.class, null);
-            if (identityVerifierFactory != null) {
-                this.identityVerifierFactory = identityVerifierFactory;
+                            .getOSGiService(IdentityVerificationService.class, null);
+
+            if (identityVerificationService != null) {
+                this.identityVerificationService = identityVerificationService;
             } else {
-                throw new Exception("Unable to retrieve IdentityVerifierFactory.");
+                throw new Exception("Unable to retrieve IdentityVerificationService.");
             }
         }
-        return this.identityVerifierFactory;
+        return this.identityVerificationService;
     }
+
 }

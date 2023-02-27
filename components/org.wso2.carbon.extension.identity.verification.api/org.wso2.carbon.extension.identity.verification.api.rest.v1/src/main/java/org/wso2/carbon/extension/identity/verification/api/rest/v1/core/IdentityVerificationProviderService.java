@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -161,6 +162,7 @@ public class IdentityVerificationProviderService {
     private IdentityVerificationProvider createIdVProvider(IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
+        identityVerificationProvider.setIdVProviderId(UUID.randomUUID().toString());
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());

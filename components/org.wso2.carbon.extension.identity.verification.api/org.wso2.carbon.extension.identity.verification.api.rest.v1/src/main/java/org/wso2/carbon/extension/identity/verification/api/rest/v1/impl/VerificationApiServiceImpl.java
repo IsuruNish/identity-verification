@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
  */
 public class VerificationApiServiceImpl implements VerificationApiService {
 
+    @Autowired
     IdentityVerificationService identityVerificationService;
 
     @Override

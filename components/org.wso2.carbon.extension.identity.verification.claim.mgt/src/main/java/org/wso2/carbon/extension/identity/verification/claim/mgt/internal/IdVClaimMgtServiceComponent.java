@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -33,6 +34,10 @@ import org.wso2.carbon.user.core.service.RealmService;
  * OSGi declarative services component which handles registration and un-registration of
  * IdentityVerificationProviderManager service.
  */
+@Component(
+        name = "org.wso2.carbon.extension.identity.verification.claim.mgt",
+        immediate = true
+)
 public class IdVClaimMgtServiceComponent {
 
     private static final Log log = LogFactory.getLog(IdVClaimMgtServiceComponent.class);
@@ -40,9 +45,9 @@ public class IdVClaimMgtServiceComponent {
     @Activate
     protected void activate(ComponentContext ctxt) {
 
-        IdVClaimManager idVProviderManager = new IdentityVerificationClaimManager();
-        ctxt.getBundleContext().registerService(IdentityVerificationClaimManager.class.getName(),
-                idVProviderManager, null);
+        IdVClaimManager idVClaimManager = new IdentityVerificationClaimManager();
+        ctxt.getBundleContext().registerService(IdVClaimManager.class.getName(),
+                idVClaimManager, null);
         log.info("IdentityVerificationProviderManager bundle activated successfully.");
     }
 

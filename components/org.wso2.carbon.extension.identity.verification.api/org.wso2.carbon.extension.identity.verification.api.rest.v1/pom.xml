@@ -80,17 +80,29 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.extension.identity.verification</groupId>
-            <artifactId>org.wso2.carbon.extension.identity.verification.api.rest.common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
+            <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.extension.identity.verification</groupId>
             <artifactId>org.wso2.carbon.extension.identity.verifier</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.verification.provider</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.verification.api.rest.common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
         </dependency>
     </dependencies>
 
@@ -162,10 +174,4 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
 </project>

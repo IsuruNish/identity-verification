@@ -88,9 +88,8 @@ public class IdentityVerificationService {
         IdentityVerifierResponse identityVerifierResponse;
         String identityVerifierName = verificationPostRequest.getIdentityVerificationProvider();
         try {
-            identityVerifierResponse = IdVProviderServiceHolder.getIdentityVerifierFactory().
-                    getIdentityVerifier(identityVerifierName).verifyIdentity(verificationPostRequest.getUsername(),
-                            identityVerifierName);
+            identityVerifierResponse = IdVProviderServiceHolder.getIdentityVerificationService().
+                    verifyIdentity(verificationPostRequest.getUsername(), identityVerifierName);
         } catch (IdentityVerificationException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);

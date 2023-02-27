@@ -111,6 +111,7 @@ public class IdVProviderManagementDAO {
                 addIdVProviderStmt.setString(3, identityVerificationProvider.getDisplayName());
                 addIdVProviderStmt.setString(4,
                         identityVerificationProvider.getIdVProviderDescription());
+                addIdVProviderStmt.setBoolean(5, identityVerificationProvider.isEnable());
                 addIdVProviderStmt.executeUpdate();
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);

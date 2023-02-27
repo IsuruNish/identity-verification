@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.ProvidersApiService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationProviderService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.Response;
  */
 public class ProvidersApiServiceImpl implements ProvidersApiService {
 
+    @Autowired
     IdentityVerificationProviderService identityVerificationProviderService;
 
     @Override

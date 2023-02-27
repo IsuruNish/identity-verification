@@ -59,7 +59,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build.helper.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -107,10 +106,63 @@
         <dependency>
             <groupId>org.wso2.carbon.extension.identity.verification</groupId>
             <artifactId>org.wso2.carbon.extension.identity.verification.api.rest.common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.provider</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verifier</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.extension.identity.verification</groupId>
             <artifactId>org.wso2.carbon.extension.identity.verification.api.rest.v1</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.provider</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
+                    <artifactId>org.wso2.carbon.extension.identity.verifier</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

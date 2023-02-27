@@ -20,43 +20,59 @@ package org.wso2.carbon.extension.identity.verifier.internal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.extension.identity.verifier.IdentityVerificationService;
+import org.wso2.carbon.extension.identity.verifier.IdentityVerificationServiceImpl;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
 
 /**
  * OSGi declarative services component which handles registration and un-registration of
- * IdentityVerifier.
+ * IdentityVerifierService.
  */
+@Component(
+        name = "org.wso2.carbon.extension.identity.verifier",
+        immediate = true
+)
 public class IdentityVerifierServiceComponent {
 
     private static final Log log = LogFactory.getLog(IdentityVerifierServiceComponent.class);
-    IdentityVerifierDataHolder identityVerifierDataHolder = IdentityVerifierDataHolder.getInstance();
 
-    @Reference(
-            name = "hash.provider.component",
-            service = org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory.class,
-            cardinality = ReferenceCardinality.MULTIPLE,
-            policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetHashProviderFactory"
-    )
-    protected void setHashProviderFactory(IdentityVerifierFactory identityVerifierFactory) {
+    @Activate
+    protected void activate(ComponentContext ctxt) {
 
-        identityVerifierDataHolder.setIdentityVerifierFactory(identityVerifierFactory);
-    }
-
-    protected void unsetIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
-
-        identityVerifierDataHolder.unbindIdentityVerifierFactory(identityVerifierFactory);
+        IdentityVerificationService identityVerificationService = new IdentityVerificationServiceImpl();
+        ctxt.getBundleContext().registerService(IdentityVerificationService.class.getName(),
+                identityVerificationService, null);
+        log.info("IdentityVerificationService bundle activated successfully.");
     }
 
     @Deactivate
     protected void deactivate(ComponentContext ctxt) {
 
         if (log.isDebugEnabled()) {
-            log.debug("IdentityVerifierManager bundle is deactivated ");
+            log.debug("IdentityVerificationService bundle is deactivated ");
         }
+    }
+
+    @Reference(
+            name = "identity.verifier.component",
+            service = org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory.class,
+            cardinality = ReferenceCardinality.MULTIPLE,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetIdentityVerifierFactory"
+    )
+    protected void setIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
+
+        IdentityVerifierDataHolder.setIdentityVerifierFactory(identityVerifierFactory);
+    }
+
+    protected void unsetIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
+
+        IdentityVerifierDataHolder.unbindIdentityVerifierFactory(identityVerifierFactory);
     }
 }

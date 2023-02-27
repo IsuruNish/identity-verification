@@ -46,7 +46,7 @@ public class IdVProviderMgtServiceComponent {
     protected void activate(ComponentContext ctxt) {
 
         IdVProviderManager idVProviderManager = new IdentityVerificationProviderManager();
-        ctxt.getBundleContext().registerService(IdentityVerificationProviderManager.class.getName(),
+        ctxt.getBundleContext().registerService(IdVProviderManager.class.getName(),
                 idVProviderManager, null);
         log.info("IdentityVerificationProviderManager bundle activated successfully.");
     }

@@ -18,32 +18,22 @@
 
 package org.wso2.carbon.extension.identity.verifier;
 
+import org.wso2.carbon.extension.identity.verifier.internal.IdentityVerifierDataHolder;
+import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
+
 /**
  * This interface of IdentityVerifierFactory to retrieve the required identity verifier.
  */
-public class IdentityVerifierFactoryManagerImpl implements IdentityVerifierFactoryManager {
-
-    private static final IdentityVerifierFactoryManagerImpl instance =
-            new IdentityVerifierFactoryManagerImpl();
-
-    private IdentityVerifierFactoryManagerImpl() {
-
-    }
-
-    public static IdentityVerifierFactoryManagerImpl getInstance() {
-
-        return instance;
-    }
+public class IdentityVerificationServiceImpl implements IdentityVerificationService {
 
     @Override
-    public IdentityVerifierFactory getIdentityVerifierFactory(String identityVerifierName) {
+    public IdentityVerifierResponse verifyIdentity(String userId, String identityVerifierName)
+            throws IdentityVerificationException {
 
-        return null;
+        IdentityVerifierFactory identityVerifierFactory =
+                IdentityVerifierDataHolder.getIdentityVerifierFactory(identityVerifierName);
+        return identityVerifierFactory.getIdentityVerifier(identityVerifierName).
+                verifyIdentity(userId, identityVerifierName);
     }
 
-    @Override
-    public String getIdentityVerifierName() {
-
-        return null;
-    }
 }

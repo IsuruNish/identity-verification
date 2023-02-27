@@ -21,12 +21,13 @@
     <bean class="org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationService"/>
     <bean class="org.wso2.carbon.extension.identity.verification.api.rest.v1.impl.VerificationApiServiceImpl"/>
     <bean class="org.wso2.carbon.extension.identity.verification.api.rest.v1.impl.ProvidersApiServiceImpl"/>
-    <bean id="IdentityVerifierFactoryBean"
-          class="org.wso2.carbon.extension.identity.verification.api.rest.common.factory.IdentityVerifierFactoryOSGIFactory"/>
-    <bean id="IdVClaimManagerFactoryBean"
-          class="org.wso2.carbon.extension.identity.verification.api.rest.common.factory.IdVClaimManagerOSGIFactory"/>
     <bean id="IdVProviderManagerFactoryBean"
           class="org.wso2.carbon.extension.identity.verification.api.rest.common.factory.IdVProviderManagerOSGIFactory"/>
+    <bean id="IdVClaimManagerFactoryBean"
+          class="org.wso2.carbon.extension.identity.verification.api.rest.common.factory.IdVClaimManagerOSGIFactory"/>
+    <bean id="IdentityVerificationServiceFactoryBean"
+          class="org.wso2.carbon.extension.identity.verification.api.rest.common.factory.IdentityVerificationServiceOSGIFactory"/>
+
 
     <bean id="idVClaimManagerHolderBean"
           class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
@@ -36,8 +37,8 @@
           class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
         <property name="idVProviderManager" ref="IdVProviderManagerFactoryBean"/>
     </bean>
-    <bean id="IdentityVerifierFactoryHolderBean"
+    <bean id="IdentityVerificationServiceHolderBean"
           class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
-        <property name="identityVerifierFactory" ref="IdentityVerifierFactoryBean"/>
+        <property name="identityVerificationService" ref="IdentityVerificationServiceFactoryBean"/>
     </bean>
 </beans>

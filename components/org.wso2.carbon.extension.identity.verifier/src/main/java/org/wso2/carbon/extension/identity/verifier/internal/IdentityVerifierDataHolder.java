@@ -27,19 +27,9 @@ import java.util.Map;
  */
 public class IdentityVerifierDataHolder {
 
-    private static final IdentityVerifierDataHolder instance = new IdentityVerifierDataHolder();
-    private Map<String, IdentityVerifierFactory> identityVerifierFactoryMap;
+    private static Map<String, IdentityVerifierFactory> identityVerifierFactoryMap;
 
-    private IdentityVerifierDataHolder() {
-
-    }
-
-    public static IdentityVerifierDataHolder getInstance() {
-
-        return instance;
-    }
-
-    public void setIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
+    public static void setIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
 
         if (identityVerifierFactoryMap == null) {
             identityVerifierFactoryMap = new HashMap<>();
@@ -47,7 +37,7 @@ public class IdentityVerifierDataHolder {
         identityVerifierFactoryMap.put(identityVerifierFactory.getIdentityVerifierName(), identityVerifierFactory);
     }
 
-    public IdentityVerifierFactory getIdentityVerifierFactory(String identityVerifierName) {
+    public static IdentityVerifierFactory getIdentityVerifierFactory(String identityVerifierName) {
 
         if (identityVerifierFactoryMap == null) {
             return null;
@@ -55,7 +45,7 @@ public class IdentityVerifierDataHolder {
         return identityVerifierFactoryMap.get(identityVerifierName);
     }
 
-    public void unbindIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
+    public static void unbindIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
 
         identityVerifierFactoryMap.remove(identityVerifierFactory.getIdentityVerifierName());
     }
