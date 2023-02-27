@@ -25,6 +25,7 @@ import java.util.Map;
  */
 public class IdentityVerificationProvider {
 
+    private String id;
     private String idVProviderId;
     private String idVProviderName;
     private boolean enable;
@@ -32,6 +33,16 @@ public class IdentityVerificationProvider {
     private String idVProviderDescription;
     private Map<String, String> claimMappings = new HashMap<>();
     private IdVConfigProperty[] idVConfigProperties = new IdVConfigProperty[0];
+
+    public String getId() {
+
+        return id;
+    }
+
+    public void setId(String id) {
+
+        this.id = id;
+    }
 
     public String getIdVProviderName() {
 
@@ -53,12 +64,12 @@ public class IdentityVerificationProvider {
         this.idVConfigProperties = idVConfigProperties;
     }
 
-    public void setIdVProviderId(String idVProviderId) {
+    public void setIdVPUUID(String idVProviderId) {
 
         this.idVProviderId = idVProviderId;
     }
 
-    public String getIdVProviderId() {
+    public String getIdVPUUID() {
 
         return idVProviderId;
     }

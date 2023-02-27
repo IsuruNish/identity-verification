@@ -108,7 +108,7 @@ public class IdentityVerificationProviderService {
             IdentityVerificationProvider identityVerificationProvider =
                     IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId, tenantId);
             IdVProviderResponse idVProviderResponse = new IdVProviderResponse();
-            idVProviderResponse.setId(identityVerificationProvider.getIdVProviderId());
+            idVProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
             idVProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
             idVProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
             idVProviderResponse.setDisplayName(identityVerificationProvider.getIdVProviderDescription());
@@ -147,7 +147,7 @@ public class IdentityVerificationProviderService {
                                                                identityVerificationProvider) {
 
         IdVProviderResponse idvProviderResponse = new IdVProviderResponse();
-        idvProviderResponse.setId(identityVerificationProvider.getIdVProviderId());
+        idvProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
         idvProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
         idvProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
         idvProviderResponse.setDescription(identityVerificationProvider.getIdVProviderDescription());
@@ -162,7 +162,7 @@ public class IdentityVerificationProviderService {
     private IdentityVerificationProvider createIdVProvider(IdVProviderRequest idVProviderRequest) {
 
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
-        identityVerificationProvider.setIdVProviderId(UUID.randomUUID().toString());
+        identityVerificationProvider.setIdVPUUID(UUID.randomUUID().toString());
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
