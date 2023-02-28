@@ -38,7 +38,7 @@ public class IdVProviderMgtConstants {
         public static final String GET_IDVPS_SQL = "SELECT UUID, NAME, DISPLAY_NAME, " +
                 "DESCRIPTION, IS_ENABLE FROM IDVP WHERE TENANT_ID=?";
 
-        public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=? AND TENANT_ID=?";
+        public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=?";
 
         public static final String ADD_IDVP_SQL = "INSERT INTO IDVP(UUID, TENANT_ID, NAME, DISPLAY_NAME, " +
                 "DESCRIPTION, IS_ENABLED) VALUES (?, ?, ?, ?, ?, ?)";
@@ -51,9 +51,9 @@ public class IdVProviderMgtConstants {
         public static final String UPDATE_IDVP_SQL = "UPDATE IDVP SET NAME=?, DISPLAY_NAME=?, DESCRIPTION=?, " +
                 "IS_ENABLED = ? WHERE UUID=? AND TENANT_ID=?";
         public static final String DELETE_IDVP_CONFIG_SQL = "DELETE FROM IDVP_CONFIG " +
-                "WHERE UUID=? AND TENANT_ID=?";
+                "WHERE IDVP_ID=? AND TENANT_ID=?";
         public static final String DELETE_IDVP_CLAIM_SQL = "DELETE FROM IDVP_CLAIM_MAPPING " +
-                "WHERE UUID=? AND TENANT_ID=?";
+                "WHERE IDVP_ID=? AND TENANT_ID=?";
     }
 
     /**

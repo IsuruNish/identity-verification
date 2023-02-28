@@ -18,18 +18,17 @@
 package org.wso2.carbon.extension.identity.verification;
 
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
-import org.wso2.carbon.extension.identity.verifier.IdentityVerifier;
-import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
+import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
 
 /**
  * This class contains the implementation of OnfidoIdentityVerifier.
  */
-public class OnfidoIdentityVerifier implements IdentityVerifier {
+public class OnfidoIdentityVerifier implements org.wso2.carbon.extension.identity.verifier.IdentityVerifier {
 
     private static OnfidoIdentityVerifier instance = new OnfidoIdentityVerifier();
 
     @Override
-    public IdentityVerifierResponse verifyIdentity(String userId, String identityVerifierName)
+    public IdentityVerifierData verifyIdentity(IdentityVerifierData identityVerifierData, int tenantId)
             throws IdentityVerificationException {
 
         return null;

@@ -26,7 +26,7 @@ import java.util.Map;
 public class IdentityVerificationProvider {
 
     private String id;
-    private String idVProviderId;
+    private String uuid;
     private String idVProviderName;
     private boolean enable;
     private String displayName;
@@ -66,12 +66,12 @@ public class IdentityVerificationProvider {
 
     public void setIdVPUUID(String idVProviderId) {
 
-        this.idVProviderId = idVProviderId;
+        this.uuid = idVProviderId;
     }
 
     public String getIdVPUUID() {
 
-        return idVProviderId;
+        return uuid;
     }
 
     public boolean isEnable() {

@@ -52,12 +52,12 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         idVProviderManagementDAO.deleteIdVProvider(idVProviderId, tenantId);
     }
 
-    public IdentityVerificationProvider updateIdVProvider(String idVProviderId,
-                                                          IdentityVerificationProvider identityVerificationProvider,
+    public IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider oldIdVProvider,
+                                                          IdentityVerificationProvider updatedIdVProvider,
                                                           int tenantId) throws IdVProviderMgtException {
 
-        idVProviderManagementDAO.updateIdVProvider(idVProviderId, tenantId, identityVerificationProvider);
-        return identityVerificationProvider;
+        idVProviderManagementDAO.updateIdVProvider(oldIdVProvider, updatedIdVProvider, tenantId);
+        return updatedIdVProvider;
     }
 
     public List<IdentityVerificationProvider> getIdVProviders(int tenantId)

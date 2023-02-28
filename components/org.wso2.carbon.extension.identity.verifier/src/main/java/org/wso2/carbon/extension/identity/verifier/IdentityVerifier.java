@@ -17,13 +17,13 @@
  */
 package org.wso2.carbon.extension.identity.verifier;
 
-import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierResponse;
+import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
 
 /**
  * This interface contains the implementation of IdentityVerifier.
  */
 public interface IdentityVerifier {
 
-    IdentityVerifierResponse verifyIdentity(String userId, String identityVerifierName)
+    IdentityVerifierData verifyIdentity(IdentityVerifierData identityVerifierData, int tenantId)
             throws IdentityVerificationException;
 }

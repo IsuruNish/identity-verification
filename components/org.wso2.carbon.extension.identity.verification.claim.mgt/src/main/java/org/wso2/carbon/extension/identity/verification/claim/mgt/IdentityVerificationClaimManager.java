@@ -30,7 +30,7 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     @Override
     public IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
-        return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId);
+        return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId, tenantId);
     }
 
     @Override

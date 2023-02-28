@@ -16,15 +16,33 @@
  * under the License.
  */
 
-package org.wso2.carbon.extension.identity.verifier;
-
-import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
+package org.wso2.carbon.extension.identity.verifier.model;
 
 /**
- * This interface of IdentityVerifierFactory to retrieve the required identity verifier.
+ * This class contains the properties of the identity verifier.
  */
-public interface IdentityVerificationService {
+public class IdVProperty {
 
-    IdentityVerifierData verifyIdentity(IdentityVerifierData identityVerifierData, int tenantId)
-            throws IdentityVerificationException;
+    private String name;
+    private String value;
+
+    public String getValue() {
+
+        return value;
+    }
+
+    public void setValue(String value) {
+
+        this.value = value;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public void setName(String name) {
+
+        this.name = name;
+    }
 }

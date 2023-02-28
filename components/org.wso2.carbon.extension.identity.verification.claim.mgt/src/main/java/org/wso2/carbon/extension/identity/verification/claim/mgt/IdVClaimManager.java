@@ -24,13 +24,54 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
  */
 public interface IdVClaimManager {
 
+    /**
+     * Get the IdVClaim.
+     *
+     * @param userId      User Id.
+     * @param idvClaimId  IdVClaim Id.
+     * @param tenantId    Tenant Id.
+     * @return IdVClaim.
+     * @throws IdVClaimMgtException IdVClaimMgtException.
+     */
     IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 
+    /**
+     * Get the IdVClaims of a user.
+     *
+     * @param userId   User Id.
+     * @param tenantId Tenant Id.
+     * @return IdVClaims.
+     * @throws IdVClaimMgtException IdVClaimMgtException.
+     */
     IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException;
 
+    /**
+     * Add the IdVClaim.
+     *
+     * @param userId     User Id.
+     * @param idvClaim   IdVClaim.
+     * @param tenantId   Tenant Id.
+     * @throws IdVClaimMgtException IdVClaimMgtException.
+     */
     void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
+    /**
+     * Update the IdVClaim.
+     *
+     * @param userId     User Id.
+     * @param idvClaim   IdVClaim.
+     * @param tenantId   Tenant Id.
+     * @throws IdVClaimMgtException IdVClaimMgtException.
+     */
     void updateIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
+    /**
+     * Delete the IdVClaim.
+     *
+     * @param userId      User Id.
+     * @param idvClaimId  IdVClaim Id.
+     * @param tenantId    Tenant Id.
+     * @throws IdVClaimMgtException IdVClaimMgtException.
+     */
     void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 }

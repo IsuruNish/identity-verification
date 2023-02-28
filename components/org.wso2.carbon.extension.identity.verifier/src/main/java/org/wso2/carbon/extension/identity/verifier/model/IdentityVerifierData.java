@@ -19,15 +19,18 @@ package org.wso2.carbon.extension.identity.verifier.model;
 
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class contains the implementation of IdentityVerifierResponse.
  */
-public class IdentityVerifierResponse {
+public class IdentityVerifierData {
 
     String userId;
     String identityVerifierName;
-
-    IdVClaim[] idVClaims;
+    List<IdVClaim> idVClaim;
+    List<IdVProperty> idVProperties;
 
     public String getUserId() {
 
@@ -49,13 +52,39 @@ public class IdentityVerifierResponse {
         this.identityVerifierName = identityVerifierName;
     }
 
-    public IdVClaim[] getIdVClaims() {
+    public List<IdVClaim> getIdVClaim() {
 
-        return idVClaims;
+        return idVClaim;
     }
 
-    public void setIdVClaims(IdVClaim[] idVClaims) {
+    public void setIdVClaim(List<IdVClaim> idVClaim) {
 
-        this.idVClaims = idVClaims;
+        this.idVClaim = idVClaim;
+    }
+
+    public List<IdVProperty> getIdVProperties() {
+
+        return idVProperties;
+    }
+
+    public void setIdVProperties(List<IdVProperty> idVProperties) {
+
+        this.idVProperties = idVProperties;
+    }
+
+    public void addIdVClaimProperty(IdVClaim idVClaim) {
+
+        if (this.idVClaim == null) {
+            this.idVClaim = new ArrayList<>();
+        }
+        this.idVClaim.add(idVClaim);
+    }
+
+    public void addIdVProperty(IdVProperty idVProperty) {
+
+        if (idVProperties == null) {
+            idVProperties = new ArrayList<>();
+        }
+        idVProperties.add(idVProperty);
     }
 }

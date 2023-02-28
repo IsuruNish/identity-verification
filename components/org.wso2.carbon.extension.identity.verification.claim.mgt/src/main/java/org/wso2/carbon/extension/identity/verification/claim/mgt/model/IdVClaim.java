@@ -24,37 +24,92 @@ import org.json.JSONObject;
  */
 public class IdVClaim {
 
-    private String idVClaimId;
-    private String idVStatus;
-    private JSONObject idVClaimMetadata;
+    private String id;
+    private String uuid;
+    private String localClaimId;
+    private String claimUri;
+    private String claimValue;
+    private String userId;
+    private String status;
+    private JSONObject metadata;
 
-    public String getIdVClaimId() {
+    public String getId() {
 
-        return idVClaimId;
+        return id;
     }
 
-    public void setIdVClaimId(String idVClaimId) {
+    public void setId(String id) {
 
-        this.idVClaimId = idVClaimId;
+        this.id = id;
     }
 
-    public String getIdVStatus() {
+    public String getUuid() {
 
-        return idVStatus;
+        return uuid;
     }
 
-    public void setIdVStatus(String idVStatus) {
+    public void setUuid(String uuid) {
 
-        this.idVStatus = idVStatus;
+        this.uuid = uuid;
     }
 
-    public JSONObject getIdVClaimMetadata() {
+    public String getLocalClaimId() {
 
-        return idVClaimMetadata;
+        return localClaimId;
     }
 
-    public void setIdVClaimMetadata(JSONObject idVClaimMetadata) {
+    public void setLocalClaimId(String localClaimId) {
 
-        this.idVClaimMetadata = idVClaimMetadata;
+        this.localClaimId = localClaimId;
+    }
+
+    public String getUserId() {
+
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+
+        this.userId = userId;
+    }
+
+    public String getStatus() {
+
+        return status;
+    }
+
+    public void setStatus(String status) {
+
+        this.status = status;
+    }
+
+    public JSONObject getMetadata() {
+
+        return metadata;
+    }
+
+    public void setMetadata(JSONObject metadata) {
+
+        this.metadata = metadata;
+    }
+
+    public String getClaimUri() {
+
+        return claimUri;
+    }
+
+    public void setClaimUri(String claimUri) {
+
+        this.claimUri = claimUri;
+    }
+
+    public String getClaimValue() {
+
+        return claimValue;
+    }
+
+    public void setClaimValue(String claimValue) {
+
+        this.claimValue = claimValue;
     }
 }

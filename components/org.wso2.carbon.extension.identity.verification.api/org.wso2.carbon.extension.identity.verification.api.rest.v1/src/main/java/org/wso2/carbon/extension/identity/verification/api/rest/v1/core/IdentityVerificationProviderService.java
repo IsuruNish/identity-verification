@@ -75,24 +75,28 @@ public class IdentityVerificationProviderService {
      */
     public IdVProviderResponse updateIdVProvider(String idVProviderId, IdVProviderRequest idVProviderRequest) {
 
-        IdentityVerificationProvider identityVerificationProvider ;
+        IdentityVerificationProvider oldIdVProvider;
+        IdentityVerificationProvider newIdVProvider;
         int tenantId = getTenantId();
         try {
-            identityVerificationProvider =
+            oldIdVProvider =
                     IdVProviderServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId, tenantId);
 
-            if (identityVerificationProvider == null) {
+            if (oldIdVProvider == null) {
                 throw handleException(Response.Status.NOT_FOUND,
                         Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND, null);
             }
 
-            identityVerificationProvider = IdVProviderServiceHolder.getIdVProviderManager().
-                    updateIdVProvider(idVProviderId, createIdVProvider(idVProviderRequest), tenantId);
+            // todo: check if the idp name is already taken.
+            IdentityVerificationProvider updatedIdVProvider =
+                    createUpdatedIdVProvider(oldIdVProvider, idVProviderRequest);
+            newIdVProvider = IdVProviderServiceHolder.getIdVProviderManager().
+                    updateIdVProvider(oldIdVProvider, updatedIdVProvider, tenantId);
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_UPDATING_IDVP, null);
         }
-        return getIdVProviderResponse(identityVerificationProvider);
+        return getIdVProviderResponse(newIdVProvider);
     }
 
     /**
@@ -178,6 +182,24 @@ public class IdentityVerificationProviderService {
 
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
         identityVerificationProvider.setIdVPUUID(UUID.randomUUID().toString());
+        identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
+        identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
+        identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
+        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnable());
+        identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));
+        List<ConfigProperty> properties = idVProviderRequest.getConfigProperties();
+
+        identityVerificationProvider.setIdVConfigProperties(
+                properties.stream().map(propertyToInternal).toArray(IdVConfigProperty[]::new));
+        identityVerificationProvider.setEnable(true);
+        return identityVerificationProvider;
+    }
+
+    private IdentityVerificationProvider createUpdatedIdVProvider(IdentityVerificationProvider oldIdVProvider,
+                                                           IdVProviderRequest idVProviderRequest) {
+
+        IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
+        identityVerificationProvider.setIdVPUUID(oldIdVProvider.getIdVPUUID());
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());

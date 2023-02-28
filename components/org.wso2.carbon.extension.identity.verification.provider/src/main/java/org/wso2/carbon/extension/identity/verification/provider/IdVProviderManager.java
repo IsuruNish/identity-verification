@@ -26,19 +26,66 @@ import java.util.List;
  */
 public interface IdVProviderManager {
 
+    /**
+     * Add a new IdentityVerificationProvider.
+     *
+     * @param identityVerificationProvider IdentityVerificationProvider.
+     * @param tenantId                     Tenant Id.
+     * @return IdentityVerificationProvider.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
     IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider, int tenantId)
             throws IdVProviderMgtException;
 
+    /**
+     * Get the IdentityVerificationProvider.
+     *
+     * @param idVProviderId IdentityVerificationProvider Id.
+     * @param tenantId      Tenant Id.
+     * @return IdentityVerificationProvider.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
     IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
+    /**
+     * Delete the IdentityVerificationProvider.
+     *
+     * @param idVProviderId IdentityVerificationProvider Id.
+     * @param tenantId      Tenant Id.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
     void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
-    IdentityVerificationProvider updateIdVProvider(String idVProviderId,
-                                                   IdentityVerificationProvider identityVerificationProvider,
+    /**
+     * Update the IdentityVerificationProvider.
+     *
+     * @param oldIdVProvider    Old IdentityVerificationProvider.
+     * @param newIdVProvider    New IdentityVerificationProvider.
+     * @param tenantId          Tenant Id.
+     * @return IdentityVerificationProvider.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
+    IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider oldIdVProvider,
+                                                   IdentityVerificationProvider newIdVProvider,
                                                    int tenantId) throws IdVProviderMgtException;
 
+    /**
+     * Get all the IdentityVerificationProviders.
+     *
+     * @param tenantId Tenant Id.
+     * @return List of IdentityVerificationProviders.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
     List<IdentityVerificationProvider> getIdVProviders(int tenantId) throws IdVProviderMgtException;
 
+    /**
+     * Get the IdentityVerificationProvider by name.
+     *
+     * @param idPName   IdentityVerificationProvider name.
+     * @param tenantId  Tenant Id.
+     * @return IdentityVerificationProvider.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
     IdentityVerificationProvider getIdVPByName(String idPName, int tenantId)
             throws IdVProviderMgtException;
 }

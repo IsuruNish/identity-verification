@@ -23,18 +23,24 @@ package org.wso2.carbon.extension.identity.verification.claim.mgt.util;
  */
 public class IdVClaimMgtConstants {
 
+    /**
+     * Holds constants related to IdV Claim Management database tables.
+     */
     public static class SQLQueries {
 
         public static final String ADD_IDV_CLAIM_SQL =
-                "INSERT INTO IDV_CLAIM (IDV_CLAIM_ID, IDV_STATUS, IDV_CLAIM_METADATA) VALUES (?,?,?)";
+                "INSERT INTO IDV_CLAIM (ID, UUID, LOCAL_CLAIM_ID, USER_ID, TENANT_ID, STATUS, METADATA) " +
+                        "VALUES (?,?,?,?,?,?,?)";
 
         public static final String GET_IDV_CLAIM_SQL =
-                "SELECT IDV_CLAIM_ID, IDV_STATUS, IDV_CLAIM_METADATA FROM IDV_CLAIM WHERE IDV_CLAIM_ID = ?";
+                "SELECT ID, UUID, LOCAL_CLAIM_ID, USER_ID, TENANT_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                        "UUID = ? AND USER_ID = ? AND TENANT_ID = ?";
 
         public static final String GET_IDV_CLAIMS_SQL =
-                "SELECT IDV_CLAIM_ID, IDV_STATUS, IDV_CLAIM_METADATA FROM IDV_CLAIM WHERE IDV_CLAIM_ID = ?";
+                "SELECT ID, UUID, LOCAL_CLAIM_ID, USER_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                        "USER_ID = ? AND TENANT_ID = ?";
         public static final String UPDATE_IDV_CLAIM_SQL =
-                "UPDATE IDV_CLAIM SET IDV_STATUS = ?, IDV_CLAIM_METADATA = ? WHERE USER_ID = ? AND IDV_CLAIM_ID = ?";
+                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE USER_ID = ? AND IDV_CLAIM_ID = ?";
 
         public static final String DELETE_IDV_CLAIM_SQL =
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND IDV_CLAIM_ID = ?";
