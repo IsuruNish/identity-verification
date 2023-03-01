@@ -15,10 +15,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.extension.identity.verification;
+package org.wso2.carbon.extension.identity.verifier.onfido;
 
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifier;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
+import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoIdentityVerifier;
 
 /**
  * This class contains the implementation for the OnfidoIdentityVerifierProvider.

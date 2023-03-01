@@ -54,12 +54,10 @@ public class IdentityVerificationUtils {
         Response.Status status;
 
         if (e instanceof IdVProviderMgtClientException) {
-//            if (ERROR_CODE_RESOURCE_LIMIT_REACHED.equals(e.getErrorCode())) {
-//                return handleResourceLimitReached();
-//            }
             if (e.getErrorCode() != null) {
                 String errorCode = e.getErrorCode();
-                errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).build(log, e.getMessage(), true);
+                errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).
+                        build(log, e.getMessage(), true);
                 errorResponse.setCode(errorCode);
             } else {
                 errorResponse = getErrorBuilder(errorEnum, data).build(log, e.getMessage(), true);

@@ -19,6 +19,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.ProvidersApiService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationProviderService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderListResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
 import javax.ws.rs.core.Response;
@@ -57,7 +58,8 @@ public class ProvidersApiServiceImpl implements ProvidersApiService {
     @Override
     public Response getIdVProviders(Integer limit, Integer offset) {
 
-        // do some magic!
+        IdVProviderListResponse idVProviderListResponse =
+                identityVerificationProviderService.getIdVProviders(limit, offset);
         return Response.ok().entity("magic!").build();
     }
 

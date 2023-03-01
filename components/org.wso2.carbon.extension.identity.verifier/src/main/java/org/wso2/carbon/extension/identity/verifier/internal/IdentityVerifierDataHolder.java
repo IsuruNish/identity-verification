@@ -29,6 +29,11 @@ public class IdentityVerifierDataHolder {
 
     private static Map<String, IdentityVerifierFactory> identityVerifierFactoryMap;
 
+    /**
+     * Set IdentityVerifierFactory.
+     *
+     * @param identityVerifierFactory IdentityVerifierFactory.
+     */
     public static void setIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
 
         if (identityVerifierFactoryMap == null) {
@@ -37,6 +42,12 @@ public class IdentityVerifierDataHolder {
         identityVerifierFactoryMap.put(identityVerifierFactory.getIdentityVerifierName(), identityVerifierFactory);
     }
 
+    /**
+     * Get IdentityVerifierFactory.
+     *
+     * @param identityVerifierName IdentityVerifierFactory name.
+     * @return IdentityVerifierFactory.
+     */
     public static IdentityVerifierFactory getIdentityVerifierFactory(String identityVerifierName) {
 
         if (identityVerifierFactoryMap == null) {
@@ -45,6 +56,11 @@ public class IdentityVerifierDataHolder {
         return identityVerifierFactoryMap.get(identityVerifierName);
     }
 
+    /**
+     * Unbind IdentityVerifierFactory.
+     *
+     * @param identityVerifierFactory IdentityVerifierFactory.
+     */
     public static void unbindIdentityVerifierFactory(IdentityVerifierFactory identityVerifierFactory) {
 
         identityVerifierFactoryMap.remove(identityVerifierFactory.getIdentityVerifierName());

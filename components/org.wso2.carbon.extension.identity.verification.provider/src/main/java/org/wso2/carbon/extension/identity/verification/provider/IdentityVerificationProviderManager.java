@@ -17,14 +17,15 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.extension.identity.verification.provider.dao.IdVProviderManagementDAO;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
-import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class contains the implementation for the IdVProviderManager.
@@ -37,6 +38,8 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
                                                        int tenantId) throws IdVProviderMgtException {
 
         validateAddIdPVInputValues(identityVerificationProvider.getIdVProviderName(), tenantId);
+        // todo
+        validateLocalClaims(identityVerificationProvider.getClaimMappings(), tenantId);
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider, tenantId);
         return identityVerificationProvider;
     }
@@ -44,6 +47,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
     public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
             throws IdVProviderMgtException {
 
+        validateGetIdPInputValues(idVProviderId);
         return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
     }
 
@@ -60,10 +64,10 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         return updatedIdVProvider;
     }
 
-    public List<IdentityVerificationProvider> getIdVProviders(int tenantId)
+    public List<IdentityVerificationProvider> getIdVProviders(Integer limit, Integer offset, int tenantId)
             throws IdVProviderMgtException {
 
-        return idVProviderManagementDAO.getIdVProviders(tenantId);
+        return idVProviderManagementDAO.getIdVProviders(limit, offset, tenantId);
     }
 
     /**
@@ -73,13 +77,43 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
      * @param tenantId Tenant Id.
      * @throws IdVProviderMgtException IdVProviderMgtException
      */
-    private void validateAddIdPVInputValues(String idVPName, int tenantId) throws
-            IdVProviderMgtException {
+    private void validateAddIdPVInputValues(String idVPName, int tenantId) throws IdVProviderMgtException {
 
         if (getIdVPByName(idVPName, tenantId) != null) {
             throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_CODE_IDVP_ALREADY_EXISTS, idVPName, null);
         }
+    }
+
+    /**
+     * Validate input parameters for the getIdPByResourceId function.
+     *
+     * @param idVProviderId Identity Provider ID.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
+    private void validateGetIdPInputValues(String idVProviderId) throws IdVProviderMgtException {
+
+        if (StringUtils.isEmpty(idVProviderId)) {
+            String data = "Invalid argument: Identity Verification Provider ID value is empty";
+            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_CODE_IDVP_REQUEST_INVALID, data);
+        }
+    }
+
+    private void validateLocalClaims(Map<String, String> claimMappings, int tenantId) {
+
+        if (MapUtils.isEmpty(claimMappings)) {
+            return;
+        }
+
+        // todo
+//        for (Map.Entry<String, String> entry : claimMappings.entrySet()) {
+//            if (claimManager.getClaim(entry.getKey()) {
+//                throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
+//                        ERROR_CODE_LOCAL_CLAIMS_NOT_ALLOWED, entry.getKey(), null);
+//            }
+//        }
+
     }
 
     @Override

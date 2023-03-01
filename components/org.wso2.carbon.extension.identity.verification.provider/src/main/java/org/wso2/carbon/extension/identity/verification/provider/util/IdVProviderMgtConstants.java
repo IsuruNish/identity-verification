@@ -36,7 +36,7 @@ public class IdVProviderMgtConstants {
         public static final String GET_IDVP_CLAIMS_SQL = "SELECT CLAIM, LOCAL_CLAIM FROM " +
                 "IDVP_CLAIM_MAPPING WHERE IDVP_ID=? AND TENANT_ID=?";
         public static final String GET_IDVPS_SQL = "SELECT UUID, NAME, DISPLAY_NAME, " +
-                "DESCRIPTION, IS_ENABLE FROM IDVP WHERE TENANT_ID=?";
+                "DESCRIPTION, IS_ENABLE FROM IDVP WHERE TENANT_ID=? LIMIT ? OFFSET ?";
 
         public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=?";
 
@@ -68,12 +68,17 @@ public class IdVProviderMgtConstants {
                 "An error occurred while deleting Identity Verification Provider: %s."),
         ERROR_CODE_RETRIEVING_IDV_PROVIDERS("IDV-65001",
                 "An error occurred while retrieving Identity Verification Providers."),
+        ERROR_CODE_RETRIEVING_IDV_PROVIDER("IDV-65001",
+                "An error occurred while retrieving Identity Verification Provider by %s."),
         ERROR_CODE_RETRIEVING_IDV_PROVIDER_CONFIGS("IDV-65002",
                 "An error occurred while retrieving Identity Verification Provider configs."),
         ERROR_CODE_RETRIEVING_IDV_PROVIDER_CLAIMS("IDV-65003",
                 "An error occurred while retrieving Identity Verification Provider claims."),
-
+        ERROR_CODE_IDVP_NOT_EXISTS("IDV-65004",
+                "An Identity Verification Provider not exists with the id: %s."),
         ERROR_CODE_IDVP_ALREADY_EXISTS("IDV-65004",
+                "An Identity Verification Provider already exists with the name: %s."),
+        ERROR_CODE_IDVP_REQUEST_INVALID("IDV-65005",
                 "An Identity Verification Provider already exists with the name: %s.");
         private final String code;
         private final String message;

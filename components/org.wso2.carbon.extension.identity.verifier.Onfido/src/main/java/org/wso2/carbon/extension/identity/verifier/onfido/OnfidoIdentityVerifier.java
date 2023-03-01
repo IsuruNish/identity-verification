@@ -15,22 +15,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.extension.identity.verification;
+package org.wso2.carbon.extension.identity.verifier.onfido;
 
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
+import org.wso2.carbon.extension.identity.verifier.onfido.web.OnfidoAPIClient;
+
+import java.io.IOException;
 
 /**
  * This class contains the implementation of OnfidoIdentityVerifier.
  */
 public class OnfidoIdentityVerifier implements org.wso2.carbon.extension.identity.verifier.IdentityVerifier {
 
-    private static OnfidoIdentityVerifier instance = new OnfidoIdentityVerifier();
-
     @Override
     public IdentityVerifierData verifyIdentity(IdentityVerifierData identityVerifierData, int tenantId)
             throws IdentityVerificationException {
 
+        try {
+            OnfidoAPIClient.createApplicantResponse();
+        } catch (OnfidoException | IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

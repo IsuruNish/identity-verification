@@ -28,7 +28,6 @@ import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verific
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
-import org.wso2.carbon.extension.identity.verifier.model.IdVClaimData;
 import org.wso2.carbon.extension.identity.verifier.model.IdVProperty;
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
 

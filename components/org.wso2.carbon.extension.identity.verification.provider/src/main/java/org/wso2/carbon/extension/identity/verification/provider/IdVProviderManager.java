@@ -59,7 +59,7 @@ public interface IdVProviderManager {
     /**
      * Update the IdentityVerificationProvider.
      *
-     * @param oldIdVProvider    Old IdentityVerificationProvider.
+     * @param idVProviderId    IdentityVerificationProvider Id.
      * @param newIdVProvider    New IdentityVerificationProvider.
      * @param tenantId          Tenant Id.
      * @return IdentityVerificationProvider.
@@ -76,7 +76,8 @@ public interface IdVProviderManager {
      * @return List of IdentityVerificationProviders.
      * @throws IdVProviderMgtException IdVProviderMgtException.
      */
-    List<IdentityVerificationProvider> getIdVProviders(int tenantId) throws IdVProviderMgtException;
+    List<IdentityVerificationProvider> getIdVProviders(Integer limit, Integer offset,
+                                                       int tenantId) throws IdVProviderMgtException;
 
     /**
      * Get the IdentityVerificationProvider by name.

@@ -49,7 +49,7 @@ public class IdVProviderManagementDAO {
     /**
      * Get Identity Verification Provider.
      *
-     * @param idVPUUID Identity Verification Provider ID.
+     * @param idVPUUID Identity Verification Provider UUID.
      * @param tenantId Tenant ID.
      * @return Identity Verification Provider.
      * @throws IdVProviderMgtException Error when getting Identity Verification Provider.
@@ -60,6 +60,7 @@ public class IdVProviderManagementDAO {
         IdentityVerificationProvider identityVerificationProvider;
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             identityVerificationProvider = getIDVPbyUUID(idVPUUID, tenantId, connection);
+
             // Get configs of identity verification provider.
             getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
 
@@ -96,9 +97,9 @@ public class IdVProviderManagementDAO {
                     identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
                 }
             }
-        } catch (SQLException e1) {
+        } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
+                    ERROR_CODE_RETRIEVING_IDV_PROVIDER, idVPUUID, e);
         }
         return identityVerificationProvider;
     }
@@ -189,7 +190,8 @@ public class IdVProviderManagementDAO {
         }
     }
 
-    public List<IdentityVerificationProvider> getIdVProviders(int tenantId) throws IdVProviderMgtException {
+    public List<IdentityVerificationProvider> getIdVProviders(Integer limit, Integer offset, int tenantId)
+            throws IdVProviderMgtException {
 
         List<IdentityVerificationProvider> identityVerificationProviders = new ArrayList<>();
 
@@ -197,7 +199,8 @@ public class IdVProviderManagementDAO {
             try (PreparedStatement getIdVProvidersStmt = connection
                     .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVPS_SQL)) {
                 getIdVProvidersStmt.setInt(1, tenantId);
-
+                getIdVProvidersStmt.setInt(2, limit);
+                getIdVProvidersStmt.setInt(3, offset);
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();

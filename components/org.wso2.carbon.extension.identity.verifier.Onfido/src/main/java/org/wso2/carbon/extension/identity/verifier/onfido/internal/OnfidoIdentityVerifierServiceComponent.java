@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.extension.identity.verification.internal;
+package org.wso2.carbon.extension.identity.verifier.onfido.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,10 +24,10 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.wso2.carbon.extension.identity.verification.OnfidoIdentityVerifier;
-import org.wso2.carbon.extension.identity.verification.OnfidoIdentityVerifierFactory;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifier;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
+import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoIdentityVerifier;
+import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoIdentityVerifierFactory;
 
 /**
  * Service holder class for Identity Verifier.
@@ -43,12 +43,12 @@ public class OnfidoIdentityVerifierServiceComponent {
     protected void activate(ComponentContext ctxt) {
 
         try {
-            OnfidoIdentityVerifierFactory onfidoIdentityVerifierFactory
+            IdentityVerifierFactory onfidoIdentityVerifierFactory
                     = new OnfidoIdentityVerifierFactory();
             ctxt.getBundleContext().registerService(IdentityVerifierFactory.class.getName(),
                     onfidoIdentityVerifierFactory, null);
 
-            OnfidoIdentityVerifier onfidoIdentityVerifier = new OnfidoIdentityVerifier();
+            IdentityVerifier onfidoIdentityVerifier = new OnfidoIdentityVerifier();
             ctxt.getBundleContext().registerService(IdentityVerifier.class.getName(),
                     onfidoIdentityVerifier, null);
             if (log.isDebugEnabled()) {

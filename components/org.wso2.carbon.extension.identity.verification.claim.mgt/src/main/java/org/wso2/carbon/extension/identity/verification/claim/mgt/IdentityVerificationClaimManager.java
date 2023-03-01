@@ -17,7 +17,7 @@
  */
 package org.wso2.carbon.extension.identity.verification.claim.mgt;
 
-import org.wso2.carbon.extension.identity.verification.claim.mgt.dao.IdentityVerificationClaimDAO;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.dao.IdentityVerificationClaimDAOImpl;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 
 /**
@@ -25,7 +25,7 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
  */
 public class IdentityVerificationClaimManager implements IdVClaimManager {
 
-    IdentityVerificationClaimDAO identityVerificationClaimDAO = new IdentityVerificationClaimDAO();
+    IdentityVerificationClaimDAOImpl identityVerificationClaimDAO = new IdentityVerificationClaimDAOImpl();
 
     @Override
     public IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {

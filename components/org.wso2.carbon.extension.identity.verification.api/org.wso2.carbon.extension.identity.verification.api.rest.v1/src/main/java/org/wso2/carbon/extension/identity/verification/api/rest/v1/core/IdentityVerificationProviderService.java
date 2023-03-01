@@ -21,6 +21,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ConfigProperty;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderListResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.IdVProviderResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verificationclaim;
@@ -86,8 +87,6 @@ public class IdentityVerificationProviderService {
                 throw handleException(Response.Status.NOT_FOUND,
                         Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND, null);
             }
-
-            // todo: check if the idp name is already taken.
             IdentityVerificationProvider updatedIdVProvider =
                     createUpdatedIdVProvider(oldIdVProvider, idVProviderRequest);
             newIdVProvider = IdVProviderServiceHolder.getIdVProviderManager().
@@ -125,6 +124,43 @@ public class IdentityVerificationProviderService {
             idVProviderResponse.setClaims(getIdVClaimMappings(identityVerificationProvider));
 
             return idVProviderResponse;
+        } catch (IdVProviderMgtException e) {
+            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP, null);
+        }
+    }
+
+    /**
+     * Get all identity verification providers.
+     *
+     * @param limit  Limit per page.
+     * @param offset Offset value.
+     * @return Identity verification providers.
+     */
+    public IdVProviderListResponse getIdVProviders(Integer limit, Integer offset) {
+
+        try {
+            int tenantId = getTenantId();
+            List<IdentityVerificationProvider> identityVerificationProviders =
+                    IdVProviderServiceHolder.getIdVProviderManager().getIdVProviders(limit, offset, tenantId);
+            IdVProviderListResponse idVProviderListResponse = new IdVProviderListResponse();
+            idVProviderListResponse.setCount(identityVerificationProviders.size());
+            idVProviderListResponse.setStartIndex(offset);
+
+            return idVProviderListResponse;
+//            idVProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
+//            idVProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
+//            idVProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
+//            idVProviderResponse.setDisplayName(identityVerificationProvider.getIdVProviderDescription());
+//
+//            List<ConfigProperty> configProperties =
+//                    Arrays.stream(identityVerificationProvider.getIdVConfigProperties()).
+//                            map(propertyToExternal).collect(Collectors.toList());
+//            idVProviderResponse.setConfigProperties(configProperties);
+//
+//            idVProviderResponse.setClaims(getIdVClaimMappings(identityVerificationProvider));
+//
+//            return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP, null);
