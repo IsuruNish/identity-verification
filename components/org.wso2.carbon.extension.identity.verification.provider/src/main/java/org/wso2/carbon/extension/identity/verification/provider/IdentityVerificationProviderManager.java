@@ -81,7 +81,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
 
         if (getIdVPByName(idVPName, tenantId) != null) {
             throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_IDVP_ALREADY_EXISTS, idVPName, null);
+                    ERROR_IDVP_ALREADY_EXISTS, idVPName, null);
         }
     }
 
@@ -96,7 +96,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         if (StringUtils.isEmpty(idVProviderId)) {
             String data = "Invalid argument: Identity Verification Provider ID value is empty";
             throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_IDVP_REQUEST_INVALID, data);
+                    ERROR_IDVP_REQUEST_INVALID, data);
         }
     }
 

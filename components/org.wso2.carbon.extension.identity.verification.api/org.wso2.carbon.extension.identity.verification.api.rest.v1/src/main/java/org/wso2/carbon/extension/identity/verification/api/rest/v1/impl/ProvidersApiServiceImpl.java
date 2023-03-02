@@ -60,7 +60,7 @@ public class ProvidersApiServiceImpl implements ProvidersApiService {
 
         IdVProviderListResponse idVProviderListResponse =
                 identityVerificationProviderService.getIdVProviders(limit, offset);
-        return Response.ok().entity("magic!").build();
+        return Response.ok().entity(idVProviderListResponse).build();
     }
 
     @Override

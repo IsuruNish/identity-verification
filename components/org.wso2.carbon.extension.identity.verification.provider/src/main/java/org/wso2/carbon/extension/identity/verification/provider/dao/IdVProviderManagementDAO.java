@@ -67,11 +67,14 @@ public class IdVProviderManagementDAO {
             // Get claim mappings of identity verification provider.
             getIdVProvidersWithClaims(identityVerificationProvider, tenantId, connection);
         } catch (SQLException e) {
+            // connection.rollback();
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
+                    ERROR_RETRIEVING_IDV_PROVIDERS, e);
         } catch (IdentityRuntimeException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_DATABASE_CONNECTION, e);
+                    ERROR_DATABASE_CONNECTION, e);
+        } finally {
+            IdentityDatabaseUtil.closeConnection();
         }
         return identityVerificationProvider;
     }
@@ -99,7 +102,7 @@ public class IdVProviderManagementDAO {
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDER, idVPUUID, e);
+                    ERROR_RETRIEVING_IDV_PROVIDER, idVPUUID, e);
         }
         return identityVerificationProvider;
     }
@@ -128,7 +131,7 @@ public class IdVProviderManagementDAO {
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage
-                        .ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e1);
+                        .ERROR_ADDING_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e1);
             }
 
             IdentityVerificationProvider createdIDVP = getIDVPbyUUID(identityVerificationProvider.getIdVPUUID(),
@@ -143,7 +146,7 @@ public class IdVProviderManagementDAO {
             addIDVProviderClaims(identityVerificationProvider, idPVId, tenantId, connection);
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_ADD_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e);
+                    ERROR_ADDING_IDV_PROVIDER, identityVerificationProvider.getDisplayName(), e);
         }
     }
 
@@ -173,7 +176,7 @@ public class IdVProviderManagementDAO {
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage
-                        .ERROR_CODE_ADD_IDV_PROVIDER, updatedIdVProvider.getDisplayName(), e1);
+                        .ERROR_ADDING_IDV_PROVIDER, updatedIdVProvider.getDisplayName(), e1);
             }
 
             // Update configs of identity verification provider.
@@ -186,7 +189,7 @@ public class IdVProviderManagementDAO {
             connection.commit();
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_ADD_IDV_PROVIDER, oldIdVProvider.getDisplayName(), e);
+                    ERROR_ADDING_IDV_PROVIDER, oldIdVProvider.getDisplayName(), e);
         }
     }
 
@@ -216,14 +219,14 @@ public class IdVProviderManagementDAO {
                 }
             } catch (SQLException e1) {
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                        ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
+                        ERROR_RETRIEVING_IDV_PROVIDERS, e1);
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
+                    ERROR_RETRIEVING_IDV_PROVIDERS, e);
         } catch (IdentityRuntimeException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_DATABASE_CONNECTION, e);
+                    ERROR_DATABASE_CONNECTION, e);
         }
         return identityVerificationProviders;
     }
@@ -252,15 +255,15 @@ public class IdVProviderManagementDAO {
                 }
             } catch (SQLException e1) {
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                        ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e1);
+                        ERROR_RETRIEVING_IDV_PROVIDERS, e1);
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDERS, e);
+                    ERROR_RETRIEVING_IDV_PROVIDERS, e);
             //todo
         } catch (IdentityRuntimeException | IdvProviderMgtServerException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_DATABASE_CONNECTION, e);
+                    ERROR_DATABASE_CONNECTION, e);
         }
         return identityVerificationProvider;
     }
@@ -284,11 +287,11 @@ public class IdVProviderManagementDAO {
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
                 throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                        ERROR_CODE_DELETING_IDV_PROVIDER, idVProviderId, e1);
+                        ERROR_DELETING_IDV_PROVIDER, idVProviderId, e1);
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_DATABASE_CONNECTION, e);
+                    ERROR_DATABASE_CONNECTION, e);
         }
     }
 
@@ -391,7 +394,7 @@ public class IdVProviderManagementDAO {
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDER_CONFIGS, e);
+                    ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS, e);
         }
     }
 
@@ -413,7 +416,7 @@ public class IdVProviderManagementDAO {
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_CODE_RETRIEVING_IDV_PROVIDER_CLAIMS, e);
+                    ERROR_RETRIEVING_IDV_PROVIDER_CLAIMS, e);
         }
     }
 }
