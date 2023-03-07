@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.validation.constraints.*;
 
 
@@ -34,7 +37,8 @@ public class VerificationClaimResponse  {
     private String uri;
     private String value;
     private String status;
-    private Object claimMetadata;
+    private Map<String, Object> claimMetadata = null;
+
 
     /**
     **/
@@ -110,7 +114,7 @@ public class VerificationClaimResponse  {
 
     /**
     **/
-    public VerificationClaimResponse claimMetadata(Object claimMetadata) {
+    public VerificationClaimResponse claimMetadata(Map<String, Object> claimMetadata) {
 
         this.claimMetadata = claimMetadata;
         return this;
@@ -119,14 +123,23 @@ public class VerificationClaimResponse  {
     @ApiModelProperty(example = "{\"source\": \"evidentID\", \"verifiedAt\": \"2020-10-10T12:00:00.000Z\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", value = "")
     @JsonProperty("claimMetadata")
     @Valid
-    public Object getClaimMetadata() {
+    public Map<String, Object> getClaimMetadata() {
         return claimMetadata;
     }
-    public void setClaimMetadata(Object claimMetadata) {
+    public void setClaimMetadata(Map<String, Object> claimMetadata) {
         this.claimMetadata = claimMetadata;
     }
 
 
+    public VerificationClaimResponse putClaimMetadataItem(String key, Object claimMetadataItem) {
+        if (this.claimMetadata == null) {
+            this.claimMetadata = new HashMap<>();
+        }
+        this.claimMetadata.put(key, claimMetadataItem);
+        return this;
+    }
+
+    
 
     @Override
     public boolean equals(java.lang.Object o) {

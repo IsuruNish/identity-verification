@@ -133,6 +133,12 @@ paths:
       responses:
         '201':
           description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/verificationClaimResponse'
         '400':
           description: Bad Request
           content:
@@ -231,11 +237,6 @@ paths:
       responses:
         '200':
           description: Successful response
-          headers:
-            Location:
-              description: Location of the updated identity provider.
-              schema:
-                type: string
           content:
             application/json:
               schema:
@@ -613,22 +614,17 @@ components:
           example: Verified
         claimMetadata:
           type: object
+          additionalProperties: true
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
     verificationClaimUpdateRequest:
       type: object
       properties:
-        id:
-          type: string
-          example: aHR0cDovL3dzbzIub3JnL2NsYWltcy91c2VybmFtZQ
-          readOnly: true
-        uri:
-          type: string
-          example: 'http://wso2.org/claims/country'
         status:
           type: string
           example: Verified
         claimMetadata:
           type: object
+          additionalProperties: true
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
     verificationClaimPostRequest:
       type: object
@@ -636,6 +632,9 @@ components:
         userId:
           type: string
           example: '123e4567-e89b-12d3-a456-556642440000'
+        idvpId:
+          type: string
+          example: '2159375-r567-8524-a456-5566424414527'
         uri:
           type: string
           example: 'http://wso2.org/claims/country'
@@ -644,6 +643,7 @@ components:
           example: Verified
         claimMetadata:
           type: object
+          additionalProperties: true
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
     verificationClaimRequest:
       required:

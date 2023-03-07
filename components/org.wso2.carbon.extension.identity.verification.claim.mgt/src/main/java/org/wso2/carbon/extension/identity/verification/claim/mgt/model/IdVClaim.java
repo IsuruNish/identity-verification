@@ -26,7 +26,6 @@ public class IdVClaim {
 
     private String id;
     private String uuid;
-    private String localClaimId;
     private String claimUri;
     private String claimValue;
     private String userId;
@@ -52,16 +51,6 @@ public class IdVClaim {
     public void setUuid(String uuid) {
 
         this.uuid = uuid;
-    }
-
-    public String getLocalClaimId() {
-
-        return localClaimId;
-    }
-
-    public void setLocalClaimId(String localClaimId) {
-
-        this.localClaimId = localClaimId;
     }
 
     public String getUserId() {

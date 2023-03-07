@@ -22,12 +22,15 @@ import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimPostRequest;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimUpdateRequest;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 
@@ -49,6 +52,7 @@ public class IdentityVerificationClaimService {
             throw IdentityVerificationUtils.handleException((IdVProviderMgtException) null,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
         }
+        // todo: how error will be passed
         return getVerificationClaimResponse(idvClaim);
     }
 
@@ -90,7 +94,12 @@ public class IdentityVerificationClaimService {
         verificationClaimResponse.setUri(idVClaim.getClaimUri());
         verificationClaimResponse.setValue(idVClaim.getClaimValue());
         verificationClaimResponse.setStatus(idVClaim.getStatus());
-        verificationClaimResponse.setClaimMetadata(idVClaim.getMetadata());
+        Map<String, Object> claimMetadata = new HashMap<>();
+        JSONObject claimMetadataJson = idVClaim.getMetadata();
+        for (String key : claimMetadataJson.keySet()) {
+            claimMetadata.put(key, claimMetadataJson.get(key));
+        }
+        verificationClaimResponse.setClaimMetadata(claimMetadata);
         return verificationClaimResponse;
     }
 
@@ -98,20 +107,22 @@ public class IdentityVerificationClaimService {
                                          verificationClaimPostRequest) {
 
         IdVClaim idVClaim = new IdVClaim();
+        idVClaim.setUuid(UUID.randomUUID().toString());
         idVClaim.setUserId(verificationClaimPostRequest.getUserId());
         idVClaim.setClaimUri(verificationClaimPostRequest.getUri());
         idVClaim.setStatus(verificationClaimPostRequest.getStatus());
-        idVClaim.setMetadata((JSONObject) verificationClaimPostRequest.getClaimMetadata());
+        idVClaim.setIdvProviderId(verificationClaimPostRequest.getIdvpId());
+        Map<String, Object> claimMetadata = verificationClaimPostRequest.getClaimMetadata();
+        idVClaim.setMetadata(new JSONObject(claimMetadata));
         return idVClaim;
     }
 
     private IdVClaim getIdVClaim(VerificationClaimUpdateRequest verificationClaimUpdateRequest) {
 
         IdVClaim idVClaim = new IdVClaim();
-        idVClaim.setId(verificationClaimUpdateRequest.getId());
-        idVClaim.setClaimUri(verificationClaimUpdateRequest.getUri());
         idVClaim.setStatus(verificationClaimUpdateRequest.getStatus());
-        idVClaim.setMetadata((JSONObject) verificationClaimUpdateRequest.getClaimMetadata());
+        Map<String, Object> claimMetadata = verificationClaimUpdateRequest.getClaimMetadata();
+        idVClaim.setMetadata(new JSONObject(claimMetadata));
         return idVClaim;
     }
 }

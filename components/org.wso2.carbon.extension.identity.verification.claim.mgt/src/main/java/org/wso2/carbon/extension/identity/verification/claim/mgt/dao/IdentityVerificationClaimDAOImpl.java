@@ -25,6 +25,7 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants;
 import org.wso2.carbon.identity.core.util.IdentityDatabaseUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,12 +54,12 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
             try (PreparedStatement addIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
                     SQLQueries.ADD_IDV_CLAIM_SQL)) {
                 addIdVProviderStmt.setString(1, idVClaim.getUuid());
-                addIdVProviderStmt.setString(2, idVClaim.getLocalClaimId());
-                addIdVProviderStmt.setString(3, idVClaim.getUserId());
+                addIdVProviderStmt.setString(2, idVClaim.getUserId());
+                addIdVProviderStmt.setString(3, idVClaim.getClaimUri());
                 addIdVProviderStmt.setString(4, idVClaim.getIdvProviderId());
                 addIdVProviderStmt.setInt(5, tenantId);
                 addIdVProviderStmt.setString(6, idVClaim.getStatus());
-                addIdVProviderStmt.setObject(7, idVClaim.getMetadata());
+                addIdVProviderStmt.setBytes(7, getMetadata(idVClaim));
                 addIdVProviderStmt.executeUpdate();
                 IdentityDatabaseUtil.commitTransaction(connection);
             } catch (SQLException e1) {
@@ -84,7 +85,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
             try (PreparedStatement updateIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
                     SQLQueries.UPDATE_IDV_CLAIM_SQL)) {
                 updateIdVProviderStmt.setString(1, idVClaim.getStatus());
-                updateIdVProviderStmt.setObject(2, idVClaim.getMetadata());
+                updateIdVProviderStmt.setObject(2, getMetadata(idVClaim));
                 updateIdVProviderStmt.setString(3, idVClaim.getUuid());
                 updateIdVProviderStmt.setInt(4, tenantId);
                 updateIdVProviderStmt.executeUpdate();
@@ -121,10 +122,10 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                     idVClaim.setId(idVProviderResultSet.getString("ID"));
                     idVClaim.setUuid(idVProviderResultSet.getString("UUID"));
                     idVClaim.setUserId(idVProviderResultSet.getString("USER_ID"));
-                    idVClaim.setLocalClaimId(idVProviderResultSet.getString("LOCAL_CLAIM_ID"));
+                    idVClaim.setUserId(idVProviderResultSet.getString("CLAIM_URI"));
                     idVClaim.setIdvProviderId(idVProviderResultSet.getString("IDVP_ID"));
                     idVClaim.setStatus(idVProviderResultSet.getString("STATUS"));
-                    idVClaim.setMetadata((JSONObject) idVProviderResultSet.getObject("METADATA"));
+                    idVClaim.setMetadata(getMetadataJsonObject(idVProviderResultSet.getBytes("METADATA")));
                 }
             }
         } catch (SQLException e) {
@@ -157,7 +158,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                     idVClaim.setId(idVProviderResultSet.getString("ID"));
                     idVClaim.setUuid(idVProviderResultSet.getString("UUID"));
                     idVClaim.setUserId(idVProviderResultSet.getString("USER_ID"));
-                    idVClaim.setLocalClaimId(idVProviderResultSet.getString("LOCAL_CLAIM_ID"));
+                    idVClaim.setUserId(idVProviderResultSet.getString("CLAIM_URI"));
                     idVClaim.setStatus(idVProviderResultSet.getString("STATUS"));
                     idVClaim.setIdvProviderId(idVProviderResultSet.getString("IDVP_ID"));
                     idVClaim.setMetadata((JSONObject) idVProviderResultSet.getObject("METADATA"));
@@ -193,5 +194,17 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
         } catch (SQLException e) {
             throw new IdVClaimMgtException("Error while deleting the identity verification claim.", e);
         }
+    }
+
+    private byte[] getMetadata(IdVClaim idVClaim) throws IdVClaimMgtException {
+
+        String metadataString = idVClaim.getMetadata().toString();
+        return metadataString.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private JSONObject getMetadataJsonObject(byte[] metadata) throws IdVClaimMgtException {
+
+        String metadataString = new String(metadata, StandardCharsets.UTF_8);
+        return new JSONObject(metadataString);
     }
 }

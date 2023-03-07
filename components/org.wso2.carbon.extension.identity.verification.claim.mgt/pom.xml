@@ -54,7 +54,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.json.wso2</groupId>
+            <groupId>org.json</groupId>
             <artifactId>json</artifactId>
         </dependency>
     </dependencies>
