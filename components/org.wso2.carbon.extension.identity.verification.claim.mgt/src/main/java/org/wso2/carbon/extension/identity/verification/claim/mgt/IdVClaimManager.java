@@ -48,30 +48,28 @@ public interface IdVClaimManager {
     /**
      * Add the IdVClaim.
      *
-     * @param userId     User Id.
      * @param idvClaim   IdVClaim.
      * @param tenantId   Tenant Id.
+     * @return IdVClaim.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    IdVClaim addIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Update the IdVClaim.
      *
-     * @param userId     User Id.
      * @param idvClaim   IdVClaim.
      * @param tenantId   Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    void updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    IdVClaim updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Delete the IdVClaim.
      *
-     * @param userId      User Id.
      * @param idvClaimId  IdVClaim Id.
      * @param tenantId    Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
+    void deleteIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException;
 }

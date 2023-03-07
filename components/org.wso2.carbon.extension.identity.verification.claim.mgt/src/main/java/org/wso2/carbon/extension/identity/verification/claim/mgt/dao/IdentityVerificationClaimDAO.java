@@ -29,12 +29,11 @@ public interface IdentityVerificationClaimDAO {
     /**
      * Add the identity verification claim.
      *
-     * @param userId   User id.
      * @param idVClaim IdentityVerificationClaim.
      * @param tenantId Tenant id.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    void addIdVClaim(String userId, IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException;
+    void addIdVClaim(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Update the identity verification claim by the user id.

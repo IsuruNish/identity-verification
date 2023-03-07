@@ -73,7 +73,7 @@ public class IdentityVerificationService {
         IdVClaim idVClaim;
         int tenantId = getTenantId();
         try {
-            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().getIDVClaim(userId, claimId, tenantId);
+            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().getIDVClaim(claimId, tenantId);
         } catch (IdVClaimMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);

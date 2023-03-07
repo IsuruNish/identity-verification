@@ -133,15 +133,6 @@ paths:
       responses:
         '201':
           description: Successful response
-          headers:
-            Location:
-              description: Location of the newly created identity provider.
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/verificationClaimResponse'
         '400':
           description: Bad Request
           content:
@@ -633,9 +624,6 @@ components:
         uri:
           type: string
           example: 'http://wso2.org/claims/country'
-        value:
-          type: string
-          example: 'Sri Lanka'
         status:
           type: string
           example: Verified

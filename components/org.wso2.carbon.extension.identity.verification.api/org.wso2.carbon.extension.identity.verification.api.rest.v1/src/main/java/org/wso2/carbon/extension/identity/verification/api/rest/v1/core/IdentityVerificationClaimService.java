@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
+import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimPostRequest;
@@ -29,7 +30,6 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
 
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
-import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleException;
 
 /**
  * Service class for identity verification Claims.
@@ -39,20 +39,30 @@ public class IdentityVerificationClaimService {
     public VerificationClaimResponse addVerificationClaimData(VerificationClaimPostRequest
                                                                       verificationClaimPostRequest) {
 
-        // do some magic!
-        return;
+        IdVClaim idvClaim;
+        int tenantId = getTenantId();
+        try {
+            idvClaim = IdentityVerificationServiceHolder.
+                    getIdVClaimManager().addIDVClaim(getIdVClaim(verificationClaimPostRequest), tenantId);
+        } catch (IdVClaimMgtException e) {
+            // todo
+            throw IdentityVerificationUtils.handleException((IdVProviderMgtException) null,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+        }
+        return getVerificationClaimResponse(idvClaim);
     }
 
     public VerificationClaimResponse getVerificationClaimData(String claimId) {
 
-        // todo
-        IdVClaim idVClaim = null;
+        IdVClaim idVClaim;
         int tenantId = getTenantId();
         try {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
                     getIDVClaim(claimId, tenantId);
         } catch (IdVClaimMgtException e) {
-            // throw handleException(e, Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+            // todo
+            throw IdentityVerificationUtils.handleException(e,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
         }
         return getVerificationClaimResponse(idVClaim);
     }
@@ -60,13 +70,15 @@ public class IdentityVerificationClaimService {
     public VerificationClaimResponse updateVerificationClaim(String claimId, VerificationClaimUpdateRequest
             verificationClaimUpdateRequest) {
 
-        IdVClaim idVClaim = null;
+        IdVClaim idVClaim;
         int tenantId = getTenantId();
         try {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
-                    updateIDVClaim(claimId, tenantId);
+                    updateIDVClaim(getIdVClaim(verificationClaimUpdateRequest), tenantId);
         } catch (IdVClaimMgtException e) {
-            // throw handleException(e, Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+            // todo
+            throw IdentityVerificationUtils.handleException(e,
+                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
         }
         return getVerificationClaimResponse(idVClaim);
     }
@@ -82,13 +94,24 @@ public class IdentityVerificationClaimService {
         return verificationClaimResponse;
     }
 
-    private IdVClaim getIdVClaim(VerificationClaimRequest verificationClaimRequest) {
+    private IdVClaim getIdVClaim(VerificationClaimPostRequest
+                                         verificationClaimPostRequest) {
 
         IdVClaim idVClaim = new IdVClaim();
-        idVClaim.setClaimUri(verificationClaimRequest.ugetUri());
-        idVClaim.setClaimValue(verificationClaimRequest.getValue());
-        idVClaim.setStatus(verificationClaimRequest.getStatus());
-        idVClaim.setMetadata(verificationClaimRequest.getClaimMetadata());
+        idVClaim.setUserId(verificationClaimPostRequest.getUserId());
+        idVClaim.setClaimUri(verificationClaimPostRequest.getUri());
+        idVClaim.setStatus(verificationClaimPostRequest.getStatus());
+        idVClaim.setMetadata((JSONObject) verificationClaimPostRequest.getClaimMetadata());
+        return idVClaim;
+    }
+
+    private IdVClaim getIdVClaim(VerificationClaimUpdateRequest verificationClaimUpdateRequest) {
+
+        IdVClaim idVClaim = new IdVClaim();
+        idVClaim.setId(verificationClaimUpdateRequest.getId());
+        idVClaim.setClaimUri(verificationClaimUpdateRequest.getUri());
+        idVClaim.setStatus(verificationClaimUpdateRequest.getStatus());
+        idVClaim.setMetadata((JSONObject) verificationClaimUpdateRequest.getClaimMetadata());
         return idVClaim;
     }
 }

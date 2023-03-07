@@ -25,9 +25,12 @@ import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants
 import org.wso2.carbon.extension.identity.verification.api.rest.common.ContextLoader;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.ErrorResponse;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtClientException;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.IdvClaimMgtServerException;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtClientException;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
 import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtServerException;
+import org.wso2.carbon.identity.base.IdentityException;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 
 import javax.ws.rs.core.Response;
@@ -47,13 +50,13 @@ public class IdentityVerificationUtils {
      * @param errorEnum Error message Information.
      * @return APIError.
      */
-    public static APIError handleException(IdVProviderMgtException e,
+    public static APIError handleException(IdentityException e,
                                            Constants.ErrorMessage errorEnum, String data) {
 
         ErrorResponse errorResponse;
         Response.Status status;
 
-        if (e instanceof IdVProviderMgtClientException) {
+        if (e instanceof IdVProviderMgtClientException || e instanceof IdVClaimMgtClientException) {
             if (e.getErrorCode() != null) {
                 String errorCode = e.getErrorCode();
                 errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).
@@ -64,7 +67,7 @@ public class IdentityVerificationUtils {
             }
             errorResponse.setDescription(e.getMessage());
             status = Response.Status.BAD_REQUEST;
-        } else if (e instanceof IdvProviderMgtServerException) {
+        } else if (e instanceof IdvProviderMgtServerException || e instanceof IdvClaimMgtServerException) {
             if (e.getErrorCode() != null) {
                 String errorCode = e.getErrorCode();
                 errorResponse = getErrorBuilder(errorCode, e.getMessage(), data).build(log, e,

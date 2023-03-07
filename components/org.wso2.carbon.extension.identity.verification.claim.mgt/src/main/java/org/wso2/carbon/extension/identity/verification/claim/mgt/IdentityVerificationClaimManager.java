@@ -34,21 +34,23 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     }
 
     @Override
-    public void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
+    public IdVClaim addIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
-        identityVerificationClaimDAO.addIdVClaim(userId, idvClaim, tenantId);
+        identityVerificationClaimDAO.addIdVClaim(idvClaim, tenantId);
+        return idvClaim;
     }
 
     @Override
-    public void updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
+    public IdVClaim updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
         identityVerificationClaimDAO.updateIdVClaim(idvClaim, tenantId);
+        return idvClaim;
     }
 
     @Override
-    public void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
+    public void deleteIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
-        identityVerificationClaimDAO.deleteIdVClaim(userId, idvClaimId);
+        identityVerificationClaimDAO.deleteIdVClaim(idvClaimId, tenantId);
     }
 
     @Override
