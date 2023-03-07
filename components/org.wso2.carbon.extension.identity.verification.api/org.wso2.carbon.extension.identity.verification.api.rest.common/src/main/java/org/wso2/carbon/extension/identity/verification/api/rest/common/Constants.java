@@ -83,7 +83,9 @@ public class Constants {
         ERROR_GETTING_VERIFICATION_CLAIM("IDV-65006", "Unable to get the verification claim %s.",
                 "Error occurred while getting the verification claim."),
         ERROR_UPDATING_VERIFICATION_CLAIM("IDV-65006", "Unable to update the verification claim %s.",
-                "Error occurred while updating the verification claim.");
+                "Error occurred while updating the verification claim."),
+        ERROR_CODE_IDV_CLAIM_NOT_FOUND("IDV-65006", "Resource not found.",
+                "Unable to find a resource matching the provided identity claim identifier %s.");
 
         private final String code;
         private final String message;

@@ -30,6 +30,8 @@ import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.ws.rs.core.Response;
+
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getClaimMetadataMap;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 
@@ -72,6 +74,10 @@ public class IdentityVerificationClaimService {
         try {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
                     getIDVClaim(claimId, tenantId);
+            if (idVClaim == null) {
+                throw IdentityVerificationUtils.handleException(Response.Status.NOT_FOUND,
+                        Constants.ErrorMessage.ERROR_CODE_IDV_CLAIM_NOT_FOUND, claimId);
+            }
         } catch (IdVClaimMgtException e) {
             throw IdentityVerificationUtils.handleException(e,
                     Constants.ErrorMessage.ERROR_GETTING_VERIFICATION_CLAIM, claimId);
@@ -92,6 +98,12 @@ public class IdentityVerificationClaimService {
         IdVClaim idVClaim;
         int tenantId = getTenantId();
         try {
+            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
+                    getIDVClaim(claimId, tenantId);
+            if (idVClaim == null) {
+                throw IdentityVerificationUtils.handleException(Response.Status.NOT_FOUND,
+                        Constants.ErrorMessage.ERROR_CODE_IDV_CLAIM_NOT_FOUND, claimId);
+            }
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
                     updateIDVClaim(getIdVClaim(verificationClaimUpdateRequest, claimId), tenantId);
         } catch (IdVClaimMgtException e) {

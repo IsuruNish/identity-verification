@@ -18,6 +18,7 @@
 package org.wso2.carbon.extension.identity.verification.claim.mgt;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.dao.IdentityVerificationClaimDAOImpl;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants;
@@ -33,6 +34,10 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     @Override
     public IdVClaim getIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
+        if (StringUtils.isBlank(idvClaimId)) {
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS, "idvClaimId");
+        }
         return identityVerificationClaimDAO.getIDVClaim(idvClaimId, tenantId);
     }
 
@@ -47,6 +52,7 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     @Override
     public IdVClaim updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
+        validateUpdateIDVClaimUpdateInputs(idvClaim, tenantId);
         identityVerificationClaimDAO.updateIdVClaim(idvClaim, tenantId);
         return idvClaim;
     }
@@ -77,12 +83,33 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
         String claimUri = idVClaim.getClaimUri();
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(idvProviderId) || StringUtils.isBlank(claimUri)) {
             throw IdVClaimMgtExceptionManagement.handleClientException(
-                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_MISSING_INPUTS, null);
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS, null);
         }
         boolean idvClaimExists = isIDVClaimExists(userId, idvProviderId, claimUri, tenantId);
         if (idvClaimExists) {
             throw IdVClaimMgtExceptionManagement.handleClientException(
                     IdVClaimMgtConstants.ErrorMessage.ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS, null);
+        }
+        validateStatus(idVClaim.getStatus());
+    }
+
+    private void validateUpdateIDVClaimUpdateInputs(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException {
+
+        String status = idVClaim.getStatus();
+        JSONObject claimMetadata = idVClaim.getMetadata();
+        if (StringUtils.isBlank(status) || claimMetadata == null) {
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS, null);
+        }
+        validateStatus(status);
+    }
+
+    private void validateStatus(String status) throws IdVClaimMgtException {
+
+        if (StringUtils.isBlank(status) || !(IdVClaimMgtConstants.Status.VERIFIED.equals(status) ||
+                IdVClaimMgtConstants.Status.NOT_VERIFIED.equals(status))) {
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_STATUS, null);
         }
     }
 }

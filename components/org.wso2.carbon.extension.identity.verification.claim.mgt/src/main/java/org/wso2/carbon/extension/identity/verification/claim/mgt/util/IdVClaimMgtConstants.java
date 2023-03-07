@@ -48,7 +48,7 @@ public class IdVClaimMgtConstants {
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String IS_IDV_CLAIM_EXIST_SQL =
-                "SELECT ID FROM IDV_CLAIM WHERE USER_ID = ? AND CLAIM_URI = ? AND TENANT_ID = ?";
+                "SELECT ID FROM IDV_CLAIM WHERE USER_ID = ? AND IDVP_ID = ? AND CLAIM_URI = ? AND TENANT_ID = ?";
     }
 
     /**
@@ -56,16 +56,24 @@ public class IdVClaimMgtConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists."),
-        ERROR_CODE_MISSING_INPUTS("65001",
-                "Required properties are missing in the request.");
+        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists.",
+                "Identity Verification Claim data already exists for the given user"),
+        ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid.",
+                "Provided inputs are invalid. Please check the provided inputs."),
+        ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status.",
+                "Status should be either VERIFIED or NOT_VERIFIED"),
+        ERROR_CHECKING_IDV_CLAIM_EXISTENCE("65003",
+                "Error while checking the existence of the Identity Verification Claim.",
+                "Error while checking the existence of the Identity Verification Claim.");
         private final String code;
         private final String message;
+        private final String description;
 
-        ErrorMessage(String code, String message) {
+        ErrorMessage(String code, String message, String description) {
 
             this.code = code;
             this.message = message;
+            this.description = description;
         }
 
         public String getCode() {
@@ -78,10 +86,25 @@ public class IdVClaimMgtConstants {
             return message;
         }
 
+        public String getDescription() {
+
+            return description;
+        }
+
         @Override
         public String toString() {
 
             return code + ":" + message;
         }
     }
+
+    /**
+     * Holds constants related to IdV Claim status.
+     */
+    public static class Status {
+
+        public static final String NOT_VERIFIED = "NOT_VERIFIED";
+        public static final String VERIFIED = "VERIFIED";
+    }
+
 }

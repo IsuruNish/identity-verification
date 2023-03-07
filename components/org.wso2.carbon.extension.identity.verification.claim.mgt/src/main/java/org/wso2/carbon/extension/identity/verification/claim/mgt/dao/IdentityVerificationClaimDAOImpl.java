@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtExceptionManagement;
 import org.wso2.carbon.identity.core.util.IdentityDatabaseUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -32,6 +33,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_CHECKING_IDV_CLAIM_EXISTENCE;
 
 /**
  * Identity verification claim DAO class.
@@ -196,6 +199,17 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
         }
     }
 
+    /**
+     * Check whether the identity verification claim exist.
+     *
+     * @param userId   User id.
+     * @param idvId    Identity verification id.
+     * @param uri      Claim uri.
+     * @param tenantId Tenant id.
+     * @return True if the identity verification claim exist.
+     * @throws IdVClaimMgtException Identity verification claim management exception.
+     */
+    @Override
     public boolean isIdVClaimExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false);
@@ -212,18 +226,18 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 }
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while retrieving the identity verification claim.", e);
+            IdVClaimMgtExceptionManagement.handleServerException(ERROR_CHECKING_IDV_CLAIM_EXISTENCE, e);
         }
         return false;
     }
 
-    private byte[] getMetadata(IdVClaim idVClaim) throws IdVClaimMgtException {
+    private byte[] getMetadata(IdVClaim idVClaim) {
 
         String metadataString = idVClaim.getMetadata().toString();
         return metadataString.getBytes(StandardCharsets.UTF_8);
     }
 
-    private JSONObject getMetadataJsonObject(byte[] metadata) throws IdVClaimMgtException {
+    private JSONObject getMetadataJsonObject(byte[] metadata) {
 
         String metadataString = new String(metadata, StandardCharsets.UTF_8);
         return new JSONObject(metadataString);
