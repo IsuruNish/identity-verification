@@ -53,22 +53,22 @@ public class Constants {
                 "Server encountered an error while finding the identity verification provider."),
 
         // Server errors.
-        ERROR_CODE_ERROR_ADDING_IDVP("IDV-65000",
+        ERROR_ADDING_IDVP("IDV-65000",
                 "Unable to add identity verification provider.",
                 "Server encountered an error while adding the identity verification provider."),
-        ERROR_CODE_ERROR_UPDATING_IDVP("IDV-65001",
+        ERROR_UPDATING_IDVP("IDV-65001",
                 "Unable to update identity verification provider.",
                 "Server encountered an error while updating the identity verification provider."),
-        ERROR_CODE_ERROR_RETRIEVING_IDVP("IDV-65002",
+        ERROR_RETRIEVING_IDVP("IDV-65002",
                 "Unable to retrieve identity verification provider.",
                 "Server encountered an error while retrieving the identity verification provider."),
-        ERROR_CODE_ERROR_DELETING_IDVP("IDV-65003",
+        ERROR_DELETING_IDVP("IDV-65003",
                 "Unable to delete identity verification provider.",
                 "Server encountered an error while deleting the identity verification provider."),
-        ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA("IDV-65004",
+        ERROR_RETRIEVING_IDV_CLAIM_METADATA("IDV-65004",
                 "Unable to retrieve identity verification claim metadata.",
                 "Server encountered an error while retrieving the identity verification claim metadata."),
-        ERROR_CODE_ERROR_RETRIEVING_USER_IDV_CLAIMS("IDV-65005",
+        ERROR_RETRIEVING_USER_IDV_CLAIMS("IDV-65005",
                 "Unable to retrieve identity verification claims of the user %s.",
                 "Server encountered an error while retrieving the identity verification claim of the user."),
         ERROR_CODE_ERROR_VERIFYING_IDENTITY("IDV-65006",
@@ -77,7 +77,13 @@ public class Constants {
 
         ERROR_COMMON_SERVER_ERROR("IDV-65006",
                 "Unable to complete operation.",
-                "Error occurred while performing operation.");
+                "Error occurred while performing operation."),
+        ERROR_ADDING_VERIFICATION_CLAIM("IDV-65006", "Unable to add the verification claim.",
+                "Error occurred while adding the verification claim."),
+        ERROR_GETTING_VERIFICATION_CLAIM("IDV-65006", "Unable to get the verification claim %s.",
+                "Error occurred while getting the verification claim."),
+        ERROR_UPDATING_VERIFICATION_CLAIM("IDV-65006", "Unable to update the verification claim %s.",
+                "Error occurred while updating the verification claim.");
 
         private final String code;
         private final String message;

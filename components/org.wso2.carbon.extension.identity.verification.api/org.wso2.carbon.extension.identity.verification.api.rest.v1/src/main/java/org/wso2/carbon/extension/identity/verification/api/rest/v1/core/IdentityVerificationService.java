@@ -17,7 +17,6 @@
  */
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 
-import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Claims;
@@ -32,11 +31,9 @@ import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException
 import org.wso2.carbon.extension.identity.verifier.model.IdVProperty;
 import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.core.Response;
 
+import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getClaimMetadataMap;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleException;
 
@@ -59,7 +56,7 @@ public class IdentityVerificationService {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().getIDVClaims(userId, tenantId);
         } catch (IdVClaimMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_USER_IDV_CLAIMS, null);
+                    Constants.ErrorMessage.ERROR_RETRIEVING_USER_IDV_CLAIMS, null);
         }
         return getVerificationInfoResponse(userId, idVClaim);
     }
@@ -79,7 +76,7 @@ public class IdentityVerificationService {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().getIDVClaim(claimId, tenantId);
         } catch (IdVClaimMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
+                    Constants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
         }
         return getVerificationClaimResponse(idVClaim);
     }
@@ -100,7 +97,7 @@ public class IdentityVerificationService {
                     verifyIdentity(identityVerifier, tenantId);
         } catch (IdentityVerificationException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
+                    Constants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
         }
         return getVerificationPostResponse(identityVerifierResponse);
     }
@@ -135,12 +132,7 @@ public class IdentityVerificationService {
             verificationClaimResponse.setUri(idVClaim.getClaimUri());
             verificationClaimResponse.setStatus(idVClaim.getStatus());
             verificationClaimResponse.setValue(idVClaim.getClaimValue());
-            Map<String, Object> claimMetadata = new HashMap<>();
-            JSONObject claimMetadataJson = idVClaim.getMetadata();
-            for (String key : claimMetadataJson.keySet()) {
-                claimMetadata.put(key, claimMetadataJson.get(key));
-            }
-            verificationClaimResponse.setClaimMetadata(claimMetadata);
+            verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
             verificationPostResponse.addClaimsItem(verificationClaimResponse);
         }
         return verificationPostResponse;
@@ -153,12 +145,7 @@ public class IdentityVerificationService {
         verificationClaimResponse.setUri(idVClaim.getClaimUri());
         verificationClaimResponse.setValue(idVClaim.getClaimValue());
         verificationClaimResponse.setStatus(idVClaim.getStatus());
-        Map<String, Object> claimMetadata = new HashMap<>();
-        JSONObject claimMetadataJson = idVClaim.getMetadata();
-        for (String key : claimMetadataJson.keySet()) {
-            claimMetadata.put(key, claimMetadataJson.get(key));
-        }
-        verificationClaimResponse.setClaimMetadata(claimMetadata);
+        verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
         return verificationClaimResponse;
     }
 

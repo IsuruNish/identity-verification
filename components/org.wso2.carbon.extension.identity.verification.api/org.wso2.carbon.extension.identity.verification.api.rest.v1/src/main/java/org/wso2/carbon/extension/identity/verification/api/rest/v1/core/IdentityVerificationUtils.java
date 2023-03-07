@@ -21,6 +21,7 @@ package org.wso2.carbon.extension.identity.verification.api.rest.v1.core;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.ContextLoader;
 import org.wso2.carbon.extension.identity.verification.api.rest.common.error.APIError;
@@ -31,6 +32,9 @@ import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtCl
 import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtServerException;
 import org.wso2.carbon.identity.base.IdentityException;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
@@ -150,7 +154,7 @@ public class IdentityVerificationUtils {
         }
     }
 
-    public static String includeData(String errorMsg, String data) {
+    private static String includeData(String errorMsg, String data) {
 
         String message = errorMsg;
         if (data != null) {
@@ -159,6 +163,11 @@ public class IdentityVerificationUtils {
         return message;
     }
 
+    /**
+     * Get the tenant id from the tenant domain.
+     *
+     * @return Tenant id.
+     */
     public static int getTenantId() {
 
         String tenantDomain = ContextLoader.getTenantDomainFromAuthUser();
@@ -170,5 +179,20 @@ public class IdentityVerificationUtils {
         }
 
         return IdentityTenantUtil.getTenantId(tenantDomain);
+    }
+
+    /**
+     * Get the claim metadata map from the JSON object.
+     *
+     * @param claimMetadataJson JSON object of the claim metadata.
+     * @return Map of the claim metadata.
+     */
+    public static Map<String, Object> getClaimMetadataMap(JSONObject claimMetadataJson) {
+
+        Map<String, Object> claimMetadata = new HashMap<>();
+        for (String key : claimMetadataJson.keySet()) {
+            claimMetadata.put(key, claimMetadataJson.get(key));
+        }
+        return claimMetadata;
     }
 }

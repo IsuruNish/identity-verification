@@ -62,7 +62,7 @@ public class IdentityVerificationProviderService {
                     addIdVProvider(createIdVProvider(idVProviderRequest), tenantId);
         } catch (IdVProviderMgtException e) {
             throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_ADDING_IDVP, null);
         }
         return getIdVProviderResponse(identityVerificationProvider);
     }
@@ -93,7 +93,7 @@ public class IdentityVerificationProviderService {
                     updateIdVProvider(oldIdVProvider, updatedIdVProvider, tenantId);
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_UPDATING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_UPDATING_IDVP, null);
         }
         return getIdVProviderResponse(newIdVProvider);
     }
@@ -126,7 +126,7 @@ public class IdentityVerificationProviderService {
             return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_RETRIEVING_IDVP, null);
         }
     }
 
@@ -163,7 +163,7 @@ public class IdentityVerificationProviderService {
 //            return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_RETRIEVING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_RETRIEVING_IDVP, null);
         }
     }
 
@@ -180,7 +180,7 @@ public class IdentityVerificationProviderService {
                     deleteIdVProvider(identityVerificationProviderId, tenantId);
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_DELETING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_DELETING_IDVP, null);
         }
     }
 

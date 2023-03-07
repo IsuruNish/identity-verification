@@ -26,12 +26,11 @@ import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verific
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimUpdateRequest;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
-import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getClaimMetadataMap;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 
 /**
@@ -39,6 +38,12 @@ import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.I
  */
 public class IdentityVerificationClaimService {
 
+    /**
+     * Update verification claim.
+     *
+     * @param verificationClaimPostRequest verificationClaimPostRequest.
+     * @return Verification claim response.
+     */
     public VerificationClaimResponse addVerificationClaimData(VerificationClaimPostRequest
                                                                       verificationClaimPostRequest) {
 
@@ -48,14 +53,18 @@ public class IdentityVerificationClaimService {
             idvClaim = IdentityVerificationServiceHolder.
                     getIdVClaimManager().addIDVClaim(getIdVClaim(verificationClaimPostRequest), tenantId);
         } catch (IdVClaimMgtException e) {
-            // todo
-            throw IdentityVerificationUtils.handleException((IdVProviderMgtException) null,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+            throw IdentityVerificationUtils.handleException(e,
+                    Constants.ErrorMessage.ERROR_ADDING_VERIFICATION_CLAIM, null);
         }
-        // todo: how error will be passed
         return getVerificationClaimResponse(idvClaim);
     }
 
+    /**
+     * Get verification claim.
+     *
+     * @param claimId Claim id.
+     * @return Verification claim response.
+     */
     public VerificationClaimResponse getVerificationClaimData(String claimId) {
 
         IdVClaim idVClaim;
@@ -64,13 +73,19 @@ public class IdentityVerificationClaimService {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
                     getIDVClaim(claimId, tenantId);
         } catch (IdVClaimMgtException e) {
-            // todo
             throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_GETTING_VERIFICATION_CLAIM, claimId);
         }
         return getVerificationClaimResponse(idVClaim);
     }
 
+    /**
+     * Update verification claim.
+     *
+     * @param claimId                        Claim id.
+     * @param verificationClaimUpdateRequest Verification claim update request.
+     * @return Verification claim response.
+     */
     public VerificationClaimResponse updateVerificationClaim(String claimId, VerificationClaimUpdateRequest
             verificationClaimUpdateRequest) {
 
@@ -78,11 +93,10 @@ public class IdentityVerificationClaimService {
         int tenantId = getTenantId();
         try {
             idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
-                    updateIDVClaim(getIdVClaim(verificationClaimUpdateRequest), tenantId);
+                    updateIDVClaim(getIdVClaim(verificationClaimUpdateRequest, claimId), tenantId);
         } catch (IdVClaimMgtException e) {
-            // todo
             throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_CODE_ERROR_ADDING_IDVP, null);
+                    Constants.ErrorMessage.ERROR_UPDATING_VERIFICATION_CLAIM, claimId);
         }
         return getVerificationClaimResponse(idVClaim);
     }
@@ -94,12 +108,7 @@ public class IdentityVerificationClaimService {
         verificationClaimResponse.setUri(idVClaim.getClaimUri());
         verificationClaimResponse.setValue(idVClaim.getClaimValue());
         verificationClaimResponse.setStatus(idVClaim.getStatus());
-        Map<String, Object> claimMetadata = new HashMap<>();
-        JSONObject claimMetadataJson = idVClaim.getMetadata();
-        for (String key : claimMetadataJson.keySet()) {
-            claimMetadata.put(key, claimMetadataJson.get(key));
-        }
-        verificationClaimResponse.setClaimMetadata(claimMetadata);
+        verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
         return verificationClaimResponse;
     }
 
@@ -117,7 +126,7 @@ public class IdentityVerificationClaimService {
         return idVClaim;
     }
 
-    private IdVClaim getIdVClaim(VerificationClaimUpdateRequest verificationClaimUpdateRequest) {
+    private IdVClaim getIdVClaim(VerificationClaimUpdateRequest verificationClaimUpdateRequest, String claimId) {
 
         IdVClaim idVClaim = new IdVClaim();
         idVClaim.setStatus(verificationClaimUpdateRequest.getStatus());
