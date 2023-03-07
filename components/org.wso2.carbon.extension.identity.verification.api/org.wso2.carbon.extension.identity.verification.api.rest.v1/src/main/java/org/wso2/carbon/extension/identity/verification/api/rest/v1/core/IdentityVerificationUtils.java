@@ -47,8 +47,8 @@ public class IdentityVerificationUtils {
      * @param errorEnum Error message Information.
      * @return APIError.
      */
-    public static APIError handleIdPException(IdVProviderMgtException e,
-                                        Constants.ErrorMessage errorEnum, String data) {
+    public static APIError handleException(IdVProviderMgtException e,
+                                           Constants.ErrorMessage errorEnum, String data) {
 
         ErrorResponse errorResponse;
         Response.Status status;

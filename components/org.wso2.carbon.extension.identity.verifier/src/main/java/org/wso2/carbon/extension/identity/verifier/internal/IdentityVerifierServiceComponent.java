@@ -45,10 +45,17 @@ public class IdentityVerifierServiceComponent {
     @Activate
     protected void activate(ComponentContext ctxt) {
 
-        IdentityVerificationService identityVerificationService = new IdentityVerificationServiceImpl();
-        ctxt.getBundleContext().registerService(IdentityVerificationService.class.getName(),
-                identityVerificationService, null);
-        log.info("IdentityVerificationService bundle activated successfully.");
+        try {
+            IdentityVerificationService identityVerificationService = new IdentityVerificationServiceImpl();
+            ctxt.getBundleContext().registerService(IdentityVerificationService.class.getName(),
+                    identityVerificationService, null);
+            log.info("IdentityVerificationService bundle activated successfully.");
+            if (log.isDebugEnabled()) {
+                log.debug("PIdentityVerificationService bundle is activated");
+            }
+        } catch (Throwable e) {
+            log.fatal(" Error while activating IdentityVerificationService bundle ", e);
+        }
     }
 
     @Deactivate

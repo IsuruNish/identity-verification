@@ -22,6 +22,8 @@ package org.wso2.carbon.extension.identity.verification.provider.util;
  */
 public class IdVProviderMgtConstants {
 
+    public static final String IDVP_ERROR_PREFIX = "IDVP-";
+
     /**
      * This class contains the constants used in the IdentityVerificationProvider.
      */
@@ -61,24 +63,24 @@ public class IdVProviderMgtConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_DATABASE_CONNECTION("IDV-65001", "Couldn't get a database connection."),
-        ERROR_RETRIEVING_IDV_PROVIDERS("IDV-65001",
+        ERROR_DATABASE_CONNECTION("65001", "Couldn't get a database connection."),
+        ERROR_RETRIEVING_IDV_PROVIDERS("65001",
                 "An error occurred while retrieving Identity Verification Providers."),
-        ERROR_RETRIEVING_IDV_PROVIDER("IDV-65001",
+        ERROR_RETRIEVING_IDV_PROVIDER("65001",
                 "An error occurred while retrieving Identity Verification Provider by %s."),
-        ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS("IDV-65002",
+        ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS("65002",
                 "An error occurred while retrieving Identity Verification Provider configs."),
-        ERROR_RETRIEVING_IDV_PROVIDER_CLAIMS("IDV-65003",
+        ERROR_RETRIEVING_IDV_PROVIDER_CLAIMS("65003",
                 "An error occurred while retrieving Identity Verification Provider claims."),
-        ERROR_ADDING_IDV_PROVIDER("IDV-", "Error while adding Identity Verification Provider."),
-        ERROR_UPDATING_IDV_PROVIDER("IDV-", ""),
-        ERROR_DELETING_IDV_PROVIDER("IDV-65000",
+        ERROR_ADDING_IDV_PROVIDER("", "Error while adding Identity Verification Provider."),
+        ERROR_UPDATING_IDV_PROVIDER("", ""),
+        ERROR_DELETING_IDV_PROVIDER("65000",
                 "An error occurred while deleting Identity Verification Provider: %s."),
-        ERROR_IDVP_NOT_EXISTS("IDV-65004",
+        ERROR_IDVP_NOT_EXISTS("65004",
                 "An Identity Verification Provider not exists with the id: %s."),
-        ERROR_IDVP_ALREADY_EXISTS("IDV-65004",
+        ERROR_IDVP_ALREADY_EXISTS("65004",
                 "An Identity Verification Provider already exists with the name: %s."),
-        ERROR_IDVP_REQUEST_INVALID("IDV-65005",
+        ERROR_IDVP_REQUEST_INVALID("65005",
                 "An Identity Verification Provider already exists with the name: %s.");
         private final String code;
         private final String message;
@@ -91,7 +93,7 @@ public class IdVProviderMgtConstants {
 
         public String getCode() {
 
-            return code;
+            return IDVP_ERROR_PREFIX + code;
         }
 
         public String getMessage() {

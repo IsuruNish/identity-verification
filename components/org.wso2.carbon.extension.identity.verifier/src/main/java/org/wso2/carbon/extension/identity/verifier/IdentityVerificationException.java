@@ -17,12 +17,14 @@
  */
 package org.wso2.carbon.extension.identity.verifier;
 
+import org.wso2.carbon.extension.identity.verifier.util.IdentityVerifierConstants;
+import org.wso2.carbon.identity.base.IdentityException;
+
 /**
  * This class contains the implementation for the IdentityVerificationException.
  */
-public class IdentityVerificationException extends Exception {
+public class IdentityVerificationException extends IdentityException {
 
-    //todo
     public IdentityVerificationException(String message) {
 
         super(message);
@@ -33,15 +35,9 @@ public class IdentityVerificationException extends Exception {
         super(message, cause);
     }
 
-    public IdentityVerificationException(Throwable cause) {
+    public IdentityVerificationException(IdentityVerifierConstants.ErrorMessage error, Throwable cause) {
 
-        super(cause);
-    }
-
-    public IdentityVerificationException(String message, Throwable cause, boolean enableSuppression,
-                                         boolean writableStackTrace) {
-
-        super(message, cause, enableSuppression, writableStackTrace);
+        super(error.code(), error.message(), cause);
     }
 }
 

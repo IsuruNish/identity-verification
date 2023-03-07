@@ -23,27 +23,62 @@ package org.wso2.carbon.extension.identity.verification.claim.mgt.util;
  */
 public class IdVClaimMgtConstants {
 
+    public static final String IDVC_ERROR_PREFIX = "IDVC-";
+
     /**
      * Holds constants related to IdV Claim Management database tables.
      */
     public static class SQLQueries {
 
         public static final String ADD_IDV_CLAIM_SQL =
-                "INSERT INTO IDV_CLAIM (ID, UUID, LOCAL_CLAIM_ID, USER_ID, TENANT_ID, STATUS, METADATA) " +
-                        "VALUES (?,?,?,?,?,?,?)";
+                "INSERT INTO IDV_CLAIM (ID, UUID, LOCAL_CLAIM_ID, USER_ID, IDVP_ID, TENANT_ID, STATUS, METADATA) " +
+                        "VALUES (?,?,?,?,?,?,?,?)";
 
         public static final String GET_IDV_CLAIM_SQL =
-                "SELECT ID, UUID, LOCAL_CLAIM_ID, USER_ID, TENANT_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
-                        "UUID = ? AND USER_ID = ? AND TENANT_ID = ?";
+                "SELECT ID, UUID, LOCAL_CLAIM_ID, USER_ID, TENANT_ID, IDVP_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                        "UUID = ? AND TENANT_ID = ?";
 
         public static final String GET_IDV_CLAIMS_SQL =
                 "SELECT ID, UUID, LOCAL_CLAIM_ID, USER_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
                         "USER_ID = ? AND TENANT_ID = ?";
         public static final String UPDATE_IDV_CLAIM_SQL =
-                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE USER_ID = ? AND IDV_CLAIM_ID = ?";
+                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE UUID = ? AND TENANT_ID = ?";
 
         public static final String DELETE_IDV_CLAIM_SQL =
-                "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND IDV_CLAIM_ID = ?";
+                "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
     }
 
+    /**
+     * Error messages.
+     */
+    public enum ErrorMessage {
+
+        ERROR_DATABASE_CONNECTION("65001", "Couldn't get a database connection."),
+        ERROR_IDVP_REQUEST_INVALID("65005",
+                "An Identity Verification Provider already exists with the name: %s.");
+        private final String code;
+        private final String message;
+
+        ErrorMessage(String code, String message) {
+
+            this.code = code;
+            this.message = message;
+        }
+
+        public String getCode() {
+
+            return IDVC_ERROR_PREFIX + code;
+        }
+
+        public String getMessage() {
+
+            return message;
+        }
+
+        @Override
+        public String toString() {
+
+            return code + ":" + message;
+        }
+    }
 }

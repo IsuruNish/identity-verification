@@ -25,6 +25,8 @@ security:
 tags:
   - name: Verification
     description: Identity Verification API
+  - name: Identity Verification Claims
+    description: Identity Verification Claim API
   - name: Identity Verification Providers
     description: Identity Verification Provider API
 paths:
@@ -40,7 +42,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/verificationPostRequest'
+              $ref: '#/components/schemas/verificationClaimRequest'
         required: true
       responses:
         '202':
@@ -120,20 +122,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /{user-id}/claim/{claim-id}:
+  /claims:
+    post:
+      tags:
+        - Identity Verification Claims
+      summary: |
+        Add verification claim data
+      description: "This API provides the capability to add verification claim data"
+      operationId: addVerificationClaimData
+      responses:
+        '201':
+          description: Successful response
+          headers:
+            Location:
+              description: Location of the newly created identity provider.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/verificationClaimResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/verificationClaimPostRequest'
+        description: This represents the identity provider to be created.
+        required: true
+  /claims/{claim-id}:
     get:
       tags:
-        - Verification
-      summary: Get the verification metadata of a claim
+        - Identity Verification Claims
+      summary: Get the verification data of a claim
       description: This API provides the capability to retrive the verification metadata of a user claim
-      operationId: getVerificationClaimMetadata
+      operationId: getVerificationClaimData
       parameters:
-        - name: user-id
-          in: path
-          description: user id of the user
-          required: true
-          schema:
-            type: string
         - name: claim-id
           in: path
           description: Claim that needs to retrieve verification metadata
@@ -171,6 +225,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Identity Verification Claims
+      summary: Update the verification data of a claim
+      operationId: updateVerificationClaim
+      parameters:
+        - name: claim-id
+          in: path
+          description: Claim that needs to retrieve verification metadata
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Location:
+              description: Location of the updated identity provider.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/verificationClaimResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/verificationClaimUpdateRequest'
+        required: true
   /providers:
     get:
       tags:
@@ -517,7 +623,41 @@ components:
         claimMetadata:
           type: object
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
-    verificationPostRequest:
+    verificationClaimUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: aHR0cDovL3dzbzIub3JnL2NsYWltcy91c2VybmFtZQ
+          readOnly: true
+        uri:
+          type: string
+          example: 'http://wso2.org/claims/country'
+        value:
+          type: string
+          example: 'Sri Lanka'
+        status:
+          type: string
+          example: Verified
+        claimMetadata:
+          type: object
+          example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
+    verificationClaimPostRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: '123e4567-e89b-12d3-a456-556642440000'
+        uri:
+          type: string
+          example: 'http://wso2.org/claims/country'
+        status:
+          type: string
+          example: Verified
+        claimMetadata:
+          type: object
+          example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
+    verificationClaimRequest:
       required:
         - identityVerificationProvider
       type: object
@@ -531,13 +671,12 @@ components:
         claims:
           type: array
           items:
-            $ref: '#/components/schemas/attributes'
+            $ref: '#/components/schemas/claims'
         properties:
           type: array
           items:
             $ref: '#/components/schemas/Property'
-        
-    attributes:
+    claims:
       type: object
       properties:
         claim-uri:

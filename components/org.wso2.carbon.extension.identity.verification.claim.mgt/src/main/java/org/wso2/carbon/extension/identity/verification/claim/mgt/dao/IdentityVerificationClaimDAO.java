@@ -21,6 +21,9 @@ package org.wso2.carbon.extension.identity.verification.claim.mgt.dao;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
 
+/**
+ * This interface of IdentityVerificationClaimDAO.
+ */
 public interface IdentityVerificationClaimDAO {
 
     /**
@@ -28,18 +31,19 @@ public interface IdentityVerificationClaimDAO {
      *
      * @param userId   User id.
      * @param idVClaim IdentityVerificationClaim.
+     * @param tenantId Tenant id.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    void addIdVClaim(String userId, IdVClaim idVClaim) throws IdVClaimMgtException;
+    void addIdVClaim(String userId, IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Update the identity verification claim by the user id.
      *
-     * @param userId   User id.
      * @param idVClaim IdentityVerificationClaim.
+     * @param tenantId Tenant id.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    void updateIdVClaim(String userId, IdVClaim idVClaim) throws IdVClaimMgtException;
+    void updateIdVClaim(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Get the identity verification claim.
@@ -48,7 +52,7 @@ public interface IdentityVerificationClaimDAO {
      * @return Identity verification claim.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    IdVClaim getIDVClaim(String userId, String idVClaimId, int tenantId) throws IdVClaimMgtException;
+    IdVClaim getIDVClaim(String idVClaimId, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Get the identity verification claims.
@@ -64,7 +68,8 @@ public interface IdentityVerificationClaimDAO {
      * Delete the identity verification claim.
      *
      * @param idVClaimId Identity verification claim id.
+     * @param tenantId   Tenant id.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    void deleteIdVClaim(String userId, String idVClaimId) throws IdVClaimMgtException;
+    void deleteIdVClaim(String idVClaimId, int tenantId) throws IdVClaimMgtException;
 }

@@ -32,7 +32,6 @@ public class OnfidoIdentityVerifierFactory implements IdentityVerifierFactory {
         if (identityVerifierName.equals("ONFIDO")) {
             return new OnfidoIdentityVerifier();
         } else {
-            // todo
             throw new IllegalArgumentException("Identity verifier not found for the name: " + identityVerifierName);
         }
     }

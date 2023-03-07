@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Attributes;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Claims;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Property;
 import javax.validation.constraints.*;
 
@@ -36,7 +36,7 @@ public class VerificationPostRequest  {
   
     private String username;
     private String identityVerificationProvider;
-    private List<Attributes> claims = null;
+    private List<Claims> claims = null;
 
     private List<Property> properties = null;
 
@@ -81,7 +81,7 @@ public class VerificationPostRequest  {
 
     /**
     **/
-    public VerificationPostRequest claims(List<Attributes> claims) {
+    public VerificationPostRequest claims(List<Claims> claims) {
 
         this.claims = claims;
         return this;
@@ -90,14 +90,14 @@ public class VerificationPostRequest  {
     @ApiModelProperty(value = "")
     @JsonProperty("claims")
     @Valid
-    public List<Attributes> getClaims() {
+    public List<Claims> getClaims() {
         return claims;
     }
-    public void setClaims(List<Attributes> claims) {
+    public void setClaims(List<Claims> claims) {
         this.claims = claims;
     }
 
-    public VerificationPostRequest addClaimsItem(Attributes claimsItem) {
+    public VerificationPostRequest addClaimsItem(Claims claimsItem) {
         if (this.claims == null) {
             this.claims = new ArrayList<>();
         }

@@ -28,21 +28,21 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     IdentityVerificationClaimDAOImpl identityVerificationClaimDAO = new IdentityVerificationClaimDAOImpl();
 
     @Override
-    public IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
+    public IdVClaim getIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
-        return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId, tenantId);
+        return identityVerificationClaimDAO.getIDVClaim(idvClaimId, tenantId);
     }
 
     @Override
     public void addIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
-        identityVerificationClaimDAO.addIdVClaim(userId, idvClaim);
+        identityVerificationClaimDAO.addIdVClaim(userId, idvClaim, tenantId);
     }
 
     @Override
-    public void updateIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
+    public void updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
-        identityVerificationClaimDAO.updateIdVClaim(userId, idvClaim);
+        identityVerificationClaimDAO.updateIdVClaim(idvClaim, tenantId);
     }
 
     @Override

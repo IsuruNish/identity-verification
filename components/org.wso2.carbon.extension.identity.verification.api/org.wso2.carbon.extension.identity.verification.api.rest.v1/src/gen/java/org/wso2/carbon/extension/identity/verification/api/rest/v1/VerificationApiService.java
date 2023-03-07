@@ -24,9 +24,8 @@ import java.io.InputStream;
 import java.util.List;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Error;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.InitVerificationResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 import javax.ws.rs.core.Response;
 
@@ -35,7 +34,5 @@ public interface VerificationApiService {
 
       public Response getIdentityVerificationInfo(String userId);
 
-      public Response getVerificationClaimMetadata(String userId, String claimId);
-
-      public Response verifyIdentity(VerificationPostRequest verificationPostRequest);
+      public Response verifyIdentity(VerificationClaimRequest verificationClaimRequest);
 }

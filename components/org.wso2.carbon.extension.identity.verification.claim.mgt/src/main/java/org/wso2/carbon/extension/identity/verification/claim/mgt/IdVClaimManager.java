@@ -33,7 +33,7 @@ public interface IdVClaimManager {
      * @return IdVClaim.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    IdVClaim getIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
+    IdVClaim getIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Get the IdVClaims of a user.
@@ -63,7 +63,7 @@ public interface IdVClaimManager {
      * @param tenantId   Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    void updateIDVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    void updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Delete the IdVClaim.

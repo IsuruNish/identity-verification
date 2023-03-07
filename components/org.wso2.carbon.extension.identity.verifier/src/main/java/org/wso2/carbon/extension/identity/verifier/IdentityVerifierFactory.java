@@ -22,7 +22,18 @@ package org.wso2.carbon.extension.identity.verifier;
  */
 public interface IdentityVerifierFactory {
 
+    /**
+     * Get the identity verifier by passing the identity verifier name.
+     *
+     * @param identityVerifierName Identity verifier name.
+     * @return IdentityVerifier.
+     */
     IdentityVerifier getIdentityVerifier(String identityVerifierName);
 
+    /**
+     * Get the identity verifier name.
+     *
+     * @return Identity verifier name.
+     */
     String getIdentityVerifierName();
 }

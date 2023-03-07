@@ -31,6 +31,7 @@ public class IdVClaim {
     private String claimValue;
     private String userId;
     private String status;
+    private String idvProviderId;
     private JSONObject metadata;
 
     public String getId() {
@@ -111,5 +112,15 @@ public class IdVClaim {
     public void setClaimValue(String claimValue) {
 
         this.claimValue = claimValue;
+    }
+
+    public String getIdvProviderId() {
+
+        return idvProviderId;
+    }
+
+    public void setIdvProviderId(String idvProviderId) {
+
+        this.idvProviderId = idvProviderId;
     }
 }

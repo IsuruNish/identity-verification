@@ -67,14 +67,13 @@ public class IdVProviderManagementDAO {
             // Get claim mappings of identity verification provider.
             getIdVProvidersWithClaims(identityVerificationProvider, tenantId, connection);
         } catch (SQLException e) {
-            // connection.rollback();
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDERS, e);
         } catch (IdentityRuntimeException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_DATABASE_CONNECTION, e);
-        } finally {
-            IdentityDatabaseUtil.closeConnection();
+//        } finally {
+//            IdentityDatabaseUtil.closeConnection();
         }
         return identityVerificationProvider;
     }

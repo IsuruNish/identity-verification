@@ -25,6 +25,14 @@ import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
  */
 public interface IdentityVerificationService {
 
+    /**
+     * Get the identity verifier data after processing the identity verification.
+     *
+     * @param identityVerifierData Identity verifier data.
+     * @param tenantId             Tenant Id.
+     * @return IdentityVerifierData.
+     * @throws IdentityVerificationException IdentityVerificationException.
+     */
     IdentityVerifierData verifyIdentity(IdentityVerifierData identityVerifierData, int tenantId)
             throws IdentityVerificationException;
 }

@@ -24,9 +24,8 @@ import java.util.List;
 
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Error;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.InitVerificationResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
 
@@ -70,30 +69,6 @@ public class VerificationApi  {
     }
 
     @Valid
-    @GET
-    @Path("/{user-id}/claim/{claim-id}")
-    
-    @Produces({ "application/json" })
-    @ApiOperation(value = "Get the verification metadata of a claim", notes = "This API provides the capability to retrive the verification metadata of a user claim", response = VerificationClaimResponse.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "BasicAuth"),
-        @Authorization(value = "OAuth2", scopes = {
-            
-        })
-    }, tags={ "Verification", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "successful operation", response = VerificationClaimResponse.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Invalid status value", response = Error.class),
-        @ApiResponse(code = 401, message = "Unauthorized", response = Void.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = Void.class),
-        @ApiResponse(code = 404, message = "Not Found", response = Error.class),
-        @ApiResponse(code = 500, message = "Server Error", response = Error.class)
-    })
-    public Response getVerificationClaimMetadata(@ApiParam(value = "user id of the user",required=true) @PathParam("user-id") String userId, @ApiParam(value = "Claim that needs to retrieve verification metadata",required=true) @PathParam("claim-id") String claimId) {
-
-        return delegate.getVerificationClaimMetadata(userId,  claimId );
-    }
-
-    @Valid
     @POST
     
     @Consumes({ "application/json" })
@@ -112,9 +87,9 @@ public class VerificationApi  {
         @ApiResponse(code = 403, message = "Forbidden", response = Void.class),
         @ApiResponse(code = 500, message = "Server Error", response = Error.class)
     })
-    public Response verifyIdentity(@ApiParam(value = "Verify an identity" ,required=true) @Valid VerificationPostRequest verificationPostRequest) {
+    public Response verifyIdentity(@ApiParam(value = "Verify an identity" ,required=true) @Valid VerificationClaimRequest verificationClaimRequest) {
 
-        return delegate.verifyIdentity(verificationPostRequest );
+        return delegate.verifyIdentity(verificationClaimRequest );
     }
 
 }

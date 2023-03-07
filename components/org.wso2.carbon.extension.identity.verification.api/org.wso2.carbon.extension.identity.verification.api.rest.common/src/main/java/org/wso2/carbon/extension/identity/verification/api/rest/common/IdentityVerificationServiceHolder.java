@@ -23,9 +23,9 @@ import  org.wso2.carbon.extension.identity.verification.provider.IdVProviderMana
 import org.wso2.carbon.extension.identity.verifier.IdentityVerificationService;
 
 /**
- * Service holder class for identity providers.
+ * Service holder class for identity verification Rest API.
  */
-public class IdVProviderServiceHolder {
+public class IdentityVerificationServiceHolder {
 
     private static IdVProviderManager idVProviderManager;
     private static IdVClaimManager idVClaimManager;
@@ -48,7 +48,7 @@ public class IdVProviderServiceHolder {
      */
     public static void setIdVProviderManager(IdVProviderManager idVProviderManager) {
 
-        IdVProviderServiceHolder.idVProviderManager = idVProviderManager;
+        IdentityVerificationServiceHolder.idVProviderManager = idVProviderManager;
     }
 
     public static IdVClaimManager getIdVClaimManager() {
@@ -58,12 +58,12 @@ public class IdVProviderServiceHolder {
 
     public static void setIdVClaimManager(IdVClaimManager idVClaimManager) {
 
-        IdVProviderServiceHolder.idVClaimManager = idVClaimManager;
+        IdentityVerificationServiceHolder.idVClaimManager = idVClaimManager;
     }
 
     public static void setIdentityVerificationService(IdentityVerificationService identityVerificationService) {
 
-        IdVProviderServiceHolder.identityVerificationService = identityVerificationService;
+        IdentityVerificationServiceHolder.identityVerificationService = identityVerificationService;
     }
 
     public static IdentityVerificationService getIdentityVerificationService () {

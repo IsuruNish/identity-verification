@@ -30,15 +30,15 @@
 
 
     <bean id="idVClaimManagerHolderBean"
-          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
+          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder">
         <property name="idVClaimManager" ref="IdVClaimManagerFactoryBean"/>
     </bean>
     <bean id="idVProviderManagerHolderBean"
-          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
+          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder">
         <property name="idVProviderManager" ref="IdVProviderManagerFactoryBean"/>
     </bean>
     <bean id="IdentityVerificationServiceHolderBean"
-          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdVProviderServiceHolder">
+          class="org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder">
         <property name="identityVerificationService" ref="IdentityVerificationServiceFactoryBean"/>
     </bean>
 </beans>
