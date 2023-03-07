@@ -45,14 +45,14 @@ paths:
               $ref: '#/components/schemas/verificationClaimRequest'
         required: true
       responses:
-        '202':
+        '201':
           description: Accepted
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/initVerificationResponse'
+                  $ref: '#/components/schemas/verificationPostResponse'
         '200':
           description: Successful operation
           content:
@@ -572,8 +572,6 @@ components:
           type: string
           example: e0fbcfeb-3617-43c4-8dd0-7b7d38e13047
     verificationPostResponse:
-      required:
-        - identityVerificationProvider
       type: object
       properties:
         username:
@@ -626,6 +624,9 @@ components:
           type: object
           additionalProperties: true
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
+      required:
+        - status
+        - claimMetadata
     verificationClaimPostRequest:
       type: object
       properties:
@@ -645,9 +646,12 @@ components:
           type: object
           additionalProperties: true
           example: '{"source": "evidentID", "verifiedAt": "2020-10-10T12:00:00.000Z", "trackingId": "123e4567-e89b-12d3-a456-556642440000" }'
-    verificationClaimRequest:
       required:
-        - identityVerificationProvider
+        - userId
+        - idvpId
+        - uri
+        - status
+    verificationClaimRequest:
       type: object
       properties:
         username:
@@ -664,6 +668,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Property'
+      required:
+        - username
+        - identityVerificationProvider
     claims:
       type: object
       properties:
@@ -671,17 +678,6 @@ components:
           type: string
         claim-value:
           type: string
-    initVerificationResponse:
-      required:
-        - identityVerificationProvider
-      type: object
-      properties:
-        username:
-          type: string
-          example: username
-        identityVerificationProvider:
-          type: string
-          example: evidentID
     IdVProviderListResponse:
       type: object
       properties:
@@ -747,6 +743,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigProperty'
+      required:
+        - Name
+        - isEnable
     ConfigProperty:
       type: object
       properties:

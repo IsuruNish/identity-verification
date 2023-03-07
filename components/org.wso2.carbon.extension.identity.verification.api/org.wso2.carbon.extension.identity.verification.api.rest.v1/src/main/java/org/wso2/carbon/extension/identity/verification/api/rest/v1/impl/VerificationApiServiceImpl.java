@@ -20,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationService;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
 
 import javax.ws.rs.core.Response;

@@ -64,11 +64,9 @@ public class VerificationPostResponse  {
         return this;
     }
     
-    @ApiModelProperty(example = "evidentID", required = true, value = "")
+    @ApiModelProperty(example = "evidentID", value = "")
     @JsonProperty("identityVerificationProvider")
     @Valid
-    @NotNull(message = "Property identityVerificationProvider cannot be null.")
-
     public String getIdentityVerificationProvider() {
         return identityVerificationProvider;
     }

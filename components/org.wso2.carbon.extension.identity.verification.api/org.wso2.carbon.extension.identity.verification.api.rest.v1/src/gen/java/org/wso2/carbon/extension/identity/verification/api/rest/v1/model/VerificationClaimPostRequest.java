@@ -48,9 +48,11 @@ public class VerificationClaimPostRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "123e4567-e89b-12d3-a456-556642440000", value = "")
+    @ApiModelProperty(example = "123e4567-e89b-12d3-a456-556642440000", required = true, value = "")
     @JsonProperty("userId")
     @Valid
+    @NotNull(message = "Property userId cannot be null.")
+
     public String getUserId() {
         return userId;
     }
@@ -66,9 +68,11 @@ public class VerificationClaimPostRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "2159375-r567-8524-a456-5566424414527", value = "")
+    @ApiModelProperty(example = "2159375-r567-8524-a456-5566424414527", required = true, value = "")
     @JsonProperty("idvpId")
     @Valid
+    @NotNull(message = "Property idvpId cannot be null.")
+
     public String getIdvpId() {
         return idvpId;
     }
@@ -84,9 +88,11 @@ public class VerificationClaimPostRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "http://wso2.org/claims/country", value = "")
+    @ApiModelProperty(example = "http://wso2.org/claims/country", required = true, value = "")
     @JsonProperty("uri")
     @Valid
+    @NotNull(message = "Property uri cannot be null.")
+
     public String getUri() {
         return uri;
     }
@@ -102,9 +108,11 @@ public class VerificationClaimPostRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "Verified", value = "")
+    @ApiModelProperty(example = "Verified", required = true, value = "")
     @JsonProperty("status")
     @Valid
+    @NotNull(message = "Property status cannot be null.")
+
     public String getStatus() {
         return status;
     }

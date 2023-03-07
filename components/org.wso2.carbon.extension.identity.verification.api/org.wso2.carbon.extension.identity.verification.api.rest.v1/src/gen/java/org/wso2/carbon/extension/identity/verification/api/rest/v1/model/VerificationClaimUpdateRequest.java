@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.*;
 public class VerificationClaimUpdateRequest  {
   
     private String status;
-    private Map<String, Object> claimMetadata = null;
+    private Map<String, Object> claimMetadata = new HashMap<>();
 
 
     /**
@@ -45,9 +45,11 @@ public class VerificationClaimUpdateRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "Verified", value = "")
+    @ApiModelProperty(example = "Verified", required = true, value = "")
     @JsonProperty("status")
     @Valid
+    @NotNull(message = "Property status cannot be null.")
+
     public String getStatus() {
         return status;
     }
@@ -63,9 +65,11 @@ public class VerificationClaimUpdateRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "{\"source\": \"evidentID\", \"verifiedAt\": \"2020-10-10T12:00:00.000Z\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", value = "")
+    @ApiModelProperty(example = "{\"source\": \"evidentID\", \"verifiedAt\": \"2020-10-10T12:00:00.000Z\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", required = true, value = "")
     @JsonProperty("claimMetadata")
     @Valid
+    @NotNull(message = "Property claimMetadata cannot be null.")
+
     public Map<String, Object> getClaimMetadata() {
         return claimMetadata;
     }
@@ -75,9 +79,6 @@ public class VerificationClaimUpdateRequest  {
 
 
     public VerificationClaimUpdateRequest putClaimMetadataItem(String key, Object claimMetadataItem) {
-        if (this.claimMetadata == null) {
-            this.claimMetadata = new HashMap<>();
-        }
         this.claimMetadata.put(key, claimMetadataItem);
         return this;
     }

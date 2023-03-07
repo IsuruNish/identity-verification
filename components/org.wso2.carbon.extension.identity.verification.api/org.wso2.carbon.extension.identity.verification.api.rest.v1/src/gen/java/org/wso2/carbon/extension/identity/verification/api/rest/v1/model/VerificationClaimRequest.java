@@ -49,9 +49,11 @@ public class VerificationClaimRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "username", value = "")
+    @ApiModelProperty(example = "username", required = true, value = "")
     @JsonProperty("username")
     @Valid
+    @NotNull(message = "Property username cannot be null.")
+
     public String getUsername() {
         return username;
     }

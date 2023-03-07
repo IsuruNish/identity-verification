@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Error;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.InitVerificationResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
@@ -80,7 +79,7 @@ public class VerificationApi  {
         })
     }, tags={ "Verification" })
     @ApiResponses(value = { 
-        @ApiResponse(code = 202, message = "Accepted", response = InitVerificationResponse.class, responseContainer = "List"),
+        @ApiResponse(code = 201, message = "Accepted", response = VerificationPostResponse.class, responseContainer = "List"),
         @ApiResponse(code = 200, message = "Successful operation", response = VerificationPostResponse.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad request", response = Error.class),
         @ApiResponse(code = 401, message = "Unauthorized", response = Void.class),

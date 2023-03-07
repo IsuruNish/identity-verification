@@ -46,6 +46,9 @@ public class IdVClaimMgtConstants {
 
         public static final String DELETE_IDV_CLAIM_SQL =
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
+
+        public static final String IS_IDV_CLAIM_EXIST_SQL =
+                "SELECT ID FROM IDV_CLAIM WHERE USER_ID = ? AND CLAIM_URI = ? AND TENANT_ID = ?";
     }
 
     /**
@@ -53,9 +56,9 @@ public class IdVClaimMgtConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_DATABASE_CONNECTION("65001", "Couldn't get a database connection."),
-        ERROR_IDVP_REQUEST_INVALID("65005",
-                "An Identity Verification Provider already exists with the name: %s.");
+        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists."),
+        ERROR_CODE_MISSING_INPUTS("65001",
+                "Required properties are missing in the request.");
         private final String code;
         private final String message;
 

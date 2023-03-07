@@ -51,9 +51,11 @@ public class IdVProviderRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "EvidentID", value = "")
+    @ApiModelProperty(example = "EvidentID", required = true, value = "")
     @JsonProperty("Name")
     @Valid
+    @NotNull(message = "Property name cannot be null.")
+
     public String getName() {
         return name;
     }
@@ -105,9 +107,11 @@ public class IdVProviderRequest  {
         return this;
     }
     
-    @ApiModelProperty(example = "true", value = "")
+    @ApiModelProperty(example = "true", required = true, value = "")
     @JsonProperty("isEnable")
     @Valid
+    @NotNull(message = "Property isEnable cannot be null.")
+
     public Boolean getIsEnable() {
         return isEnable;
     }

@@ -27,7 +27,6 @@ public interface IdVClaimManager {
     /**
      * Get the IdVClaim.
      *
-     * @param userId      User Id.
      * @param idvClaimId  IdVClaim Id.
      * @param tenantId    Tenant Id.
      * @return IdVClaim.
@@ -72,4 +71,6 @@ public interface IdVClaimManager {
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
     void deleteIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException;
+
+    boolean isIDVClaimExists(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException;
 }

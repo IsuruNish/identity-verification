@@ -196,6 +196,27 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
         }
     }
 
+    public boolean isIdVClaimExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException {
+
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false);
+             PreparedStatement getIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
+                     SQLQueries.IS_IDV_CLAIM_EXIST_SQL)) {
+            getIdVProviderStmt.setString(1, userId);
+            getIdVProviderStmt.setString(2, idvId);
+            getIdVProviderStmt.setString(3, uri);
+            getIdVProviderStmt.setInt(4, tenantId);
+            getIdVProviderStmt.execute();
+            try (ResultSet idVProviderResultSet = getIdVProviderStmt.executeQuery()) {
+                if (idVProviderResultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new IdVClaimMgtException("Error while retrieving the identity verification claim.", e);
+        }
+        return false;
+    }
+
     private byte[] getMetadata(IdVClaim idVClaim) throws IdVClaimMgtException {
 
         String metadataString = idVClaim.getMetadata().toString();

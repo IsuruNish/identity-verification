@@ -17,8 +17,11 @@
  */
 package org.wso2.carbon.extension.identity.verification.claim.mgt;
 
+import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.dao.IdentityVerificationClaimDAOImpl;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtExceptionManagement;
 
 /**
  * This class provides methods to manage identity verification claims.
@@ -36,6 +39,7 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     @Override
     public IdVClaim addIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
+        validateAddIDVClaimInputs(idvClaim, tenantId);
         identityVerificationClaimDAO.addIdVClaim(idvClaim, tenantId);
         return idvClaim;
     }
@@ -57,5 +61,28 @@ public class IdentityVerificationClaimManager implements IdVClaimManager {
     public IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException {
 
         return identityVerificationClaimDAO.getIDVClaims(userId, tenantId);
+    }
+
+    @Override
+    public boolean isIDVClaimExists(String userId, String idvId, String uri, int tenantId)
+            throws IdVClaimMgtException {
+
+        return identityVerificationClaimDAO.isIdVClaimExist(userId, idvId, uri, tenantId);
+    }
+
+    private void validateAddIDVClaimInputs(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException {
+
+        String userId = idVClaim.getUserId();
+        String idvProviderId = idVClaim.getIdvProviderId();
+        String claimUri = idVClaim.getClaimUri();
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(idvProviderId) || StringUtils.isBlank(claimUri)) {
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_MISSING_INPUTS, null);
+        }
+        boolean idvClaimExists = isIDVClaimExists(userId, idvProviderId, claimUri, tenantId);
+        if (idvClaimExists) {
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS, null);
+        }
     }
 }

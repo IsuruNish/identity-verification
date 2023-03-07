@@ -26,14 +26,6 @@ import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtSe
  */
 public class IdVProviderMgtExceptionManagement {
 
-    /**
-     * This method can be used to generate a FunctionLibraryManagementClientException from
-     * FunctionLibraryManagementConstants.ErrorMessage object when no exception is thrown.
-     *
-     * @param error FunctionLibraryManagementConstants.ErrorMessage.
-     * @param data  data to replace if message needs to be replaced.
-     * @return FunctionLibraryManagementClientException.
-     */
     public static IdVProviderMgtClientException handleClientException(
             IdVProviderMgtConstants.ErrorMessage error, String data) {
 
@@ -55,14 +47,6 @@ public class IdVProviderMgtExceptionManagement {
         return new IdVProviderMgtClientException(error.getCode(), message);
     }
 
-    /**
-     * This method can be used to generate a FunctionLibraryManagementServerException from
-     * FunctionLibraryManagementConstants.ErrorMessage object when no exception is thrown.
-     *
-     * @param error FunctionLibraryManagementConstants.ErrorMessage.
-     * @param data  data to replace if message needs to be replaced.
-     * @return FunctionLibraryManagementServerException.
-     */
     public static IdvProviderMgtServerException handleServerException(
             IdVProviderMgtConstants.ErrorMessage error, String data, Throwable e) {
 
