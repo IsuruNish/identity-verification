@@ -47,7 +47,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
     public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
             throws IdVProviderMgtException {
 
-        validateGetIdPInputValues(idVProviderId);
+        validateIdPId(idVProviderId);
         return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
     }
 
@@ -91,7 +91,7 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
      * @param idVProviderId Identity Provider ID.
      * @throws IdVProviderMgtException IdVProviderMgtException.
      */
-    private void validateGetIdPInputValues(String idVProviderId) throws IdVProviderMgtException {
+    private void validateIdPId(String idVProviderId) throws IdVProviderMgtException {
 
         if (StringUtils.isEmpty(idVProviderId)) {
             String data = "Invalid argument: Identity Verification Provider ID value is empty";

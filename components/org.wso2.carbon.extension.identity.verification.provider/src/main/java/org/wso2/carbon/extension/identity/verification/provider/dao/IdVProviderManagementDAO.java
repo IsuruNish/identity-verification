@@ -60,7 +60,9 @@ public class IdVProviderManagementDAO {
         IdentityVerificationProvider identityVerificationProvider;
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
             identityVerificationProvider = getIDVPbyUUID(idVPUUID, tenantId, connection);
-
+            if (identityVerificationProvider == null) {
+                return null;
+            }
             // Get configs of identity verification provider.
             getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
 
@@ -201,8 +203,6 @@ public class IdVProviderManagementDAO {
             try (PreparedStatement getIdVProvidersStmt = connection
                     .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVPS_SQL)) {
                 getIdVProvidersStmt.setInt(1, tenantId);
-                getIdVProvidersStmt.setInt(2, limit);
-                getIdVProvidersStmt.setInt(3, offset);
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
@@ -277,6 +277,11 @@ public class IdVProviderManagementDAO {
     public void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            IdentityVerificationProvider identityVerificationProvider =
+                    getIDVPbyUUID(idVProviderId, tenantId, connection);
+            if (identityVerificationProvider == null) {
+                return;
+            }
             try (PreparedStatement deleteIdVProviderStmt =
                          connection.prepareStatement(IdVProviderMgtConstants.SQLQueries.DELETE_IDV_SQL)) {
                 deleteIdVProviderStmt.setString(1, idVProviderId);

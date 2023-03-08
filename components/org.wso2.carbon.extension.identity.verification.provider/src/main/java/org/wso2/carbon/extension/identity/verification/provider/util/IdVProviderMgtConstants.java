@@ -37,8 +37,7 @@ public class IdVProviderMgtConstants {
                 "IDVP_CONFIG WHERE IDVP_ID=? AND TENANT_ID=?";
         public static final String GET_IDVP_CLAIMS_SQL = "SELECT CLAIM, LOCAL_CLAIM FROM " +
                 "IDVP_CLAIM_MAPPING WHERE IDVP_ID=? AND TENANT_ID=?";
-        public static final String GET_IDVPS_SQL = "SELECT UUID, NAME, DISPLAY_NAME, " +
-                "DESCRIPTION, IS_ENABLE FROM IDVP WHERE TENANT_ID=? LIMIT ? OFFSET ?";
+        public static final String GET_IDVPS_SQL = "SELECT UUID, NAME, DISPLAY_NAME, DESCRIPTION, IS_ENABLE FROM IDVP";
 
         public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=?";
 

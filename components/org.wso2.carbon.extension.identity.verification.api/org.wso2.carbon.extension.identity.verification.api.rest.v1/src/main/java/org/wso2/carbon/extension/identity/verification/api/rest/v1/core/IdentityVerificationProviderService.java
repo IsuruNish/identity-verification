@@ -110,20 +110,11 @@ public class IdentityVerificationProviderService {
             int tenantId = getTenantId();
             IdentityVerificationProvider identityVerificationProvider =
                     IdentityVerificationServiceHolder.getIdVProviderManager().getIdVProvider(idVProviderId, tenantId);
-            IdVProviderResponse idVProviderResponse = new IdVProviderResponse();
-            idVProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
-            idVProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
-            idVProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
-            idVProviderResponse.setDisplayName(identityVerificationProvider.getIdVProviderDescription());
-
-            List<ConfigProperty> configProperties =
-                    Arrays.stream(identityVerificationProvider.getIdVConfigProperties()).
-                            map(propertyToExternal).collect(Collectors.toList());
-            idVProviderResponse.setConfigProperties(configProperties);
-
-            idVProviderResponse.setClaims(getIdVClaimMappings(identityVerificationProvider));
-
-            return idVProviderResponse;
+            if (identityVerificationProvider == null) {
+                throw handleException(Response.Status.NOT_FOUND,
+                        Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND, null);
+            }
+            return getIdVProviderResponse(identityVerificationProvider);
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_RETRIEVING_IDVP, null);
@@ -162,7 +153,7 @@ public class IdentityVerificationProviderService {
 //
 //            return idVProviderResponse;
         } catch (IdVProviderMgtException e) {
-            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+            throw handleException(e,
                     Constants.ErrorMessage.ERROR_RETRIEVING_IDVP, null);
         }
     }
@@ -179,7 +170,7 @@ public class IdentityVerificationProviderService {
             IdentityVerificationServiceHolder.getIdVProviderManager().
                     deleteIdVProvider(identityVerificationProviderId, tenantId);
         } catch (IdVProviderMgtException e) {
-            throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
+            throw handleException(e,
                     Constants.ErrorMessage.ERROR_DELETING_IDVP, null);
         }
     }
@@ -205,12 +196,14 @@ public class IdentityVerificationProviderService {
         idvProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
         idvProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
         idvProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
+        idvProviderResponse.setIsEnable(identityVerificationProvider.isEnable());
         idvProviderResponse.setDescription(identityVerificationProvider.getIdVProviderDescription());
         List<ConfigProperty> configProperties =
                 Arrays.stream(identityVerificationProvider.getIdVConfigProperties()).
                         map(propertyToExternal).collect(Collectors.toList());
 
         idvProviderResponse.setConfigProperties(configProperties);
+        idvProviderResponse.setClaims(getIdVClaimMappings(identityVerificationProvider));
         return idvProviderResponse;
     }
 

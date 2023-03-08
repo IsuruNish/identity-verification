@@ -59,7 +59,6 @@ public interface IdVProviderManager {
     /**
      * Update the IdentityVerificationProvider.
      *
-     * @param idVProviderId    IdentityVerificationProvider Id.
      * @param newIdVProvider    New IdentityVerificationProvider.
      * @param tenantId          Tenant Id.
      * @return IdentityVerificationProvider.

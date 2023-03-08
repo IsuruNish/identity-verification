@@ -56,24 +56,28 @@ public class IdVClaimMgtConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists.",
-                "Identity Verification Claim data already exists for the given user"),
-        ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid.",
-                "Provided inputs are invalid. Please check the provided inputs."),
-        ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status.",
-                "Status should be either VERIFIED or NOT_VERIFIED"),
+        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists."),
+        ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid."),
+        ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status."),
         ERROR_CHECKING_IDV_CLAIM_EXISTENCE("65003",
-                "Error while checking the existence of the Identity Verification Claim.",
-                "Error while checking the existence of the Identity Verification Claim.");
+                "Error while checking the existence of the Identity Verification Claim."),
+        ERROR_DELETING_IDV_CLAIM("65004",
+                "Error deleting the Identity Verification Claim."),
+        ERROR_RETRIEVING_IDV_CLAIM("65005",
+                "Error retrieving the Identity Verification Claim."),
+        ERROR_UPDATING_IDV_CLAIM("65005",
+                "Error updating the Identity Verification Claim."),
+        ERROR_ADDING_IDV_CLAIM("65005",
+                "Error adding the Identity Verification Claim."),
+        ERROR_RETRIEVING_IDV_CLAIMS("65005",
+                "Error retrieving the Identity Verification Claims.");
         private final String code;
         private final String message;
-        private final String description;
 
-        ErrorMessage(String code, String message, String description) {
+        ErrorMessage(String code, String message) {
 
             this.code = code;
             this.message = message;
-            this.description = description;
         }
 
         public String getCode() {
@@ -84,11 +88,6 @@ public class IdVClaimMgtConstants {
         public String getMessage() {
 
             return message;
-        }
-
-        public String getDescription() {
-
-            return description;
         }
 
         @Override

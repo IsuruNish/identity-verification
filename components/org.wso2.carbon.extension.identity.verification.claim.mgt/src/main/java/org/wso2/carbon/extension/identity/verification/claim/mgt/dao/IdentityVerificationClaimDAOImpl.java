@@ -34,7 +34,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_ADDING_IDV_CLAIM;
 import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_CHECKING_IDV_CLAIM_EXISTENCE;
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_DELETING_IDV_CLAIM;
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM;
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIMS;
+import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_UPDATING_IDV_CLAIM;
 
 /**
  * Identity verification claim DAO class.
@@ -67,10 +72,10 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 IdentityDatabaseUtil.commitTransaction(connection);
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
-                throw new IdVClaimMgtException("Error while adding the identity verification claim.", e1);
+                throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_ADDING_IDV_CLAIM, e1);
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while adding the identity verification claim.", e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_ADDING_IDV_CLAIM, e);
         }
     }
 
@@ -95,10 +100,10 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 IdentityDatabaseUtil.commitTransaction(connection);
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
-                throw new IdVClaimMgtException("Error while updating the identity verification claim.", e1);
+                throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_UPDATING_IDV_CLAIM, e1);
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while updating the identity verification claim.", e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_UPDATING_IDV_CLAIM, e);
         }
     }
 
@@ -132,7 +137,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 }
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while retrieving the identity verification claim.", e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_RETRIEVING_IDV_CLAIM, e);
         }
         return idVClaim;
     }
@@ -169,7 +174,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 }
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while retrieving the identity verification claim.", e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_RETRIEVING_IDV_CLAIMS, e);
         }
         return idVClaims.toArray(new IdVClaim[0]);
     }
@@ -192,10 +197,10 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 IdentityDatabaseUtil.commitTransaction(connection);
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
-                throw new IdVClaimMgtException("Error while deleting the identity verification claim.", e1);
+                throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_DELETING_IDV_CLAIM, e1);
             }
         } catch (SQLException e) {
-            throw new IdVClaimMgtException("Error while deleting the identity verification claim.", e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_DELETING_IDV_CLAIM, e);
         }
     }
 
@@ -226,7 +231,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                 }
             }
         } catch (SQLException e) {
-            IdVClaimMgtExceptionManagement.handleServerException(ERROR_CHECKING_IDV_CLAIM_EXISTENCE, e);
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_CHECKING_IDV_CLAIM_EXISTENCE, e);
         }
         return false;
     }
