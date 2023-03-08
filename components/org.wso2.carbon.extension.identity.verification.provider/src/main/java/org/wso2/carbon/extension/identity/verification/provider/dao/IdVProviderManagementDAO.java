@@ -194,6 +194,14 @@ public class IdVProviderManagementDAO {
         }
     }
 
+    /**
+     * Get Identity Verification Providers.
+     *
+     * @param limit   Limit.
+     * @param offset  Offset.
+     * @param tenantId Tenant ID.
+     * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
+     */
     public List<IdentityVerificationProvider> getIdVProviders(Integer limit, Integer offset, int tenantId)
             throws IdVProviderMgtException {
 
@@ -203,6 +211,8 @@ public class IdVProviderManagementDAO {
             try (PreparedStatement getIdVProvidersStmt = connection
                     .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVPS_SQL)) {
                 getIdVProvidersStmt.setInt(1, tenantId);
+                getIdVProvidersStmt.setInt(2, offset);
+                getIdVProvidersStmt.setInt(3, limit);
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
@@ -212,7 +222,7 @@ public class IdVProviderManagementDAO {
                         identityVerificationProvider.setDisplayName(idVProviderResultSet.getString("DISPLAY_NAME"));
                         identityVerificationProvider.
                                 setIdVProviderDescription(idVProviderResultSet.getString("DESCRIPTION"));
-                        identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLE"));
+                        identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
                         identityVerificationProviders.add(identityVerificationProvider);
                     }
                 }
@@ -228,6 +238,32 @@ public class IdVProviderManagementDAO {
                     ERROR_DATABASE_CONNECTION, e);
         }
         return identityVerificationProviders;
+    }
+
+    public int getCountOfIdVProviders(int tenantId) throws IdVProviderMgtException {
+
+        int count = 0;
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            try (PreparedStatement getIdVProvidersStmt = connection
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_COUNT_OF_IDVPS_SQL)) {
+                getIdVProvidersStmt.setInt(1, tenantId);
+                try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                    while (idVProviderResultSet.next()) {
+                        count = idVProviderResultSet.getInt(1);
+                    }
+                }
+            } catch (SQLException e1) {
+                throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                        ERROR_RETRIEVING_IDV_PROVIDERS, e1);
+            }
+        } catch (SQLException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_RETRIEVING_IDV_PROVIDERS, e);
+        } catch (IdentityRuntimeException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_DATABASE_CONNECTION, e);
+        }
+        return count;
     }
 
     public IdentityVerificationProvider getIdVPByName(String idVPName, int tenantId)

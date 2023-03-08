@@ -19,31 +19,34 @@ package org.wso2.carbon.extension.identity.verification.provider;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.extension.identity.verification.provider.dao.IdVProviderManagementDAO;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
+import org.wso2.carbon.identity.core.util.IdentityUtil;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class contains the implementation for the IdVProviderManager.
  */
 public class IdentityVerificationProviderManager implements IdVProviderManager {
 
+    private static final Log log = LogFactory.getLog(IdentityVerificationProviderManager.class);
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
+    @Override
     public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider,
                                                        int tenantId) throws IdVProviderMgtException {
 
         validateAddIdPVInputValues(identityVerificationProvider.getIdVProviderName(), tenantId);
-        // todo
-        validateLocalClaims(identityVerificationProvider.getClaimMappings(), tenantId);
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider, tenantId);
         return identityVerificationProvider;
     }
 
+    @Override
     public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
             throws IdVProviderMgtException {
 
@@ -51,11 +54,19 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
     }
 
+    @Override
+    public int getCountOfIdVProviders(int tenantId) throws IdVProviderMgtException {
+
+        return idVProviderManagementDAO.getCountOfIdVProviders(tenantId);
+    }
+
+    @Override
     public void deleteIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException {
 
         idVProviderManagementDAO.deleteIdVProvider(idVProviderId, tenantId);
     }
 
+    @Override
     public IdentityVerificationProvider updateIdVProvider(IdentityVerificationProvider oldIdVProvider,
                                                           IdentityVerificationProvider updatedIdVProvider,
                                                           int tenantId) throws IdVProviderMgtException {
@@ -64,10 +75,11 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         return updatedIdVProvider;
     }
 
+    @Override
     public List<IdentityVerificationProvider> getIdVProviders(Integer limit, Integer offset, int tenantId)
             throws IdVProviderMgtException {
 
-        return idVProviderManagementDAO.getIdVProviders(limit, offset, tenantId);
+        return idVProviderManagementDAO.getIdVProviders(validateLimit(limit), validateOffset(offset), tenantId);
     }
 
     /**
@@ -100,22 +112,6 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         }
     }
 
-    private void validateLocalClaims(Map<String, String> claimMappings, int tenantId) {
-
-        if (MapUtils.isEmpty(claimMappings)) {
-            return;
-        }
-
-        // todo
-//        for (Map.Entry<String, String> entry : claimMappings.entrySet()) {
-//            if (claimManager.getClaim(entry.getKey()) {
-//                throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
-//                        ERROR_CODE_LOCAL_CLAIMS_NOT_ALLOWED, entry.getKey(), null);
-//            }
-//        }
-
-    }
-
     @Override
     public IdentityVerificationProvider getIdVPByName(String idVPName, int tenantId)
             throws IdVProviderMgtException {
@@ -127,5 +123,58 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         }
 
         return idVProviderManagementDAO.getIdVPByName(idVPName, tenantId);
+    }
+
+    /**
+     * Validate limit.
+     *
+     * @param limit given limit value.
+     * @return validated limit and offset value.
+     */
+    private int validateLimit(Integer limit) throws IdVProviderMgtClientException {
+
+        if (limit == null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Given limit is null. Therefore we get the default limit from identity.xml.");
+            }
+            limit = IdentityUtil.getDefaultItemsPerPage();
+        }
+        if (limit < 0) {
+            String message = "Given limit: " + limit + " is a negative value.";
+            throw IdVProviderMgtExceptionManagement.
+                    handleClientException(IdVProviderMgtConstants.ErrorMessage.ERROR_RETRIEVING_IDV_PROVIDER, message);
+        }
+
+        int maximumItemsPerPage = IdentityUtil.getMaximumItemPerPage();
+        if (limit > maximumItemsPerPage) {
+            if (log.isDebugEnabled()) {
+                log.debug("Given limit exceed the maximum limit. Therefore we get the default limit from " +
+                        "identity.xml. limit: " + maximumItemsPerPage);
+            }
+            limit = maximumItemsPerPage;
+        }
+        return limit;
+    }
+
+    /**
+     * Validate offset.
+     *
+     * @param offset given offset value.
+     * @return validated limit and offset value.
+     * @throws IdVProviderMgtClientException Error while set offset
+     */
+    private int validateOffset(Integer offset) throws IdVProviderMgtClientException {
+
+        if (offset == null) {
+            // Return first page offset.
+            offset = 0;
+        }
+
+        if (offset < 0) {
+            String message = "Invalid offset applied. Offset should not negative. offSet: " + offset;
+            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.
+                            ErrorMessage.ERROR_RETRIEVING_IDV_PROVIDER, message);
+        }
+        return offset;
     }
 }

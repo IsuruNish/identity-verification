@@ -88,4 +88,13 @@ public interface IdVProviderManager {
      */
     IdentityVerificationProvider getIdVPByName(String idPName, int tenantId)
             throws IdVProviderMgtException;
+
+    /**
+     * Get the count of IdentityVerificationProviders.
+     *
+     * @param tenantId  Tenant Id.
+     * @return Count of IdentityVerificationProviders.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
+    int getCountOfIdVProviders(int tenantId) throws IdVProviderMgtException;
 }
