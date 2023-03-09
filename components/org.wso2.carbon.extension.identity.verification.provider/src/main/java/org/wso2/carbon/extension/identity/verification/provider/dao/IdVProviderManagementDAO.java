@@ -80,6 +80,24 @@ public class IdVProviderManagementDAO {
         return identityVerificationProvider;
     }
 
+    public boolean isIdVProviderExists(String idvProviderId, int tenantId) throws IdvProviderMgtServerException {
+
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false)) {
+            try (PreparedStatement getIdVProvidersStmt = connection
+                    .prepareStatement(IdVProviderMgtConstants.SQLQueries.IS_IDVP_EXIST_SQL)) {
+                getIdVProvidersStmt.setString(1, idvProviderId);
+                getIdVProvidersStmt.setInt(2, tenantId);
+
+                try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
+                    return idVProviderResultSet.next();
+                }
+            }
+        } catch (SQLException e) {
+            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_RETRIEVING_IDV_PROVIDER, idvProviderId, e);
+        }
+    }
+
     private static IdentityVerificationProvider getIDVPbyUUID(String idVPUUID, int tenantId, Connection connection)
             throws IdvProviderMgtServerException {
 
@@ -197,8 +215,8 @@ public class IdVProviderManagementDAO {
     /**
      * Get Identity Verification Providers.
      *
-     * @param limit   Limit.
-     * @param offset  Offset.
+     * @param limit    Limit.
+     * @param offset   Offset.
      * @param tenantId Tenant ID.
      * @throws IdVProviderMgtException Identity Verification Provider Management Exception.
      */

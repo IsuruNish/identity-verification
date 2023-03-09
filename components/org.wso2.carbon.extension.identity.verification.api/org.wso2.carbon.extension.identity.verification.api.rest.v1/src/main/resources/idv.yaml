@@ -23,17 +23,15 @@ security:
   - OAuth2: []
   - BasicAuth: []
 tags:
-  - name: Verification
+  - name: Identity Verification
     description: Identity Verification API
-  - name: Identity Verification Claims
-    description: Identity Verification Claim API
   - name: Identity Verification Providers
     description: Identity Verification Provider API
 paths:
   /:
     post:
       tags:
-        - Verification
+        - Identity Verification
       summary: Verify an Identity
       description: This API provides the capability to verify a user with the configured verification required attributes
       operationId: verifyIdentity
@@ -77,13 +75,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /{user-id}:
     get:
       tags:
-        - Verification
-      summary: Get the verification details of a user
+        - Identity Verification
+      summary: Get the verification details
       description: This API provides the capability to retrive the verification details of a user
-      operationId: getIdentityVerificationInfo
+      operationId: getIdentityVerification
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/verificationGetResponse'
+        '400':
+          description: Invalid status value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /{user-id}/claims:
+    get:
+      tags:
+        - Identity Verification
+      summary: Get the identity verification claims of a user
+      description: This API provides the capability to retrieve the verification details of a user
+      operationId: getIdVClaims
       parameters:
         - name: user-id
           in: path
@@ -122,14 +157,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /claims:
     post:
       tags:
-        - Identity Verification Claims
-      summary: |
-        Add verification claim data
+        - Identity Verification
+      summary: Add identity verification claim.
       description: "This API provides the capability to add verification claim data"
-      operationId: addVerificationClaimData
+      operationId: addIdVClaim
+      parameters:
+        - name: user-id
+          in: path
+          description: user id of the user
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: Successful response
@@ -177,14 +217,20 @@ paths:
               $ref: '#/components/schemas/verificationClaimPostRequest'
         description: This represents the identity provider to be created.
         required: true
-  /claims/{claim-id}:
+  /{user-id}/claims/{claim-id}:
     get:
       tags:
-        - Identity Verification Claims
-      summary: Get the verification data of a claim
-      description: This API provides the capability to retrive the verification metadata of a user claim
-      operationId: getVerificationClaimData
+        - Identity Verification
+      summary: Get identity verification claim
+      description: This API provides the capability to retrieve a identity verification claim of a user.
+      operationId: getIdVClaim
       parameters:
+        - name: user-id
+          in: path
+          description: user id of the user
+          required: true
+          schema:
+            type: string
         - name: claim-id
           in: path
           description: Claim that needs to retrieve verification metadata
@@ -224,13 +270,20 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Identity Verification Claims
-      summary: Update the verification data of a claim
-      operationId: updateVerificationClaim
+        - Identity Verification
+      summary: Update identity verification claim
+      description: This API provides the capability to update a identity verification claim of a user.
+      operationId: updateIdVClaim
       parameters:
         - name: claim-id
           in: path
           description: Claim that needs to retrieve verification metadata
+          required: true
+          schema:
+            type: string
+        - name: user-id
+          in: path
+          description: user id of the user
           required: true
           schema:
             type: string

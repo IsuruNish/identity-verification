@@ -17,6 +17,7 @@
  */
 package org.wso2.carbon.extension.identity.verification.claim.mgt.internal;
 
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
 import org.wso2.carbon.user.core.service.RealmService;
 
 /**
@@ -25,6 +26,7 @@ import org.wso2.carbon.user.core.service.RealmService;
 public class IdVClaimMgtDataHolder {
 
     private static RealmService realmService;
+    private static IdVProviderManager idVProviderManager;
 
     /**
      * Get the RealmService.
@@ -48,5 +50,19 @@ public class IdVClaimMgtDataHolder {
     public static void setRealmService(RealmService realmService) {
 
         IdVClaimMgtDataHolder.realmService = realmService;
+    }
+
+    public static IdVProviderManager getIdVProviderManager() {
+
+        if (idVProviderManager == null) {
+            throw new RuntimeException("IdVProviderManager was not set during the " +
+                    "IdVProviderMgtServiceComponent startup");
+        }
+        return idVProviderManager;
+    }
+
+    public static void setIdVProviderManager(IdVProviderManager idVProviderManager) {
+
+        IdVClaimMgtDataHolder.idVProviderManager = idVProviderManager;
     }
 }

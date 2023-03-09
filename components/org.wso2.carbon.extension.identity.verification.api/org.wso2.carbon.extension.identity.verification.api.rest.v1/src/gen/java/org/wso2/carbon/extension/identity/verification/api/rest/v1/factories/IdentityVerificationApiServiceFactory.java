@@ -16,14 +16,14 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.factories;
 
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.VerificationApiService;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.impl.VerificationApiServiceImpl;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.IdentityVerificationApiService;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.impl.IdentityVerificationApiServiceImpl;
 
-public class VerificationApiServiceFactory {
+public class IdentityVerificationApiServiceFactory {
 
-   private final static VerificationApiService service = new VerificationApiServiceImpl();
+   private final static IdentityVerificationApiService service = new IdentityVerificationApiServiceImpl();
 
-   public static VerificationApiService getVerificationApi()
+   public static IdentityVerificationApiService getIdentityVerificationApi()
    {
       return service;
    }

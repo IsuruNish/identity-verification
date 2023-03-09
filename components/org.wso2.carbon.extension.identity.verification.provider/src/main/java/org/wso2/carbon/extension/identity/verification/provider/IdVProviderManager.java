@@ -97,4 +97,13 @@ public interface IdVProviderManager {
      * @throws IdVProviderMgtException IdVProviderMgtException.
      */
     int getCountOfIdVProviders(int tenantId) throws IdVProviderMgtException;
+
+    /**
+     * Check whether the IdentityVerificationProvider exists.
+     *
+     * @param idvProviderId IdentityVerificationProvider Id.
+     * @param tenantId      Tenant Id.
+     * @return boolean.
+     */
+    boolean isIdVProviderExists(String idvProviderId, int tenantId) throws IdVProviderMgtException;
 }

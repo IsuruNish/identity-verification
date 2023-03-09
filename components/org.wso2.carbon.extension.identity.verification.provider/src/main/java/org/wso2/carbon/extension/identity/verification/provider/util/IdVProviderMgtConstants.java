@@ -31,6 +31,7 @@ public class IdVProviderMgtConstants {
 
         public static final String GET_IDVP_SQL = "SELECT ID, UUID, NAME, DISPLAY_NAME, DESCRIPTION, IS_ENABLED" +
                 " FROM IDVP WHERE UUID=? AND TENANT_ID=?";
+        public static final String IS_IDVP_EXIST_SQL = "SELECT ID FROM IDVP WHERE UUID=? AND TENANT_ID=?";
         public static final String GET_IDVP_BY_NAME_SQL = "SELECT ID, UUID, NAME, DISPLAY_NAME, DESCRIPTION, " +
                 "IS_ENABLED FROM IDVP WHERE NAME=? AND TENANT_ID=?";
         public static final String GET_IDVP_CONFIG_SQL = "SELECT PROPERTY_KEY, PROPERTY_VALUE FROM " +

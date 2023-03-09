@@ -82,5 +82,15 @@ public interface IdentityVerificationClaimDAO {
      * @return True if the identity verification claim exist.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    boolean isIdVClaimExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException;
+    boolean isIdVClaimDataExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException;
+
+    /**
+     * Check whether the identity verification claim exist.
+     *
+     * @param claimId  Identity verification claim id.
+     * @param tenantId Tenant id.
+     * @return True if the identity verification claim exist.
+     * @throws IdVClaimMgtException Identity verification claim management exception.
+     */
+    public boolean isIdVClaimExist(String claimId, int tenantId) throws IdVClaimMgtException;
 }

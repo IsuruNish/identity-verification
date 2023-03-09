@@ -205,7 +205,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     }
 
     /**
-     * Check whether the identity verification claim exist.
+     * Check whether the identity verification claim data already exist.
      *
      * @param userId   User id.
      * @param idvId    Identity verification id.
@@ -215,15 +215,43 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
     @Override
-    public boolean isIdVClaimExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException {
+    public boolean isIdVClaimDataExist(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException {
 
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false);
              PreparedStatement getIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
-                     SQLQueries.IS_IDV_CLAIM_EXIST_SQL)) {
+                     SQLQueries.IS_IDV_CLAIM_DATA_EXIST_SQL)) {
             getIdVProviderStmt.setString(1, userId);
             getIdVProviderStmt.setString(2, idvId);
             getIdVProviderStmt.setString(3, uri);
             getIdVProviderStmt.setInt(4, tenantId);
+            getIdVProviderStmt.execute();
+            try (ResultSet idVProviderResultSet = getIdVProviderStmt.executeQuery()) {
+                if (idVProviderResultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw IdVClaimMgtExceptionManagement.handleServerException(ERROR_CHECKING_IDV_CLAIM_EXISTENCE, e);
+        }
+        return false;
+    }
+
+    /**
+     * Check whether the identity verification claim data already exist.
+     *
+     * @param claimId Identity verification claim id.
+     * @param tenantId Tenant id.
+     * @return True if the identity verification claim exist.
+     * @throws IdVClaimMgtException Identity verification claim management exception.
+     */
+    @Override
+    public boolean isIdVClaimExist(String claimId, int tenantId) throws IdVClaimMgtException {
+
+        try (Connection connection = IdentityDatabaseUtil.getDBConnection(false);
+             PreparedStatement getIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
+                     SQLQueries.IS_IDV_CLAIM_EXIST_SQL)) {
+            getIdVProviderStmt.setString(1, claimId);
+            getIdVProviderStmt.setInt(2, tenantId);
             getIdVProviderStmt.execute();
             try (ResultSet idVProviderResultSet = getIdVProviderStmt.executeQuery()) {
                 if (idVProviderResultSet.next()) {

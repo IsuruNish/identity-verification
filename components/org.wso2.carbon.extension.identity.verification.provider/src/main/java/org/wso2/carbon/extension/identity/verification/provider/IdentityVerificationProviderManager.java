@@ -82,6 +82,12 @@ public class IdentityVerificationProviderManager implements IdVProviderManager {
         return idVProviderManagementDAO.getIdVProviders(validateLimit(limit), validateOffset(offset), tenantId);
     }
 
+    @Override
+    public boolean isIdVProviderExists(String idvProviderId, int tenantId) throws IdVProviderMgtException {
+
+        return idVProviderManagementDAO.isIdVProviderExists(idvProviderId, tenantId);
+    }
+
     /**
      * Validate input parameters for the addIdVProvider function.
      *

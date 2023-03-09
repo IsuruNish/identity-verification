@@ -47,8 +47,11 @@ public class IdVClaimMgtConstants {
         public static final String DELETE_IDV_CLAIM_SQL =
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
-        public static final String IS_IDV_CLAIM_EXIST_SQL =
+        public static final String IS_IDV_CLAIM_DATA_EXIST_SQL =
                 "SELECT ID FROM IDV_CLAIM WHERE USER_ID = ? AND IDVP_ID = ? AND CLAIM_URI = ? AND TENANT_ID = ?";
+
+        public static final String IS_IDV_CLAIM_EXIST_SQL =
+                "SELECT ID FROM IDV_CLAIM WHERE UUID = ? AND TENANT_ID = ?";
     }
 
     /**
@@ -59,8 +62,12 @@ public class IdVClaimMgtConstants {
         ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists."),
         ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid."),
         ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status."),
+        ERROR_INVALID_IDV_PROVIDER_ID("65002", "Invalid Identity Provider Id provided."),
         ERROR_CHECKING_IDV_CLAIM_EXISTENCE("65003",
                 "Error while checking the existence of the Identity Verification Claim."),
+        ERROR_INVALID_USER_ID("65004", "Invalid UserID provided."),
+
+        ERROR_INVALID_IDV_CLAIM_ID("65004", "Invalid claim id provided."),
         ERROR_DELETING_IDV_CLAIM("65004",
                 "Error deleting the Identity Verification Claim."),
         ERROR_RETRIEVING_IDV_CLAIM("65005",
@@ -70,7 +77,11 @@ public class IdVClaimMgtConstants {
         ERROR_ADDING_IDV_CLAIM("65005",
                 "Error adding the Identity Verification Claim."),
         ERROR_RETRIEVING_IDV_CLAIMS("65005",
-                "Error retrieving the Identity Verification Claims.");
+                "Error retrieving the Identity Verification Claims."),
+        ERROR_VALIDATING_IDV_PROVIDER_ID("65005",
+                "Error while validating identity provider id."),
+        ERROR_CHECKING_USER_ID_EXISTENCE("65005",
+                "Error while checking the user id existence.");
         private final String code;
         private final String message;
 

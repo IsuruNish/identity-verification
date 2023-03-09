@@ -27,12 +27,13 @@ public interface IdVClaimManager {
     /**
      * Get the IdVClaim.
      *
+     * @param userId      User Id.
      * @param idvClaimId  IdVClaim Id.
      * @param tenantId    Tenant Id.
      * @return IdVClaim.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    IdVClaim getIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException;
+    IdVClaim getIdVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Get the IdVClaims of a user.
@@ -52,16 +53,17 @@ public interface IdVClaimManager {
      * @return IdVClaim.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    IdVClaim addIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    IdVClaim addIdVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Update the IdVClaim.
      *
+     * @param userId     User Id.
      * @param idvClaim   IdVClaim.
      * @param tenantId   Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    IdVClaim updateIDVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    IdVClaim updateIdVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Delete the IdVClaim.
@@ -70,7 +72,9 @@ public interface IdVClaimManager {
      * @param tenantId    Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    void deleteIDVClaim(String idvClaimId, int tenantId) throws IdVClaimMgtException;
+    void deleteIDVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException;
 
-    boolean isIDVClaimExists(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException;
+    boolean isIdVClaimDataExists(String userId, String idvId, String uri, int tenantId) throws IdVClaimMgtException;
+
+    boolean isIdVClaimExists(String idVClaimId, int tenantId) throws IdVClaimMgtException;
 }
