@@ -66,7 +66,7 @@ public class IdentityVerificationProviderService {
             throw IdentityVerificationUtils.handleException(e,
                     Constants.ErrorMessage.ERROR_ADDING_IDVP, null);
         }
-        return getIdVProviderResponse(identityVerificationProvider, true);
+        return getIdVProviderResponse(identityVerificationProvider);
     }
 
     /**
@@ -97,7 +97,7 @@ public class IdentityVerificationProviderService {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_UPDATING_IDVP, null);
         }
-        return getIdVProviderResponse(newIdVProvider, true);
+        return getIdVProviderResponse(newIdVProvider);
     }
 
     /**
@@ -116,7 +116,7 @@ public class IdentityVerificationProviderService {
                 throw handleException(Response.Status.NOT_FOUND,
                         Constants.ErrorMessage.ERROR_CODE_IDVP_NOT_FOUND, null);
             }
-            return getIdVProviderResponse(identityVerificationProvider, true);
+            return getIdVProviderResponse(identityVerificationProvider);
         } catch (IdVProviderMgtException e) {
             throw handleException(Response.Status.INTERNAL_SERVER_ERROR,
                     Constants.ErrorMessage.ERROR_RETRIEVING_IDVP, null);
@@ -142,7 +142,7 @@ public class IdentityVerificationProviderService {
             if (CollectionUtils.isNotEmpty(identityVerificationProviders)) {
                 List<IdVProviderResponse> identityVerificationProvidersList = new ArrayList<>();
                 for (IdentityVerificationProvider idVP : identityVerificationProviders) {
-                    IdVProviderResponse idVPlistItem = getIdVProviderResponse(idVP, false);
+                    IdVProviderResponse idVPlistItem = getIdVProviderResponse(idVP);
                     identityVerificationProvidersList.add(idVPlistItem);
                 }
                 idVProviderListResponse.setIdentityVerificationProviders(identityVerificationProvidersList);
@@ -192,19 +192,13 @@ public class IdentityVerificationProviderService {
     }
 
     private IdVProviderResponse getIdVProviderResponse(IdentityVerificationProvider
-                                                               identityVerificationProvider, boolean addProperties) {
+                                                               identityVerificationProvider) {
 
         IdVProviderResponse idvProviderResponse = new IdVProviderResponse();
         idvProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
         idvProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
         idvProviderResponse.setIsEnabled(identityVerificationProvider.isEnable());
         idvProviderResponse.setDescription(identityVerificationProvider.getIdVProviderDescription());
-        addIdVProviderProperties(idvProviderResponse, identityVerificationProvider);
-        return idvProviderResponse;
-    }
-
-    private IdVProviderResponse addIdVProviderProperties(IdVProviderResponse idvProviderResponse,
-                                                         IdentityVerificationProvider identityVerificationProvider) {
 
         List<ConfigProperty> configProperties =
                 Arrays.stream(identityVerificationProvider.getIdVConfigProperties()).

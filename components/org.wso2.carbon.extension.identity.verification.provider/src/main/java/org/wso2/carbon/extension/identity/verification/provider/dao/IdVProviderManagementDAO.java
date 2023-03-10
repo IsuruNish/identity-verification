@@ -231,12 +231,17 @@ public class IdVProviderManagementDAO {
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
+                        identityVerificationProvider.setId(idVProviderResultSet.getString("ID"));
                         identityVerificationProvider.
                                 setIdVPUUID(idVProviderResultSet.getString("UUID"));
                         identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
                         identityVerificationProvider.
                                 setIdVProviderDescription(idVProviderResultSet.getString("DESCRIPTION"));
                         identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
+                        // Get configs of identity verification provider.
+                        getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
+                        // Get claim mappings of identity verification provider.
+                        getIdVProvidersWithClaims(identityVerificationProvider, tenantId, connection);
                         identityVerificationProviders.add(identityVerificationProvider);
                     }
                 }
