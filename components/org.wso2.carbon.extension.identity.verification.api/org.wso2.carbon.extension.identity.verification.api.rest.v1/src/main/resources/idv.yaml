@@ -753,9 +753,6 @@ components:
         Name:
           type: string
           example: EvidentID
-        displayName:
-          type: string
-          example: EvidentID
         description:
           type: string
           example: identity verification provider
@@ -774,9 +771,6 @@ components:
       type: object
       properties:
         Name:
-          type: string
-          example: EvidentID
-        displayName:
           type: string
           example: EvidentID
         description:

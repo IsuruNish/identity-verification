@@ -197,7 +197,6 @@ public class IdentityVerificationProviderService {
         IdVProviderResponse idvProviderResponse = new IdVProviderResponse();
         idvProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
         idvProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
-        idvProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
         idvProviderResponse.setIsEnabled(identityVerificationProvider.isEnable());
         idvProviderResponse.setDescription(identityVerificationProvider.getIdVProviderDescription());
         addIdVProviderProperties(idvProviderResponse, identityVerificationProvider);
@@ -221,7 +220,6 @@ public class IdentityVerificationProviderService {
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
         identityVerificationProvider.setIdVPUUID(UUID.randomUUID().toString());
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
-        identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
         identityVerificationProvider.setEnable(idVProviderRequest.getIsEnabled());
         identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));
@@ -239,7 +237,6 @@ public class IdentityVerificationProviderService {
         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
         identityVerificationProvider.setIdVPUUID(oldIdVProvider.getIdVPUUID());
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
-        identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
         identityVerificationProvider.setEnable(idVProviderRequest.getIsEnabled());
         identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));

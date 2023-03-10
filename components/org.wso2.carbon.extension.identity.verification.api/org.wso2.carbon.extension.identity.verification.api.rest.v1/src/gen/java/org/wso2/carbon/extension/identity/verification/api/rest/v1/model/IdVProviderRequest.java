@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.*;
 public class IdVProviderRequest  {
   
     private String name;
-    private String displayName;
     private String description;
     private Boolean isEnabled;
     private List<Verificationclaim> claims = null;
@@ -61,24 +60,6 @@ public class IdVProviderRequest  {
     }
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-    **/
-    public IdVProviderRequest displayName(String displayName) {
-
-        this.displayName = displayName;
-        return this;
-    }
-    
-    @ApiModelProperty(example = "EvidentID", value = "")
-    @JsonProperty("displayName")
-    @Valid
-    public String getDisplayName() {
-        return displayName;
-    }
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     /**
@@ -184,7 +165,6 @@ public class IdVProviderRequest  {
         }
         IdVProviderRequest idVProviderRequest = (IdVProviderRequest) o;
         return Objects.equals(this.name, idVProviderRequest.name) &&
-            Objects.equals(this.displayName, idVProviderRequest.displayName) &&
             Objects.equals(this.description, idVProviderRequest.description) &&
             Objects.equals(this.isEnabled, idVProviderRequest.isEnabled) &&
             Objects.equals(this.claims, idVProviderRequest.claims) &&
@@ -193,7 +173,7 @@ public class IdVProviderRequest  {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, displayName, description, isEnabled, claims, configProperties);
+        return Objects.hash(name, description, isEnabled, claims, configProperties);
     }
 
     @Override
@@ -203,7 +183,6 @@ public class IdVProviderRequest  {
         sb.append("class IdVProviderRequest {\n");
         
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
         sb.append("    isEnabled: ").append(toIndentedString(isEnabled)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
