@@ -33,32 +33,11 @@ import javax.xml.bind.annotation.*;
 
 public class VerificationClaimPostRequest  {
   
-    private String userId;
     private String idvpId;
     private String uri;
     private String status;
     private Map<String, Object> claimMetadata = null;
 
-
-    /**
-    **/
-    public VerificationClaimPostRequest userId(String userId) {
-
-        this.userId = userId;
-        return this;
-    }
-    
-    @ApiModelProperty(example = "123e4567-e89b-12d3-a456-556642440000", required = true, value = "")
-    @JsonProperty("userId")
-    @Valid
-    @NotNull(message = "Property userId cannot be null.")
-
-    public String getUserId() {
-        return userId;
-    }
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     /**
     **/
@@ -159,8 +138,7 @@ public class VerificationClaimPostRequest  {
             return false;
         }
         VerificationClaimPostRequest verificationClaimPostRequest = (VerificationClaimPostRequest) o;
-        return Objects.equals(this.userId, verificationClaimPostRequest.userId) &&
-            Objects.equals(this.idvpId, verificationClaimPostRequest.idvpId) &&
+        return Objects.equals(this.idvpId, verificationClaimPostRequest.idvpId) &&
             Objects.equals(this.uri, verificationClaimPostRequest.uri) &&
             Objects.equals(this.status, verificationClaimPostRequest.status) &&
             Objects.equals(this.claimMetadata, verificationClaimPostRequest.claimMetadata);
@@ -168,7 +146,7 @@ public class VerificationClaimPostRequest  {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, idvpId, uri, status, claimMetadata);
+        return Objects.hash(idvpId, uri, status, claimMetadata);
     }
 
     @Override
@@ -177,7 +155,6 @@ public class VerificationClaimPostRequest  {
         StringBuilder sb = new StringBuilder();
         sb.append("class VerificationClaimPostRequest {\n");
         
-        sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
         sb.append("    idvpId: ").append(toIndentedString(idvpId)).append("\n");
         sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
         sb.append("    status: ").append(toIndentedString(status)).append("\n");

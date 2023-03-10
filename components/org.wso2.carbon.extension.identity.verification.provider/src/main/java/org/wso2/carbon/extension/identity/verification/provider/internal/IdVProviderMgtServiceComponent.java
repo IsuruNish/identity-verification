@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
-import org.wso2.carbon.extension.identity.verification.provider.IdentityVerificationProviderManager;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManagerImpl;
 import org.wso2.carbon.user.core.service.RealmService;
 
 /**
@@ -45,7 +45,7 @@ public class IdVProviderMgtServiceComponent {
     @Activate
     protected void activate(ComponentContext ctxt) {
 
-        IdVProviderManager idVProviderManager = new IdentityVerificationProviderManager();
+        IdVProviderManager idVProviderManager = new IdVProviderManagerImpl();
         ctxt.getBundleContext().registerService(IdVProviderManager.class.getName(),
                 idVProviderManager, null);
         log.info("IdentityVerificationProviderManager bundle activated successfully.");

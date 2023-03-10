@@ -46,11 +46,12 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
     @Override
     public IdVClaim getIdVClaim(String userId, String idvClaimId, int tenantId) throws IdVClaimMgtException {
 
-        if (StringUtils.isBlank(idvClaimId) && StringUtils.isBlank(idvClaimId)) {
+        if (StringUtils.isBlank(userId) && StringUtils.isBlank(idvClaimId)) {
             throw IdVClaimMgtExceptionManagement.handleClientException(
-                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS, "idvClaimId");
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS);
         }
-        return identityVerificationClaimDAO.getIDVClaim(idvClaimId, tenantId);
+        // todo: do I need to validate two ids
+        return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId, tenantId);
     }
 
     @Override

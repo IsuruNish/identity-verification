@@ -28,6 +28,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimManager;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimManagerImpl;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
 import org.wso2.carbon.user.core.service.RealmService;
 
 /**
@@ -73,5 +74,21 @@ public class IdVClaimMgtServiceComponent {
     protected void unsetRealmService(RealmService realmService) {
 
         IdVClaimMgtDataHolder.setRealmService(null);
+    }
+
+    @Reference(
+            name = "IdVProviderManager",
+            service = org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetIdVProviderManager")
+    protected void setIdVProviderManager(IdVProviderManager idVProviderManager) {
+
+        IdVClaimMgtDataHolder.setIdVProviderManager(idVProviderManager);
+    }
+
+    protected void unsetIdVProviderManager(IdVProviderManager idVProviderManager) {
+
+        IdVClaimMgtDataHolder.setIdVProviderManager(null);
     }
 }

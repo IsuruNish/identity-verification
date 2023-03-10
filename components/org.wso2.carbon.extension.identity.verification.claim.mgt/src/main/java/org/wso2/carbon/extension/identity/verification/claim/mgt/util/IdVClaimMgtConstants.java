@@ -36,7 +36,7 @@ public class IdVClaimMgtConstants {
 
         public static final String GET_IDV_CLAIM_SQL =
                 "SELECT ID, UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
-                        "UUID = ? AND TENANT_ID = ?";
+                        "USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String GET_IDV_CLAIMS_SQL =
                 "SELECT ID, UUID, USER_ID, CLAIM_URI, STATUS, METADATA FROM IDV_CLAIM WHERE " +

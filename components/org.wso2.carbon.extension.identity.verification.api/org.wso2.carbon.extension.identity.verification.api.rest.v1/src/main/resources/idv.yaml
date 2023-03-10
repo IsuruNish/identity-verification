@@ -683,9 +683,6 @@ components:
     verificationClaimPostRequest:
       type: object
       properties:
-        userId:
-          type: string
-          example: '123e4567-e89b-12d3-a456-556642440000'
         idvpId:
           type: string
           example: '2159375-r567-8524-a456-5566424414527'

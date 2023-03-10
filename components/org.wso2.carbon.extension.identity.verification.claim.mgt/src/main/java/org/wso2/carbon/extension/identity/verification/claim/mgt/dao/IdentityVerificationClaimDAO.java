@@ -47,11 +47,12 @@ public interface IdentityVerificationClaimDAO {
     /**
      * Get the identity verification claim.
      *
+     * @param userId   User id.
      * @param idVClaimId Identity verification claim id.
      * @return Identity verification claim.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
-    IdVClaim getIDVClaim(String idVClaimId, int tenantId) throws IdVClaimMgtException;
+    IdVClaim getIDVClaim(String userId, String idVClaimId, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Get the identity verification claims.

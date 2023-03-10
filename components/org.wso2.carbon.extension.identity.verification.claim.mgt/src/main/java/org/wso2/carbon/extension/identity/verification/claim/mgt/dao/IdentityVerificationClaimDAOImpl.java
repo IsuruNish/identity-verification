@@ -110,19 +110,21 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     /**
      * Get the identity verification claim.
      *
+     * @param userId   User id.
      * @param idVClaimId Identity verification claim id.
      * @return Identity verification claim.
      * @throws IdVClaimMgtException Identity verification claim management exception.
      */
     @Override
-    public IdVClaim getIDVClaim(String idVClaimId, int tenantId) throws IdVClaimMgtException {
+    public IdVClaim getIDVClaim(String userId, String idVClaimId, int tenantId) throws IdVClaimMgtException {
 
         IdVClaim idVClaim = null;
         try (Connection connection = IdentityDatabaseUtil.getDBConnection(false);
              PreparedStatement getIdVProviderStmt = connection.prepareStatement(IdVClaimMgtConstants.
                      SQLQueries.GET_IDV_CLAIM_SQL)) {
-            getIdVProviderStmt.setString(1, idVClaimId);
-            getIdVProviderStmt.setInt(2, tenantId);
+            getIdVProviderStmt.setString(1, userId);
+            getIdVProviderStmt.setString(2, idVClaimId);
+            getIdVProviderStmt.setInt(3, tenantId);
             getIdVProviderStmt.execute();
             try (ResultSet idVProviderResultSet = getIdVProviderStmt.executeQuery()) {
                 while (idVProviderResultSet.next()) {

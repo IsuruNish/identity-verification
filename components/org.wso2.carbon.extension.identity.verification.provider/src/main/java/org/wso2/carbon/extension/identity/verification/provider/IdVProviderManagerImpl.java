@@ -17,7 +17,6 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,9 +31,9 @@ import java.util.List;
 /**
  * This class contains the implementation for the IdVProviderManager.
  */
-public class IdentityVerificationProviderManager implements IdVProviderManager {
+public class IdVProviderManagerImpl implements IdVProviderManager {
 
-    private static final Log log = LogFactory.getLog(IdentityVerificationProviderManager.class);
+    private static final Log log = LogFactory.getLog(IdVProviderManagerImpl.class);
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
 
     @Override
