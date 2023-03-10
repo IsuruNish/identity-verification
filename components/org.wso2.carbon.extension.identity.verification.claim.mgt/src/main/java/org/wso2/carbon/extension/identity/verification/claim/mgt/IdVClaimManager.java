@@ -58,12 +58,11 @@ public interface IdVClaimManager {
     /**
      * Update the IdVClaim.
      *
-     * @param userId     User Id.
      * @param idvClaim   IdVClaim.
      * @param tenantId   Tenant Id.
      * @throws IdVClaimMgtException IdVClaimMgtException.
      */
-    IdVClaim updateIdVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
+    IdVClaim updateIdVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException;
 
     /**
      * Delete the IdVClaim.

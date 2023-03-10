@@ -198,7 +198,7 @@ public class IdentityVerificationProviderService {
         idvProviderResponse.setId(identityVerificationProvider.getIdVPUUID());
         idvProviderResponse.setName(identityVerificationProvider.getIdVProviderName());
         idvProviderResponse.setDisplayName(identityVerificationProvider.getDisplayName());
-        idvProviderResponse.setIsEnable(identityVerificationProvider.isEnable());
+        idvProviderResponse.setIsEnabled(identityVerificationProvider.isEnable());
         idvProviderResponse.setDescription(identityVerificationProvider.getIdVProviderDescription());
         addIdVProviderProperties(idvProviderResponse, identityVerificationProvider);
         return idvProviderResponse;
@@ -223,7 +223,7 @@ public class IdentityVerificationProviderService {
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
-        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnable());
+        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnabled());
         identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));
         List<ConfigProperty> properties = idVProviderRequest.getConfigProperties();
 
@@ -241,7 +241,7 @@ public class IdentityVerificationProviderService {
         identityVerificationProvider.setIdVProviderName(idVProviderRequest.getName());
         identityVerificationProvider.setDisplayName(idVProviderRequest.getDisplayName());
         identityVerificationProvider.setIdVProviderDescription(idVProviderRequest.getDescription());
-        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnable());
+        identityVerificationProvider.setEnable(idVProviderRequest.getIsEnabled());
         identityVerificationProvider.setClaimMappings(getClaimMap(idVProviderRequest.getClaims()));
         List<ConfigProperty> properties = idVProviderRequest.getConfigProperties();
 

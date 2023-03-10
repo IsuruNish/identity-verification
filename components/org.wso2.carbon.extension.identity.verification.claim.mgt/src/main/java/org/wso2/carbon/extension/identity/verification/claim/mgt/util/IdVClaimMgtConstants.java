@@ -35,14 +35,14 @@ public class IdVClaimMgtConstants {
                         "VALUES (?,?,?,?,?,?,?)";
 
         public static final String GET_IDV_CLAIM_SQL =
-                "SELECT ID, UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                "SELECT UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
                         "USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String GET_IDV_CLAIMS_SQL =
-                "SELECT ID, UUID, USER_ID, CLAIM_URI, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                "SELECT UUID, USER_ID, CLAIM_URI, STATUS, METADATA FROM IDV_CLAIM WHERE " +
                         "USER_ID = ? AND TENANT_ID = ?";
         public static final String UPDATE_IDV_CLAIM_SQL =
-                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE UUID = ? AND TENANT_ID = ?";
+                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String DELETE_IDV_CLAIM_SQL =
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";

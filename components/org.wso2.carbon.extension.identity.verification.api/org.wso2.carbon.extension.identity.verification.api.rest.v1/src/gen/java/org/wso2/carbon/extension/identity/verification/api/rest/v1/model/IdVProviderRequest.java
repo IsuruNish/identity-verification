@@ -37,7 +37,7 @@ public class IdVProviderRequest  {
     private String name;
     private String displayName;
     private String description;
-    private Boolean isEnable;
+    private Boolean isEnabled;
     private List<Verificationclaim> claims = null;
 
     private List<ConfigProperty> configProperties = null;
@@ -101,22 +101,22 @@ public class IdVProviderRequest  {
 
     /**
     **/
-    public IdVProviderRequest isEnable(Boolean isEnable) {
+    public IdVProviderRequest isEnabled(Boolean isEnabled) {
 
-        this.isEnable = isEnable;
+        this.isEnabled = isEnabled;
         return this;
     }
     
     @ApiModelProperty(example = "true", required = true, value = "")
-    @JsonProperty("isEnable")
+    @JsonProperty("isEnabled")
     @Valid
-    @NotNull(message = "Property isEnable cannot be null.")
+    @NotNull(message = "Property isEnabled cannot be null.")
 
-    public Boolean getIsEnable() {
-        return isEnable;
+    public Boolean getIsEnabled() {
+        return isEnabled;
     }
-    public void setIsEnable(Boolean isEnable) {
-        this.isEnable = isEnable;
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     /**
@@ -186,14 +186,14 @@ public class IdVProviderRequest  {
         return Objects.equals(this.name, idVProviderRequest.name) &&
             Objects.equals(this.displayName, idVProviderRequest.displayName) &&
             Objects.equals(this.description, idVProviderRequest.description) &&
-            Objects.equals(this.isEnable, idVProviderRequest.isEnable) &&
+            Objects.equals(this.isEnabled, idVProviderRequest.isEnabled) &&
             Objects.equals(this.claims, idVProviderRequest.claims) &&
             Objects.equals(this.configProperties, idVProviderRequest.configProperties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, displayName, description, isEnable, claims, configProperties);
+        return Objects.hash(name, displayName, description, isEnabled, claims, configProperties);
     }
 
     @Override
@@ -205,7 +205,7 @@ public class IdVProviderRequest  {
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
-        sb.append("    isEnable: ").append(toIndentedString(isEnable)).append("\n");
+        sb.append("    isEnabled: ").append(toIndentedString(isEnabled)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
         sb.append("    configProperties: ").append(toIndentedString(configProperties)).append("\n");
         sb.append("}");

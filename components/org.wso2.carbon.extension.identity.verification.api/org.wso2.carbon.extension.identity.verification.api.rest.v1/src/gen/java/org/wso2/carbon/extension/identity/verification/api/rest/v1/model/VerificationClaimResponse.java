@@ -36,7 +36,7 @@ public class VerificationClaimResponse  {
     private String id;
     private String uri;
     private String value;
-    private String status;
+    private Boolean isVerified;
     private Map<String, Object> claimMetadata = null;
 
 
@@ -96,20 +96,20 @@ public class VerificationClaimResponse  {
 
     /**
     **/
-    public VerificationClaimResponse status(String status) {
+    public VerificationClaimResponse isVerified(Boolean isVerified) {
 
-        this.status = status;
+        this.isVerified = isVerified;
         return this;
     }
     
-    @ApiModelProperty(example = "Verified", value = "")
-    @JsonProperty("status")
+    @ApiModelProperty(example = "true", value = "")
+    @JsonProperty("isVerified")
     @Valid
-    public String getStatus() {
-        return status;
+    public Boolean getIsVerified() {
+        return isVerified;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
     /**
@@ -154,13 +154,13 @@ public class VerificationClaimResponse  {
         return Objects.equals(this.id, verificationClaimResponse.id) &&
             Objects.equals(this.uri, verificationClaimResponse.uri) &&
             Objects.equals(this.value, verificationClaimResponse.value) &&
-            Objects.equals(this.status, verificationClaimResponse.status) &&
+            Objects.equals(this.isVerified, verificationClaimResponse.isVerified) &&
             Objects.equals(this.claimMetadata, verificationClaimResponse.claimMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uri, value, status, claimMetadata);
+        return Objects.hash(id, uri, value, isVerified, claimMetadata);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class VerificationClaimResponse  {
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
         sb.append("    value: ").append(toIndentedString(value)).append("\n");
-        sb.append("    status: ").append(toIndentedString(status)).append("\n");
+        sb.append("    isVerified: ").append(toIndentedString(isVerified)).append("\n");
         sb.append("    claimMetadata: ").append(toIndentedString(claimMetadata)).append("\n");
         sb.append("}");
         return sb.toString();

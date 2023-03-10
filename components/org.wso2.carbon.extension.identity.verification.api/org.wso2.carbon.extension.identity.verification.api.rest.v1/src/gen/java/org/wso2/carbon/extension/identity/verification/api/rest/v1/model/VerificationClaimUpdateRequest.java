@@ -33,28 +33,28 @@ import javax.xml.bind.annotation.*;
 
 public class VerificationClaimUpdateRequest  {
   
-    private String status;
+    private Boolean isVerified;
     private Map<String, Object> claimMetadata = new HashMap<>();
 
 
     /**
     **/
-    public VerificationClaimUpdateRequest status(String status) {
+    public VerificationClaimUpdateRequest isVerified(Boolean isVerified) {
 
-        this.status = status;
+        this.isVerified = isVerified;
         return this;
     }
     
-    @ApiModelProperty(example = "Verified", required = true, value = "")
-    @JsonProperty("status")
+    @ApiModelProperty(example = "true", required = true, value = "")
+    @JsonProperty("isVerified")
     @Valid
-    @NotNull(message = "Property status cannot be null.")
+    @NotNull(message = "Property isVerified cannot be null.")
 
-    public String getStatus() {
-        return status;
+    public Boolean getIsVerified() {
+        return isVerified;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
     /**
@@ -95,13 +95,13 @@ public class VerificationClaimUpdateRequest  {
             return false;
         }
         VerificationClaimUpdateRequest verificationClaimUpdateRequest = (VerificationClaimUpdateRequest) o;
-        return Objects.equals(this.status, verificationClaimUpdateRequest.status) &&
+        return Objects.equals(this.isVerified, verificationClaimUpdateRequest.isVerified) &&
             Objects.equals(this.claimMetadata, verificationClaimUpdateRequest.claimMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, claimMetadata);
+        return Objects.hash(isVerified, claimMetadata);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class VerificationClaimUpdateRequest  {
         StringBuilder sb = new StringBuilder();
         sb.append("class VerificationClaimUpdateRequest {\n");
         
-        sb.append("    status: ").append(toIndentedString(status)).append("\n");
+        sb.append("    isVerified: ").append(toIndentedString(isVerified)).append("\n");
         sb.append("    claimMetadata: ").append(toIndentedString(claimMetadata)).append("\n");
         sb.append("}");
         return sb.toString();

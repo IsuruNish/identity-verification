@@ -63,7 +63,7 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
     }
 
     @Override
-    public IdVClaim updateIdVClaim(String userId, IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
+    public IdVClaim updateIdVClaim(IdVClaim idvClaim, int tenantId) throws IdVClaimMgtException {
 
         validateUpdateIDVClaimUpdateInputs(idvClaim, tenantId);
         identityVerificationClaimDAO.updateIdVClaim(idvClaim, tenantId);
@@ -106,7 +106,6 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
             throw IdVClaimMgtExceptionManagement.handleClientException(
                     IdVClaimMgtConstants.ErrorMessage.ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS, null);
         }
-        validateStatus(idVClaim.getStatus());
         validateIdVProviderId(idvProviderId, tenantId);
     }
 
@@ -177,21 +176,10 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
 
     private void validateUpdateIDVClaimUpdateInputs(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException {
 
-        String status = idVClaim.getStatus();
         JSONObject claimMetadata = idVClaim.getMetadata();
-        if (StringUtils.isBlank(status) || claimMetadata == null) {
+        if (claimMetadata == null) {
             throw IdVClaimMgtExceptionManagement.handleClientException(
                     IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS, null);
-        }
-        validateStatus(status);
-    }
-
-    private void validateStatus(String status) throws IdVClaimMgtException {
-
-        if (StringUtils.isBlank(status) || !(IdVClaimMgtConstants.Status.VERIFIED.equals(status) ||
-                IdVClaimMgtConstants.Status.NOT_VERIFIED.equals(status))) {
-            throw IdVClaimMgtExceptionManagement.handleClientException(
-                    IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_STATUS, null);
         }
     }
 }

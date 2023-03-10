@@ -29,7 +29,7 @@ public class IdVClaim {
     private String claimUri;
     private String claimValue;
     private String userId;
-    private String status;
+    private boolean status;
     private String idvProviderId;
     private JSONObject metadata;
 
@@ -63,12 +63,12 @@ public class IdVClaim {
         this.userId = userId;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
 
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
 
         this.status = status;
     }

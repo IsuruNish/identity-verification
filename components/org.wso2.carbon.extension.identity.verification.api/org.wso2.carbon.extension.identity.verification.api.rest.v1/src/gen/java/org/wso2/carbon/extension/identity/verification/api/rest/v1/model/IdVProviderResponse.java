@@ -38,7 +38,7 @@ public class IdVProviderResponse  {
     private String name;
     private String displayName;
     private String description;
-    private Boolean isEnable;
+    private Boolean isEnabled;
     private List<Verificationclaim> claims = null;
 
     private List<ConfigProperty> configProperties = null;
@@ -118,20 +118,20 @@ public class IdVProviderResponse  {
 
     /**
     **/
-    public IdVProviderResponse isEnable(Boolean isEnable) {
+    public IdVProviderResponse isEnabled(Boolean isEnabled) {
 
-        this.isEnable = isEnable;
+        this.isEnabled = isEnabled;
         return this;
     }
     
     @ApiModelProperty(example = "true", value = "")
-    @JsonProperty("isEnable")
+    @JsonProperty("isEnabled")
     @Valid
-    public Boolean getIsEnable() {
-        return isEnable;
+    public Boolean getIsEnabled() {
+        return isEnabled;
     }
-    public void setIsEnable(Boolean isEnable) {
-        this.isEnable = isEnable;
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     /**
@@ -202,14 +202,14 @@ public class IdVProviderResponse  {
             Objects.equals(this.name, idVProviderResponse.name) &&
             Objects.equals(this.displayName, idVProviderResponse.displayName) &&
             Objects.equals(this.description, idVProviderResponse.description) &&
-            Objects.equals(this.isEnable, idVProviderResponse.isEnable) &&
+            Objects.equals(this.isEnabled, idVProviderResponse.isEnabled) &&
             Objects.equals(this.claims, idVProviderResponse.claims) &&
             Objects.equals(this.configProperties, idVProviderResponse.configProperties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, displayName, description, isEnable, claims, configProperties);
+        return Objects.hash(id, name, displayName, description, isEnabled, claims, configProperties);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class IdVProviderResponse  {
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
-        sb.append("    isEnable: ").append(toIndentedString(isEnable)).append("\n");
+        sb.append("    isEnabled: ").append(toIndentedString(isEnabled)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
         sb.append("    configProperties: ").append(toIndentedString(configProperties)).append("\n");
         sb.append("}");

@@ -35,7 +35,7 @@ public class VerificationClaimPostRequest  {
   
     private String idvpId;
     private String uri;
-    private String status;
+    private Boolean isVerified;
     private Map<String, Object> claimMetadata = null;
 
 
@@ -81,22 +81,22 @@ public class VerificationClaimPostRequest  {
 
     /**
     **/
-    public VerificationClaimPostRequest status(String status) {
+    public VerificationClaimPostRequest isVerified(Boolean isVerified) {
 
-        this.status = status;
+        this.isVerified = isVerified;
         return this;
     }
     
-    @ApiModelProperty(example = "Verified", required = true, value = "")
-    @JsonProperty("status")
+    @ApiModelProperty(example = "true", required = true, value = "")
+    @JsonProperty("isVerified")
     @Valid
-    @NotNull(message = "Property status cannot be null.")
+    @NotNull(message = "Property isVerified cannot be null.")
 
-    public String getStatus() {
-        return status;
+    public Boolean getIsVerified() {
+        return isVerified;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
     /**
@@ -140,13 +140,13 @@ public class VerificationClaimPostRequest  {
         VerificationClaimPostRequest verificationClaimPostRequest = (VerificationClaimPostRequest) o;
         return Objects.equals(this.idvpId, verificationClaimPostRequest.idvpId) &&
             Objects.equals(this.uri, verificationClaimPostRequest.uri) &&
-            Objects.equals(this.status, verificationClaimPostRequest.status) &&
+            Objects.equals(this.isVerified, verificationClaimPostRequest.isVerified) &&
             Objects.equals(this.claimMetadata, verificationClaimPostRequest.claimMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idvpId, uri, status, claimMetadata);
+        return Objects.hash(idvpId, uri, isVerified, claimMetadata);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class VerificationClaimPostRequest  {
         
         sb.append("    idvpId: ").append(toIndentedString(idvpId)).append("\n");
         sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
-        sb.append("    status: ").append(toIndentedString(status)).append("\n");
+        sb.append("    isVerified: ").append(toIndentedString(isVerified)).append("\n");
         sb.append("    claimMetadata: ").append(toIndentedString(claimMetadata)).append("\n");
         sb.append("}");
         return sb.toString();
