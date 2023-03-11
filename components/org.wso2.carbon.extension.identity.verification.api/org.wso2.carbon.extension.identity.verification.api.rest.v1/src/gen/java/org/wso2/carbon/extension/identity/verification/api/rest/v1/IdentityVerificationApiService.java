@@ -40,8 +40,6 @@ public interface IdentityVerificationApiService {
 
       public Response getIdVClaims(String userId);
 
-      public Response getIdentityVerification();
-
       public Response updateIdVClaim(String claimId, String userId, VerificationClaimUpdateRequest verificationClaimUpdateRequest);
 
       public Response verifyIdentity(VerificationClaimRequest verificationClaimRequest);

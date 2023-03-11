@@ -59,14 +59,6 @@ public class IdentityVerificationApiServiceImpl implements IdentityVerificationA
     }
 
     @Override
-    public Response getIdentityVerification() {
-
-//        VerificationGetResponse verificationGetResponse =
-//                identityVerificationService.getIdVClaims();
-        return Response.ok().entity("verificationGetResponse").build();
-    }
-
-    @Override
     public Response updateIdVClaim(String claimId, String userId,
                                    VerificationClaimUpdateRequest verificationClaimUpdateRequest) {
 

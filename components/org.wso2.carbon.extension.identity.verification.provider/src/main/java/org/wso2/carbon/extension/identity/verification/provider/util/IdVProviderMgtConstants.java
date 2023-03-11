@@ -44,7 +44,7 @@ public class IdVProviderMgtConstants {
         public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=?";
 
         public static final String ADD_IDVP_SQL = "INSERT INTO IDVP(UUID, TENANT_ID, NAME, " +
-                "DESCRIPTION, IS_ENABLED) VALUES (?, ?, ?, ?, ?, ?)";
+                "DESCRIPTION, IS_ENABLED) VALUES (?, ?, ?, ?, ?)";
 
         public static final String ADD_IDVP_CONFIG_SQL = "INSERT INTO IDVP_CONFIG " +
                 "(IDVP_ID, TENANT_ID, PROPERTY_KEY, PROPERTY_VALUE) VALUES (?, ?, ?, ?)";

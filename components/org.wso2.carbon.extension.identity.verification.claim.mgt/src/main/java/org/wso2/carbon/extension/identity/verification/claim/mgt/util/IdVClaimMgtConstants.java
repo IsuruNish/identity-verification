@@ -31,18 +31,18 @@ public class IdVClaimMgtConstants {
     public static class SQLQueries {
 
         public static final String ADD_IDV_CLAIM_SQL =
-                "INSERT INTO IDV_CLAIM (UUID, USER_ID, CLAIM_URI, IDVP_ID, TENANT_ID, STATUS, METADATA) " +
+                "INSERT INTO IDV_CLAIM (UUID, USER_ID, CLAIM_URI, IDVP_ID, TENANT_ID, IS_VERIFIED, METADATA) " +
                         "VALUES (?,?,?,?,?,?,?)";
 
         public static final String GET_IDV_CLAIM_SQL =
-                "SELECT UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                "SELECT UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, IS_VERIFIED, METADATA FROM IDV_CLAIM WHERE " +
                         "USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String GET_IDV_CLAIMS_SQL =
-                "SELECT UUID, USER_ID, CLAIM_URI, STATUS, METADATA FROM IDV_CLAIM WHERE " +
+                "SELECT UUID, USER_ID, CLAIM_URI, IS_VERIFIED, METADATA FROM IDV_CLAIM WHERE " +
                         "USER_ID = ? AND TENANT_ID = ?";
         public static final String UPDATE_IDV_CLAIM_SQL =
-                "UPDATE IDV_CLAIM SET STATUS = ?, METADATA = ? WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
+                "UPDATE IDV_CLAIM SET IS_VERIFIED = ?, METADATA = ? WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
 
         public static final String DELETE_IDV_CLAIM_SQL =
                 "DELETE FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
@@ -107,14 +107,4 @@ public class IdVClaimMgtConstants {
             return code + ":" + message;
         }
     }
-
-    /**
-     * Holds constants related to IdV Claim status.
-     */
-    public static class Status {
-
-        public static final String NOT_VERIFIED = "NOT_VERIFIED";
-        public static final String VERIFIED = "VERIFIED";
-    }
-
 }

@@ -75,43 +75,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    get:
-      tags:
-        - Identity Verification
-      summary: Get the verification details
-      description: This API provides the capability to retrive the verification details of a user
-      operationId: getIdentityVerification
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/verificationGetResponse'
-        '400':
-          description: Invalid status value
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
   /{user-id}/claims:
     get:
       tags:

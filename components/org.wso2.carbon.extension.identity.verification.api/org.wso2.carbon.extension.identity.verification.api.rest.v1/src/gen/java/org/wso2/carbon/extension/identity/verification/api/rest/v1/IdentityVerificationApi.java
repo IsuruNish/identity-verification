@@ -119,30 +119,6 @@ public class IdentityVerificationApi  {
     }
 
     @Valid
-    @GET
-    
-    
-    @Produces({ "application/json" })
-    @ApiOperation(value = "Get the verification details", notes = "This API provides the capability to retrive the verification details of a user", response = VerificationGetResponse.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "BasicAuth"),
-        @Authorization(value = "OAuth2", scopes = {
-            
-        })
-    }, tags={ "Identity Verification", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "successful operation", response = VerificationGetResponse.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Invalid status value", response = Error.class),
-        @ApiResponse(code = 401, message = "Unauthorized", response = Void.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = Void.class),
-        @ApiResponse(code = 404, message = "Not Found", response = Error.class),
-        @ApiResponse(code = 500, message = "Server Error", response = Error.class)
-    })
-    public Response getIdentityVerification() {
-
-        return delegate.getIdentityVerification();
-    }
-
-    @Valid
     @PUT
     @Path("/{user-id}/claims/{claim-id}")
     @Consumes({ "application/json" })
