@@ -112,8 +112,7 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
     private void validateIdVProviderId(String idvProviderId, int tenantId) throws IdVClaimMgtException {
 
         try {
-            if (!IdVClaimMgtDataHolder.getIdVProviderManager().isIdVProviderExists(idvProviderId,
-                    tenantId)) {
+            if (!IdVClaimMgtDataHolder.getIdVProviderManager().isIdVProviderExists(idvProviderId, tenantId)) {
                 throw IdVClaimMgtExceptionManagement.handleClientException(
                         IdVClaimMgtConstants.ErrorMessage.ERROR_INVALID_IDV_PROVIDER_ID, null);
             }
