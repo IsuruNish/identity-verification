@@ -105,9 +105,8 @@ public class OnfidoIdentityVerifier implements IdentityVerifier {
                     idVClaim.setStatus(false);
                     idVClaim.setUserId(identityVerifierData.getUserId());
                     idVClaim.setIdvProviderId(identityVerifierData.getIdentityVerifierName());
-                    idVClaim = OnfidoIDVDataHolder.getInstance().getIdVClaimManager().
-                            addIdVClaim(idVClaim, tenantId);
-                    idVClaims.add(idVClaim);
+                    //idVClaim = OnfidoIDVDataHolder.getInstance().getIdVClaimManager().
+                    //        addIdVClaim(idVClaim, tenantId);
                 }
 
                 identityVerifierData.setIdVClaims(idVClaims);
@@ -117,8 +116,6 @@ public class OnfidoIdentityVerifier implements IdentityVerifier {
         } catch (JSONException e) {
             log.error("Error while creating the json object.", e);
         } catch (OnfidoException e) {
-            throw new RuntimeException(e);
-        } catch (IdVClaimMgtException e) {
             throw new RuntimeException(e);
         }
         return null;
