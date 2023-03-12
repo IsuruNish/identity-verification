@@ -238,7 +238,6 @@ public class IdentityVerificationProviderService {
 
         identityVerificationProvider.setIdVConfigProperties(
                 properties.stream().map(propertyToInternal).toArray(IdVConfigProperty[]::new));
-        identityVerificationProvider.setEnable(true);
         return identityVerificationProvider;
     }
 

@@ -442,7 +442,7 @@ public class IdVProviderManagementDAO {
             getIdVProvidersStmt.setInt(2, tenantId);
 
             try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
-                if (idVProviderResultSet.next()) {
+                while (idVProviderResultSet.next()) {
                     IdVConfigProperty idVConfigProperty = new IdVConfigProperty();
                     idVConfigProperty.setName(idVProviderResultSet.getString("PROPERTY_KEY"));
                     idVConfigProperty.setValue(idVProviderResultSet.getString("PROPERTY_VALUE"));

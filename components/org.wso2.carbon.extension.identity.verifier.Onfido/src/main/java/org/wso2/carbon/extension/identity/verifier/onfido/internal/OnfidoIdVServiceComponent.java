@@ -24,6 +24,12 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimManager;
+import org.wso2.carbon.extension.identity.verification.claim.mgt.internal.IdVClaimMgtDataHolder;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifier;
 import org.wso2.carbon.extension.identity.verifier.IdentityVerifierFactory;
 import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoIdentityVerifier;
@@ -35,9 +41,9 @@ import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoIdentityVerifier
 @Component(
         name = "onfido.identity.verifier",
         immediate = true)
-public class OnfidoIdentityVerifierServiceComponent {
+public class OnfidoIdVServiceComponent {
 
-    private static final Log log = LogFactory.getLog(OnfidoIdentityVerifierServiceComponent.class);
+    private static final Log log = LogFactory.getLog(OnfidoIdVServiceComponent.class);
 
     @Activate
     protected void activate(ComponentContext ctxt) {
@@ -66,4 +72,37 @@ public class OnfidoIdentityVerifierServiceComponent {
             log.debug("");
         }
     }
+
+    @Reference(
+            name = "IdVClaimManager",
+            service = org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetIdVClaimManager")
+    protected void setIdVClaimManager(IdVClaimManager idVClaimManager) {
+
+        OnfidoIDVDataHolder.getInstance().setIdVClaimManager(idVClaimManager);
+    }
+
+    protected void unsetIdVClaimManager(IdVClaimManager idVClaimManager) {
+
+        OnfidoIDVDataHolder.getInstance().setIdVClaimManager(null);
+    }
+
+    @Reference(
+            name = "IdVProviderManager",
+            service = org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetIdVProviderManager")
+    protected void setIdVProviderManager(IdVProviderManager idVProviderManager) {
+
+        OnfidoIDVDataHolder.getInstance().setIdVProviderManager(idVProviderManager);
+    }
+
+    protected void unsetIdVProviderManager(IdVProviderManager idVProviderManager) {
+
+        OnfidoIDVDataHolder.getInstance().setIdVProviderManager(null);
+    }
+
 }

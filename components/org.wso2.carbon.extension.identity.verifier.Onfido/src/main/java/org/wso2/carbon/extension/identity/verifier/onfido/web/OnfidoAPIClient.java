@@ -18,7 +18,13 @@
 
 package org.wso2.carbon.extension.identity.verifier.onfido.web;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.util.EntityUtils;
 import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoException;
 
 import java.io.IOException;
@@ -28,21 +34,68 @@ import java.io.IOException;
  */
 public class OnfidoAPIClient {
 
-    public static HttpResponse createApplicantResponse() throws OnfidoException, IOException {
+    public static JsonObject createApplicantResponse() throws OnfidoException, IOException {
 
-        return HYPRWebUtils.
-                httpPost("api_live.Hd6vqNOtfiH.lToim4yv0WtAJxSeGFDG7PDcWZImnRoq",
+        HttpResponse response = HYPRWebUtils.
+                httpPost("api_sandbox.zf20aqvpfGl.MGh9sYKZFflunrTVedkK_X9p75HX4aVT",
                         "https://api.eu.onfido.com/v3.6/applicants/",
                         "{\n" +
                                 "  \"first_name\": \"Jane\",\n" +
                                 "  \"last_name\": \"Smith\"\n" +
                                 "}");
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+
+            Gson gson = new GsonBuilder().create();
+            HttpEntity entity = response.getEntity();
+            String jsonResponse = EntityUtils.toString(entity);
+            return gson.fromJson(jsonResponse, JsonObject.class);
+
+        }
+        return null;
+    }
+
+    public static JsonObject uploadDocument() throws OnfidoException, IOException {
+
+        HttpResponse response = HYPRWebUtils.
+                httpPost("api_sandbox.zf20aqvpfGl.MGh9sYKZFflunrTVedkK_X9p75HX4aVT",
+                        "https://api.eu.onfido.com/v3.6/documents",
+                        "file=@\"/home/gangani/Pictures/sample_driving_licence.png",
+                        "f29cfa8b-80cb-4ad5-a2b4-891fdd5a7b56");
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+
+            Gson gson = new GsonBuilder().create();
+            HttpEntity entity = response.getEntity();
+            String jsonResponse = EntityUtils.toString(entity);
+            return gson.fromJson(jsonResponse, JsonObject.class);
+
+        }
+        return null;
+    }
+
+    public static JsonObject verificationCheck() throws OnfidoException, IOException {
+
+        HttpResponse response = HYPRWebUtils.
+                httpPost("api_sandbox.zf20aqvpfGl.MGh9sYKZFflunrTVedkK_X9p75HX4aVT",
+                        "https://api.eu.onfido.com/v3.6/checks",
+                        "{\n" +
+                                "  \"applicant_id\": \"f29cfa8b-80cb-4ad5-a2b4-891fdd5a7b56\",\n" +
+                                "  \"report_names\": [\"document\", \"document_with_driving_licence_information\"]\n" +
+                                "}");
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+
+            Gson gson = new GsonBuilder().create();
+            HttpEntity entity = response.getEntity();
+            String jsonResponse = EntityUtils.toString(entity);
+            return gson.fromJson(jsonResponse, JsonObject.class);
+
+        }
+        return null;
     }
 
     public static HttpResponse getApplicantResponse() throws OnfidoException, IOException {
 
         return HYPRWebUtils.
-                httpGet("api_live.Hd6vqNOtfiH.lToim4yv0WtAJxSeGFDG7PDcWZImnRoq",
+                httpGet("api_sandbox.zf20aqvpfGl.MGh9sYKZFflunrTVedkK_X9p75HX4aVT",
                         "https://api.eu.onfido.com/v3.6/applicants/9f419d72-6f19-4b4f-9bf7-e51ca868386f");
     }
 }

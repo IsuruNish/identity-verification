@@ -32,7 +32,7 @@
         <module>
             components/org.wso2.carbon.extension.identity.verification.claim.mgt
         </module>
-<!--        <module>components/org.wso2.carbon.extension.identity.verifier.Onfido</module>-->
+        <module>components/org.wso2.carbon.extension.identity.verifier.Onfido</module>
     </modules>
 
     <dependencyManagement>

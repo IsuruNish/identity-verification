@@ -29,7 +29,7 @@ public class IdentityVerifierData {
 
     String userId;
     String identityVerifierName;
-    List<IdVClaim> idVClaim;
+    List<IdVClaim> idVClaims;
     List<IdVProperty> idVProperties;
 
     public String getUserId() {
@@ -52,14 +52,14 @@ public class IdentityVerifierData {
         this.identityVerifierName = identityVerifierName;
     }
 
-    public List<IdVClaim> getIdVClaim() {
+    public List<IdVClaim> getIdVClaims() {
 
-        return idVClaim;
+        return idVClaims;
     }
 
-    public void setIdVClaim(List<IdVClaim> idVClaim) {
+    public void setIdVClaims(List<IdVClaim> idVClaims) {
 
-        this.idVClaim = idVClaim;
+        this.idVClaims = idVClaims;
     }
 
     public List<IdVProperty> getIdVProperties() {
@@ -74,10 +74,10 @@ public class IdentityVerifierData {
 
     public void addIdVClaimProperty(IdVClaim idVClaim) {
 
-        if (this.idVClaim == null) {
-            this.idVClaim = new ArrayList<>();
+        if (this.idVClaims == null) {
+            this.idVClaims = new ArrayList<>();
         }
-        this.idVClaim.add(idVClaim);
+        this.idVClaims.add(idVClaim);
     }
 
     public void addIdVProperty(IdVProperty idVProperty) {

@@ -25,15 +25,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHttpResponse;
 import org.wso2.carbon.extension.identity.verifier.onfido.OnfidoException;
 
+import java.io.File;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 
 /**
  * The HYPRWebUtils class contains all the general helper functions required by the HYPR Authenticator.
@@ -83,6 +85,26 @@ public class HYPRWebUtils {
         request.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
 
         CloseableHttpClient client = HTTPClientManager.getInstance().getHttpClient();
+        try (CloseableHttpResponse response = client.execute(request)) {
+            return toHttpResponse(response);
+        }
+    }
+
+    public static HttpResponse httpPost(String apiToken, String requestURL, String filePath, String applicantId)
+            throws IOException, OnfidoException {
+
+        HttpPost request = new HttpPost(requestURL);
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Token token=" + apiToken);
+        request.setHeader(HttpHeaders.CONTENT_TYPE, "multipart/form-data");
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create()
+                .addPart("type", new StringBody("driving_licence", ContentType.TEXT_PLAIN))
+                .addPart("file", new FileBody(new File(filePath)))
+                .addPart("applicant_id", new StringBody(applicantId, ContentType.TEXT_PLAIN));
+
+        request.setEntity(builder.build());
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
         try (CloseableHttpResponse response = client.execute(request)) {
             return toHttpResponse(response);
         }

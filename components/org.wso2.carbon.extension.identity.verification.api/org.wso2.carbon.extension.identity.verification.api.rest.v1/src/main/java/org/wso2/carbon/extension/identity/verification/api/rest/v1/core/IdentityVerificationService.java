@@ -217,7 +217,7 @@ public class IdentityVerificationService {
         VerificationPostResponse verificationPostResponse = new VerificationPostResponse();
         verificationPostResponse.username(identityVerifierData.getUserId());
         verificationPostResponse.setIdentityVerificationProvider(identityVerifierData.getIdentityVerifierName());
-        for (IdVClaim idVClaim : identityVerifierData.getIdVClaim()) {
+        for (IdVClaim idVClaim : identityVerifierData.getIdVClaims()) {
             VerificationClaimResponse verificationClaimResponse = new VerificationClaimResponse();
             verificationClaimResponse.setId(idVClaim.getUuid());
             verificationClaimResponse.setUri(idVClaim.getClaimUri());
