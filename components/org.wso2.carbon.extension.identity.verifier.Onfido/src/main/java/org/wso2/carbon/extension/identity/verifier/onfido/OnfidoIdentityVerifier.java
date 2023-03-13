@@ -87,11 +87,11 @@ public class OnfidoIdentityVerifier implements IdentityVerifier {
                             jsonObject.put("document_id", uploadDocumentJsonObject.get("id").toString());
                         }
                         break;
-                    case "CHECKS":
+                    case "CHECK":
                         for (IdVClaim idVClaim : idVClaims) {
                             // todo
                         }
-                        JsonObject checkJsonObject = OnfidoAPIClient.uploadDocument();
+                        JsonObject checkJsonObject = OnfidoAPIClient.verificationCheck();
                         jsonObject.put("status", "IN_PROGRESS");
                         jsonObject.put("source", "ONFIDO");
                         if (checkJsonObject != null) {
@@ -118,7 +118,7 @@ public class OnfidoIdentityVerifier implements IdentityVerifier {
         } catch (OnfidoException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return identityVerifierData;
     }
 
     private void getUser(String username, int tenantId) {

@@ -59,36 +59,40 @@ public class IdVClaimMgtConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000", "Identity Verification Claim data already exists."),
-        ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid."),
-        ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status."),
-        ERROR_INVALID_IDV_PROVIDER_ID("65002", "Invalid Identity Provider Id provided."),
+        ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS("65000",
+                "Identity Verification Claim data already exists.", ""),
+        ERROR_CODE_INVALID_INPUTS("65001", "Provided inputs are invalid.", ""),
+        ERROR_CODE_INVALID_STATUS("65002", "Added an invalid status.", ""),
+        ERROR_INVALID_IDV_PROVIDER_ID("65002", "Invalid Identity Provider Id provided.", ""),
         ERROR_CHECKING_IDV_CLAIM_EXISTENCE("65003",
-                "Error while checking the existence of the Identity Verification Claim."),
-        ERROR_INVALID_USER_ID("65004", "Invalid UserID provided."),
+                "Error while checking the existence of the Identity Verification Claim.", ""),
+        ERROR_INVALID_USER_ID("60004", "Invalid UserID provided.",
+                "User is not existing with the given user id"),
 
-        ERROR_INVALID_IDV_CLAIM_ID("65004", "Invalid claim id provided."),
+        ERROR_INVALID_IDV_CLAIM_ID("65004", "Invalid claim id provided.", ""),
         ERROR_DELETING_IDV_CLAIM("65004",
-                "Error deleting the Identity Verification Claim."),
+                "Error deleting the Identity Verification Claim.", ""),
         ERROR_RETRIEVING_IDV_CLAIM("65005",
-                "Error retrieving the Identity Verification Claim."),
+                "Error retrieving the Identity Verification Claim.", ""),
         ERROR_UPDATING_IDV_CLAIM("65005",
-                "Error updating the Identity Verification Claim."),
+                "Error updating the Identity Verification Claim.", ""),
         ERROR_ADDING_IDV_CLAIM("65005",
-                "Error adding the Identity Verification Claim."),
+                "Error adding the Identity Verification Claim.", ""),
         ERROR_RETRIEVING_IDV_CLAIMS("65005",
-                "Error retrieving the Identity Verification Claims."),
+                "Error retrieving the Identity Verification Claims.", ""),
         ERROR_VALIDATING_IDV_PROVIDER_ID("65005",
-                "Error while validating identity provider id."),
+                "Error while validating identity provider id.", ""),
         ERROR_CHECKING_USER_ID_EXISTENCE("65005",
-                "Error while checking the user id existence.");
+                "Error while checking the user id existence.", "");
         private final String code;
         private final String message;
+        private final String description;
 
-        ErrorMessage(String code, String message) {
+        ErrorMessage(String code, String message, String description) {
 
             this.code = code;
             this.message = message;
+            this.description = description;
         }
 
         public String getCode() {
@@ -99,6 +103,11 @@ public class IdVClaimMgtConstants {
         public String getMessage() {
 
             return message;
+        }
+
+        public String getDescription() {
+
+            return description;
         }
 
         @Override

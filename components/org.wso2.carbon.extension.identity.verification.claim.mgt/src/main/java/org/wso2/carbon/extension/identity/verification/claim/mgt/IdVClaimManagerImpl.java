@@ -50,7 +50,7 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
             throw IdVClaimMgtExceptionManagement.handleClientException(
                     IdVClaimMgtConstants.ErrorMessage.ERROR_CODE_INVALID_INPUTS);
         }
-        // todo: do I need to validate two ids
+        validateUserId(userId, tenantId);
         return identityVerificationClaimDAO.getIDVClaim(userId, idvClaimId, tenantId);
     }
 
@@ -134,7 +134,14 @@ public class IdVClaimManagerImpl implements IdVClaimManager {
                 throw IdVClaimMgtExceptionManagement.handleClientException(
                         IdVClaimMgtConstants.ErrorMessage.ERROR_INVALID_USER_ID);
             }
-        } catch (IdvClaimMgtServerException | UserStoreException e) {
+        } catch (UserStoreException e) {
+            if (e.getCause().getMessage().contains("30007")) {
+                throw IdVClaimMgtExceptionManagement.handleClientException(
+                        IdVClaimMgtConstants.ErrorMessage.ERROR_INVALID_USER_ID);
+            }
+            throw IdVClaimMgtExceptionManagement.handleClientException(
+                    IdVClaimMgtConstants.ErrorMessage.ERROR_CHECKING_USER_ID_EXISTENCE);
+        } catch (IdvClaimMgtServerException e) {
             throw IdVClaimMgtExceptionManagement.handleClientException(
                     IdVClaimMgtConstants.ErrorMessage.ERROR_CHECKING_USER_ID_EXISTENCE);
         }

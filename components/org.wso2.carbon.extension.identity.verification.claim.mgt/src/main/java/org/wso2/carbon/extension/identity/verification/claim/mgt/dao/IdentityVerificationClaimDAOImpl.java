@@ -132,7 +132,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                     idVClaim = new IdVClaim();
                     idVClaim.setUuid(idVProviderResultSet.getString("UUID"));
                     idVClaim.setUserId(idVProviderResultSet.getString("USER_ID"));
-                    idVClaim.setUserId(idVProviderResultSet.getString("CLAIM_URI"));
+                    idVClaim.setClaimUri(idVProviderResultSet.getString("CLAIM_URI"));
                     idVClaim.setIdvProviderId(idVProviderResultSet.getString("IDVP_ID"));
                     idVClaim.setStatus(idVProviderResultSet.getBoolean("IS_VERIFIED"));
                     idVClaim.setMetadata(getMetadataJsonObject(idVProviderResultSet.getBytes("METADATA")));
@@ -167,7 +167,7 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
                     IdVClaim idVClaim = new IdVClaim();
                     idVClaim.setUuid(idVProviderResultSet.getString("UUID"));
                     idVClaim.setUserId(idVProviderResultSet.getString("USER_ID"));
-                    idVClaim.setUserId(idVProviderResultSet.getString("CLAIM_URI"));
+                    idVClaim.setClaimUri(idVProviderResultSet.getString("CLAIM_URI"));
                     idVClaim.setStatus(idVProviderResultSet.getBoolean("IS_VERIFIED"));
                     idVClaim.setMetadata(getMetadataJsonObject(idVProviderResultSet.getBytes("METADATA")));
                     idVClaims.add(idVClaim);

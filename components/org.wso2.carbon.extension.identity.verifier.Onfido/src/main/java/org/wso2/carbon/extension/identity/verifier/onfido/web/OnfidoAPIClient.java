@@ -59,7 +59,7 @@ public class OnfidoAPIClient {
         HttpResponse response = HYPRWebUtils.
                 httpPost("api_sandbox.zf20aqvpfGl.MGh9sYKZFflunrTVedkK_X9p75HX4aVT",
                         "https://api.eu.onfido.com/v3.6/documents",
-                        "file=@\"/home/gangani/Pictures/sample_driving_licence.png",
+                        "/home/gangani/Pictures/sample_driving_licence.png",
                         "f29cfa8b-80cb-4ad5-a2b4-891fdd5a7b56");
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
 

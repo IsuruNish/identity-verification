@@ -49,8 +49,8 @@ public class Constants {
         // todo
         // Client errors.
         ERROR_CODE_IDVP_NOT_FOUND("IDV-60000",
-                "Unable to find identity verification provider.",
-                "Server encountered an error while finding the identity verification provider."),
+                "Invalid identity verification provider id.",
+                "Could not find an identity verification provider with given id."),
 
         // Server errors.
         ERROR_ADDING_IDVP("IDV-65000",
