@@ -17,20 +17,35 @@
  */
 package org.wso2.carbon.extension.identity.verification.claim.mgt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
 /**
  * IdVClaim model class.
  */
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IdVClaim {
 
     private String id;
-    private String uuid;
+    private String _id;
+    private String userId;
+    private boolean isVerified;
+    private boolean status;
+    private String uuid;    //claimID
     private String claimUri;
     private String claimValue;
-    private String userId;
-    private boolean status;
+    private Document claimMetadata;
+    private JSONObject claims;
     private String idvProviderId;
+    private String idvId;
+    private int tenantId;
     private JSONObject metadata;
 
     public String getId() {
@@ -43,14 +58,14 @@ public class IdVClaim {
         this.id = id;
     }
 
-    public String getUuid() {
+    public String get_id() {
 
-        return uuid;
+        return _id;
     }
 
-    public void setUuid(String uuid) {
+    public void set_id(String _id) {
 
-        this.uuid = uuid;
+        this._id = _id;
     }
 
     public String getUserId() {
@@ -63,7 +78,17 @@ public class IdVClaim {
         this.userId = userId;
     }
 
-    public boolean getStatus() {
+    public boolean isVerified() {
+
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+
+        isVerified = verified;
+    }
+
+    public boolean isStatus() {
 
         return status;
     }
@@ -73,14 +98,14 @@ public class IdVClaim {
         this.status = status;
     }
 
-    public JSONObject getMetadata() {
+    public String getUuid() {
 
-        return metadata;
+        return uuid;
     }
 
-    public void setMetadata(JSONObject metadata) {
+    public void setUuid(String uuid) {
 
-        this.metadata = metadata;
+        this.uuid = uuid;
     }
 
     public String getClaimUri() {
@@ -103,6 +128,26 @@ public class IdVClaim {
         this.claimValue = claimValue;
     }
 
+    public Document getClaimMetadata() {
+
+        return claimMetadata;
+    }
+
+    public void setClaimMetadata(Document claimMetadata) {
+
+        this.claimMetadata = claimMetadata;
+    }
+
+    public JSONObject getClaims() {
+
+        return claims;
+    }
+
+    public void setClaims(JSONObject claims) {
+
+        this.claims = claims;
+    }
+
     public String getIdvProviderId() {
 
         return idvProviderId;
@@ -111,5 +156,35 @@ public class IdVClaim {
     public void setIdvProviderId(String idvProviderId) {
 
         this.idvProviderId = idvProviderId;
+    }
+
+    public String getIdvId() {
+
+        return idvId;
+    }
+
+    public void setIdvId(String idvId) {
+
+        this.idvId = idvId;
+    }
+
+    public int getTenantId() {
+
+        return tenantId;
+    }
+
+    public void setTenantId(int tenantId) {
+
+        this.tenantId = tenantId;
+    }
+
+    public JSONObject getMetadata() {
+
+        return metadata;
+    }
+
+    public void setMetadata(JSONObject metadata) {
+
+        this.metadata = metadata;
     }
 }

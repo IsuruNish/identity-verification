@@ -20,47 +20,24 @@ package org.wso2.carbon.extension.identity.verification.claim.mgt.dao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.DeleteResult;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.mongodb.client.*;
 import org.bson.Document;
-import org.json.JSONObject;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.model.Filters;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
 import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
-import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants;
-import org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtExceptionManagement;
-import org.wso2.carbon.identity.core.util.IdentityDatabaseUtil;
-
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_ADDING_IDV_CLAIM;
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_CHECKING_IDV_CLAIM_EXISTENCE;
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_DELETING_IDV_CLAIM;
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM;
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIMS;
-import static org.wso2.carbon.extension.identity.verification.claim.mgt.util.IdVClaimMgtConstants.ErrorMessage.ERROR_UPDATING_IDV_CLAIM;
+import org.wso2.carbon.identity.core.util.IdentityUtil;
 
 /**
  * Identity verification claim DAO class.
  */
 public class IdentityVerificationClaimDAOImpl implements IdentityVerificationClaimDAO {
 
-    private static final Log log = LogFactory.getLog(IdentityVerificationClaimDAOImpl.class);
-
-    private static String host = "localhost";
-    private static int port = 27017;
-    private static MongoClient mongoClient = new MongoClient( host , port );
+    private final String DATABASE_URL_REGEX = "datasource.configuration.url";
+    private final String DATABASE_NAME_REGEX = "datasource.configuration.databaseName";
+    private final String DATABASE_COLLECTION_REGEX = "datasource.configuration.collectionName";
 
     /**
      * Add the identity verification claim.
@@ -72,35 +49,41 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     @Override
     public void addIdVClaim(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException {
 
-        MongoDatabase dbObj = mongoClient.getDatabase("identitydb");
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonStr = null;
-        try {
-            jsonStr = mapper.writeValueAsString(idVClaim);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonStr = null;
+            try {
+                jsonStr = mapper.writeValueAsString(idVClaim);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            ObjectNode jsonNode = null;
+            try {
+                jsonNode = (ObjectNode) mapper.readTree(jsonStr);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            jsonNode.put("tenantId",tenantId);
+
+            String json = null;
+            try {
+                json = mapper.writeValueAsString((jsonNode));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            Document doc = Document.parse(json);
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
+            collection.insertOne(doc);
         }
-
-        ObjectNode jsonNode = null;
-        try {
-            jsonNode = (ObjectNode) mapper.readTree(jsonStr);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        jsonNode.put("tenantId",tenantId);
-
-        String json = null;
-        try {
-            json = mapper.writeValueAsString((jsonNode));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        Document doc = Document.parse(json);
-        MongoCollection<Document> collection = dbObj.getCollection("idv_claim");
-        collection.insertOne(doc);
     }
 
     /**
@@ -112,7 +95,10 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
      */
     @Override
     public void updateIdVClaim(IdVClaim idVClaim, int tenantId) throws IdVClaimMgtException {
-        System.out.println("to do");
+
+        //question
+        //"UPDATE IDV_CLAIM SET IS_VERIFIED = ?, METADATA = ? WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?";
+
     }
 
     /**
@@ -126,15 +112,29 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     @Override
     public IdVClaim getIDVClaim(String userId, String idVClaimId, int tenantId) throws IdVClaimMgtException {
 
-        MongoDatabase dbObj = mongoClient.getDatabase("identitydb");
-        ObjectMapper mapper = new ObjectMapper();
-        MongoCollection<Document> collection = dbObj.getCollection("idv_claim");
-        Document doc = collection.find(Filters.and(Filters.eq("id", idVClaimId), Filters.eq("tenantId", tenantId))).first();
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
 
-        try {
-            return doc != null ? mapper.readValue(doc.toJson(), IdVClaim.class) : null;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        //question
+        //idVClaimId = claimId = uuid ?
+
+//        "SELECT UUID, USER_ID, CLAIM_URI, TENANT_ID, IDVP_ID, IS_VERIFIED, METADATA FROM IDV_CLAIM WHERE USER_ID = ? AND UUID = ? AND TENANT_ID = ?"
+
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+            ObjectMapper mapper = new ObjectMapper();
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
+            Document doc = collection.find(Filters.and(
+                    Filters.eq("id", idVClaimId),
+                    Filters.eq("tenantId", tenantId)))
+                    .first();
+
+            try {
+                return doc != null ? mapper.readValue(doc.toJson(), IdVClaim.class) : null;
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -149,28 +149,36 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     @Override
     public IdVClaim[] getIDVClaims(String userId, int tenantId) throws IdVClaimMgtException {
 
-        MongoDatabase dbObj = mongoClient.getDatabase("identitydb");
-        ObjectMapper mapper = new ObjectMapper();
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
 
-        MongoCollection<Document> collection = dbObj.getCollection("idv_claim");
+        // question
+        // do we need these fields exactly?
+        // "SELECT UUID, USER_ID, CLAIM_URI, IS_VERIFIED, METADATA FROM IDV_CLAIM WHERE USER_ID = ? AND TENANT_ID = ?";
 
-        Document query = new Document("userId", userId).append("tenantId", tenantId);
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+            ObjectMapper mapper = new ObjectMapper();
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
 
-        FindIterable<Document> results = collection.find(query);
+            FindIterable<Document>  doc = collection.find(Filters.and(
+                    Filters.eq("userId", userId),
+                    Filters.eq("tenantId", tenantId)));
 
-        List<IdVClaim> idVClaims = new ArrayList<>();
-        for (Document result : results) {
-            IdVClaim idVClaim = null;
-            try {
-                idVClaim = mapper.readValue(result.toJson(), IdVClaim.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+            List<IdVClaim> idVClaims = new ArrayList<>();
+            for (Document result : doc) {
+                IdVClaim idVClaim = null;
+                try {
+                    idVClaim = mapper.readValue(result.toJson(), IdVClaim.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+                idVClaims.add(idVClaim);
             }
-
-            idVClaims.add(idVClaim);
+            return idVClaims.toArray(new IdVClaim[0]);
         }
-
-        return idVClaims.toArray(new IdVClaim[0]);
     }
 
     /**
@@ -182,12 +190,24 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     @Override
     public void deleteIdVClaim(String idVClaimId, int tenantId) throws IdVClaimMgtException {
 
-        MongoDatabase dbObj = mongoClient.getDatabase("identitydb");
-        MongoCollection<Document> collection = dbObj.getCollection("idv_claim");
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
 
-        Document query = new Document("id", idVClaimId).append("tenantId", tenantId);
-        DeleteResult result = collection.deleteMany(query);
-        System.out.println(result.getDeletedCount());
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
+
+            Document query = new Document();
+            query.append("id", idVClaimId);
+            query.append("tenantId", tenantId);
+
+            DeleteResult result = collection.deleteMany(Filters.and(
+                    Filters.eq("id", idVClaimId),
+                    Filters.eq("tenantId", tenantId)));
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+
+        }
     }
 
     /**
@@ -204,12 +224,33 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     public boolean isIdVClaimDataExist(String userId, String idvId, String uri, int tenantId)
             throws IdVClaimMgtException {
 
-        MongoDatabase dbObj = mongoClient.getDatabase("identitydb");
-        MongoCollection<Document> collection = dbObj.getCollection("idv_claim");
-        Document query = new Document("userId", userId).append("tenantId", tenantId).append("idvId", idvId).append("uri", uri);
-        long results = collection.countDocuments(query);
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
 
-        return results > 0;
+        // question
+        // paras? --> idvp id == idv id?
+//        "SELECT ID FROM IDV_CLAIM WHERE USER_ID = ? AND IDVP_ID = ? AND CLAIM_URI = ? AND TENANT_ID = ?";
+
+
+
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
+            Document doc = collection.find(Filters.and(
+                    Filters.eq("userId", userId),
+                    Filters.eq("tenantId", tenantId),
+                    Filters.eq("idvId", idvId),
+                    Filters.eq("claimUri", uri)))
+                    .first();
+
+            if (doc != null){
+                return true;
+            }
+
+            return false;
+
+        }
     }
 
     /**
@@ -223,19 +264,29 @@ public class IdentityVerificationClaimDAOImpl implements IdentityVerificationCla
     @Override
     public boolean isIdVClaimExist(String claimId, int tenantId) throws IdVClaimMgtException {
 
-        System.out.println("is it");
-        return false;
+        String url = IdentityUtil.getProperty(DATABASE_URL_REGEX);
+        String db = IdentityUtil.getProperty(DATABASE_NAME_REGEX);
+        String collectionName = IdentityUtil.getProperty(DATABASE_COLLECTION_REGEX);
+
+        //question
+        //only id returns ?
+//        "SELECT ID FROM IDV_CLAIM WHERE UUID = ? AND TENANT_ID = ?";
+
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase dbObj = mongoClient.getDatabase(db);
+            MongoCollection<Document> collection = dbObj.getCollection(collectionName);
+
+            Document doc = collection.find(Filters.and(
+                    Filters.eq("uuid", claimId),
+                    Filters.eq("tenantId", tenantId))).first();
+
+            if (doc != null) {
+                return true;
+            }
+
+            return false;
+
+        }
     }
 
-    private byte[] getMetadata(IdVClaim idVClaim) {
-
-        String metadataString = idVClaim.getMetadata().toString();
-        return metadataString.getBytes(StandardCharsets.UTF_8);
-    }
-
-    private JSONObject getMetadataJsonObject(byte[] metadata) {
-
-        String metadataString = new String(metadata, StandardCharsets.UTF_8);
-        return new JSONObject(metadataString);
-    }
 }
