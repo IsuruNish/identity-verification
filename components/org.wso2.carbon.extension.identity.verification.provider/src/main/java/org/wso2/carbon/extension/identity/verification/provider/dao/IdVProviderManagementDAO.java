@@ -21,14 +21,15 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.extension.identity.verification.provider.IdVProviderMgtException;
-import org.wso2.carbon.extension.identity.verification.provider.IdvProviderMgtServerException;
+import org.wso2.carbon.extension.identity.verification.provider.IdVPSecretProcessor;
+import org.wso2.carbon.extension.identity.verification.provider.exception.IdVProviderMgtException;
+import org.wso2.carbon.extension.identity.verification.provider.exception.IdvProviderMgtServerException;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdVConfigProperty;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
-import org.wso2.carbon.identity.base.IdentityRuntimeException;
 import org.wso2.carbon.identity.core.util.IdentityDatabaseUtil;
+import org.wso2.carbon.identity.secret.mgt.core.exception.SecretManagementException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +39,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.CLAIM;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.DESCRIPTION;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.ID;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.IS_ENABLED;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.IS_SECRET;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.LOCAL_CLAIM;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.NAME;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.PROPERTY_KEY;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.PROPERTY_VALUE;
+import static org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants.UUID;
 
 /**
  * Data Access Layer functionality for Identity Verification Provider management.
@@ -64,18 +76,14 @@ public class IdVProviderManagementDAO {
                 return null;
             }
             // Get configs of identity verification provider.
-            getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
+            identityVerificationProvider =
+                    getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
 
             // Get claim mappings of identity verification provider.
             getIdVProvidersWithClaims(identityVerificationProvider, tenantId, connection);
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDERS, e);
-        } catch (IdentityRuntimeException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_DATABASE_CONNECTION, e);
-//        } finally {
-//            IdentityDatabaseUtil.closeConnection();
         }
         return identityVerificationProvider;
     }
@@ -98,29 +106,28 @@ public class IdVProviderManagementDAO {
         }
     }
 
-    private static IdentityVerificationProvider getIDVPbyUUID(String idVPUUID, int tenantId, Connection connection)
+    private static IdentityVerificationProvider getIDVPbyUUID(String idVPUuid, int tenantId, Connection connection)
             throws IdvProviderMgtServerException {
 
         IdentityVerificationProvider identityVerificationProvider = null;
         try (PreparedStatement getIdVProvidersStmt = connection
                 .prepareStatement(IdVProviderMgtConstants.SQLQueries.GET_IDVP_SQL)) {
-            getIdVProvidersStmt.setString(1, idVPUUID);
+            getIdVProvidersStmt.setString(1, idVPUuid);
             getIdVProvidersStmt.setInt(2, tenantId);
 
             try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                 while (idVProviderResultSet.next()) {
                     identityVerificationProvider = new IdentityVerificationProvider();
-                    identityVerificationProvider.setId(idVProviderResultSet.getString("ID"));
-                    identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString("UUID"));
-                    identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
-                    identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.
-                            getString("DESCRIPTION"));
-                    identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
+                    identityVerificationProvider.setId(idVProviderResultSet.getString(ID));
+                    identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString(UUID));
+                    identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString(NAME));
+                    identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.getString(DESCRIPTION));
+                    identityVerificationProvider.setEnabled(idVProviderResultSet.getBoolean(IS_ENABLED));
                 }
             }
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_RETRIEVING_IDV_PROVIDER, idVPUUID, e);
+                    ERROR_RETRIEVING_IDV_PROVIDER, idVPUuid, e);
         }
         return identityVerificationProvider;
     }
@@ -141,9 +148,8 @@ public class IdVProviderManagementDAO {
                 addIdVProviderStmt.setString(1, identityVerificationProvider.getIdVPUUID());
                 addIdVProviderStmt.setInt(2, tenantId);
                 addIdVProviderStmt.setString(3, identityVerificationProvider.getIdVProviderName());
-                addIdVProviderStmt.setString(4,
-                        identityVerificationProvider.getIdVProviderDescription());
-                addIdVProviderStmt.setBoolean(5, identityVerificationProvider.isEnable());
+                addIdVProviderStmt.setString(4, identityVerificationProvider.getIdVProviderDescription());
+                addIdVProviderStmt.setBoolean(5, identityVerificationProvider.isEnabled());
                 addIdVProviderStmt.executeUpdate();
             } catch (SQLException e1) {
                 IdentityDatabaseUtil.rollbackTransaction(connection);
@@ -183,9 +189,8 @@ public class IdVProviderManagementDAO {
             try (PreparedStatement updateIdVProviderStmt = connection.prepareStatement(IdVProviderMgtConstants.
                     SQLQueries.UPDATE_IDVP_SQL)) {
                 updateIdVProviderStmt.setString(1, updatedIdVProvider.getIdVProviderName());
-                updateIdVProviderStmt.setString(2,
-                        updatedIdVProvider.getIdVProviderDescription());
-                updateIdVProviderStmt.setBoolean(3, updatedIdVProvider.isEnable());
+                updateIdVProviderStmt.setString(2, updatedIdVProvider.getIdVProviderDescription());
+                updateIdVProviderStmt.setBoolean(3, updatedIdVProvider.isEnabled());
                 updateIdVProviderStmt.setString(4, oldIdVProvider.getIdVPUUID());
                 updateIdVProviderStmt.setInt(5, tenantId);
                 updateIdVProviderStmt.executeUpdate();
@@ -231,15 +236,15 @@ public class IdVProviderManagementDAO {
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         IdentityVerificationProvider identityVerificationProvider = new IdentityVerificationProvider();
-                        identityVerificationProvider.setId(idVProviderResultSet.getString("ID"));
+                        identityVerificationProvider.setId(idVProviderResultSet.getString(ID));
+                        identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString(UUID));
+                        identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString(NAME));
                         identityVerificationProvider.
-                                setIdVPUUID(idVProviderResultSet.getString("UUID"));
-                        identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
-                        identityVerificationProvider.
-                                setIdVProviderDescription(idVProviderResultSet.getString("DESCRIPTION"));
-                        identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
+                                setIdVProviderDescription(idVProviderResultSet.getString(DESCRIPTION));
+                        identityVerificationProvider.setEnabled(idVProviderResultSet.getBoolean(IS_ENABLED));
                         // Get configs of identity verification provider.
-                        getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
+                        identityVerificationProvider =
+                                getIdVProviderWithConfigs(identityVerificationProvider, tenantId, connection);
                         // Get claim mappings of identity verification provider.
                         getIdVProvidersWithClaims(identityVerificationProvider, tenantId, connection);
                         identityVerificationProviders.add(identityVerificationProvider);
@@ -252,9 +257,6 @@ public class IdVProviderManagementDAO {
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDERS, e);
-        } catch (IdentityRuntimeException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_DATABASE_CONNECTION, e);
         }
         return identityVerificationProviders;
     }
@@ -278,9 +280,6 @@ public class IdVProviderManagementDAO {
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDERS, e);
-        } catch (IdentityRuntimeException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_DATABASE_CONNECTION, e);
         }
         return count;
     }
@@ -298,12 +297,12 @@ public class IdVProviderManagementDAO {
                 try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                     while (idVProviderResultSet.next()) {
                         identityVerificationProvider = new IdentityVerificationProvider();
-                        identityVerificationProvider.setId(idVProviderResultSet.getString("ID"));
-                        identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString("UUID"));
-                        identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString("NAME"));
+                        identityVerificationProvider.setId(idVProviderResultSet.getString(ID));
+                        identityVerificationProvider.setIdVPUUID(idVProviderResultSet.getString(UUID));
+                        identityVerificationProvider.setIdVProviderName(idVProviderResultSet.getString(NAME));
                         identityVerificationProvider.setIdVProviderDescription(idVProviderResultSet.
-                                getString("DESCRIPTION"));
-                        identityVerificationProvider.setEnable(idVProviderResultSet.getBoolean("IS_ENABLED"));
+                                getString(DESCRIPTION));
+                        identityVerificationProvider.setEnabled(idVProviderResultSet.getBoolean(IS_ENABLED));
                     }
                 }
             } catch (SQLException e1) {
@@ -314,9 +313,6 @@ public class IdVProviderManagementDAO {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDERS, e);
             //todo
-        } catch (IdentityRuntimeException | IdvProviderMgtServerException e) {
-            throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_DATABASE_CONNECTION, e);
         }
         return identityVerificationProvider;
     }
@@ -359,6 +355,14 @@ public class IdVProviderManagementDAO {
         if (identityVerificationProvider.getIdVConfigProperties() == null) {
             identityVerificationProvider.setIdVConfigProperties(new IdVConfigProperty[0]);
         }
+
+        IdVPSecretProcessor idVPSecretProcessor = new IdVPSecretProcessor();
+        try {
+            identityVerificationProvider = idVPSecretProcessor.encryptAssociatedSecrets(identityVerificationProvider);
+        } catch (SecretManagementException e) {
+            throw new RuntimeException(e);
+        }
+
         try (PreparedStatement addIDVProviderConfigsStmt = connection
                 .prepareStatement(IdVProviderMgtConstants.SQLQueries.ADD_IDVP_CONFIG_SQL)) {
             for (IdVConfigProperty idVConfigProperty : identityVerificationProvider.getIdVConfigProperties()) {
@@ -366,6 +370,7 @@ public class IdVProviderManagementDAO {
                 addIDVProviderConfigsStmt.setInt(2, tenantId);
                 addIDVProviderConfigsStmt.setString(3, idVConfigProperty.getName());
                 addIDVProviderConfigsStmt.setString(4, idVConfigProperty.getValue());
+                addIDVProviderConfigsStmt.setBoolean(5, idVConfigProperty.isConfidential());
                 addIDVProviderConfigsStmt.executeUpdate();
             }
         }
@@ -430,8 +435,9 @@ public class IdVProviderManagementDAO {
         addIDVProviderClaims(identityVerificationProvider, idVPId, tenantId, connection);
     }
 
-    private void getIdVProviderWithConfigs(IdentityVerificationProvider identityVerificationProvider, int tenantId,
-                                           Connection connection)
+    private IdentityVerificationProvider getIdVProviderWithConfigs(IdentityVerificationProvider
+                                                                           identityVerificationProvider, int tenantId,
+                                                                   Connection connection)
             throws IdvProviderMgtServerException {
 
         IdVConfigProperty[] idVConfigProperties = new IdVConfigProperty[0];
@@ -444,8 +450,9 @@ public class IdVProviderManagementDAO {
             try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                 while (idVProviderResultSet.next()) {
                     IdVConfigProperty idVConfigProperty = new IdVConfigProperty();
-                    idVConfigProperty.setName(idVProviderResultSet.getString("PROPERTY_KEY"));
-                    idVConfigProperty.setValue(idVProviderResultSet.getString("PROPERTY_VALUE"));
+                    idVConfigProperty.setName(idVProviderResultSet.getString(PROPERTY_KEY));
+                    idVConfigProperty.setValue(idVProviderResultSet.getString(PROPERTY_VALUE));
+                    idVConfigProperty.setConfidential(idVProviderResultSet.getBoolean(IS_SECRET));
                     idVConfigPropertyList.add(idVConfigProperty);
                 }
                 identityVerificationProvider.setIdVConfigProperties(idVConfigPropertyList.toArray(idVConfigProperties));
@@ -453,6 +460,12 @@ public class IdVProviderManagementDAO {
         } catch (SQLException e) {
             throw IdVProviderMgtExceptionManagement.handleServerException(IdVProviderMgtConstants.ErrorMessage.
                     ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS, e);
+        }
+        try {
+            IdVPSecretProcessor secretProcessor = new IdVPSecretProcessor();
+            return secretProcessor.decryptAssociatedSecrets(identityVerificationProvider);
+        } catch (SecretManagementException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -467,8 +480,8 @@ public class IdVProviderManagementDAO {
 
             try (ResultSet idVProviderResultSet = getIdVProvidersStmt.executeQuery()) {
                 while (idVProviderResultSet.next()) {
-                    idVClaimMap.put(idVProviderResultSet.getString("CLAIM"),
-                            idVProviderResultSet.getString("LOCAL_CLAIM"));
+                    idVClaimMap.put(idVProviderResultSet.getString(CLAIM),
+                            idVProviderResultSet.getString(LOCAL_CLAIM));
                     identityVerificationProvider.setClaimMappings(idVClaimMap);
                 }
             }

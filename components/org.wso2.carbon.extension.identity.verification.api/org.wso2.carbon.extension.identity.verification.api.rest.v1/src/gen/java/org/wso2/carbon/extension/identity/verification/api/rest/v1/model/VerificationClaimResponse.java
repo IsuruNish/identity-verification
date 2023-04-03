@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.model;
 
@@ -35,8 +37,8 @@ public class VerificationClaimResponse  {
   
     private String id;
     private String uri;
-    private String value;
     private Boolean isVerified;
+    private String idvpId;
     private Map<String, Object> claimMetadata = null;
 
 
@@ -78,24 +80,6 @@ public class VerificationClaimResponse  {
 
     /**
     **/
-    public VerificationClaimResponse value(String value) {
-
-        this.value = value;
-        return this;
-    }
-    
-    @ApiModelProperty(example = "Sri Lanka", value = "")
-    @JsonProperty("value")
-    @Valid
-    public String getValue() {
-        return value;
-    }
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-    **/
     public VerificationClaimResponse isVerified(Boolean isVerified) {
 
         this.isVerified = isVerified;
@@ -114,13 +98,31 @@ public class VerificationClaimResponse  {
 
     /**
     **/
+    public VerificationClaimResponse idvpId(String idvpId) {
+
+        this.idvpId = idvpId;
+        return this;
+    }
+    
+    @ApiModelProperty(example = "2159375-r567-8524-a456-5566424414527", value = "")
+    @JsonProperty("idvpId")
+    @Valid
+    public String getIdvpId() {
+        return idvpId;
+    }
+    public void setIdvpId(String idvpId) {
+        this.idvpId = idvpId;
+    }
+
+    /**
+    **/
     public VerificationClaimResponse claimMetadata(Map<String, Object> claimMetadata) {
 
         this.claimMetadata = claimMetadata;
         return this;
     }
     
-    @ApiModelProperty(example = "{\"source\": \"evidentID\", \"verifiedAt\": \"2020-10-10T12:00:00.000Z\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", value = "")
+    @ApiModelProperty(example = "{\"source\": \"evidentID\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", value = "")
     @JsonProperty("claimMetadata")
     @Valid
     public Map<String, Object> getClaimMetadata() {
@@ -153,14 +155,14 @@ public class VerificationClaimResponse  {
         VerificationClaimResponse verificationClaimResponse = (VerificationClaimResponse) o;
         return Objects.equals(this.id, verificationClaimResponse.id) &&
             Objects.equals(this.uri, verificationClaimResponse.uri) &&
-            Objects.equals(this.value, verificationClaimResponse.value) &&
             Objects.equals(this.isVerified, verificationClaimResponse.isVerified) &&
+            Objects.equals(this.idvpId, verificationClaimResponse.idvpId) &&
             Objects.equals(this.claimMetadata, verificationClaimResponse.claimMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uri, value, isVerified, claimMetadata);
+        return Objects.hash(id, uri, isVerified, idvpId, claimMetadata);
     }
 
     @Override
@@ -171,8 +173,8 @@ public class VerificationClaimResponse  {
         
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
-        sb.append("    value: ").append(toIndentedString(value)).append("\n");
         sb.append("    isVerified: ").append(toIndentedString(isVerified)).append("\n");
+        sb.append("    idvpId: ").append(toIndentedString(idvpId)).append("\n");
         sb.append("    claimMetadata: ").append(toIndentedString(claimMetadata)).append("\n");
         sb.append("}");
         return sb.toString();

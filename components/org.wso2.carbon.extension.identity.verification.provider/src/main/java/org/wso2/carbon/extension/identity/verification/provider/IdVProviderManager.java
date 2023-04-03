@@ -17,6 +17,7 @@
  */
 package org.wso2.carbon.extension.identity.verification.provider;
 
+import org.wso2.carbon.extension.identity.verification.provider.exception.IdVProviderMgtException;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 
 import java.util.List;
@@ -25,6 +26,17 @@ import java.util.List;
  * This interface contains the methods to manage the IdentityVerificationProvider.
  */
 public interface IdVProviderManager {
+
+
+    /**
+     * Get the IdentityVerificationProvider.
+     *
+     * @param idVProviderId IdentityVerificationProvider Id.
+     * @param tenantId      Tenant Id.
+     * @return IdentityVerificationProvider.
+     * @throws IdVProviderMgtException IdVProviderMgtException.
+     */
+    IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
     /**
      * Add a new IdentityVerificationProvider.
@@ -36,16 +48,6 @@ public interface IdVProviderManager {
      */
     IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider, int tenantId)
             throws IdVProviderMgtException;
-
-    /**
-     * Get the IdentityVerificationProvider.
-     *
-     * @param idVProviderId IdentityVerificationProvider Id.
-     * @param tenantId      Tenant Id.
-     * @return IdentityVerificationProvider.
-     * @throws IdVProviderMgtException IdVProviderMgtException.
-     */
-    IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId) throws IdVProviderMgtException;
 
     /**
      * Delete the IdentityVerificationProvider.

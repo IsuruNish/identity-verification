@@ -21,6 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.extension.identity.verification.provider.dao.IdVProviderManagementDAO;
+import org.wso2.carbon.extension.identity.verification.provider.exception.IdVProviderMgtClientException;
+import org.wso2.carbon.extension.identity.verification.provider.exception.IdVProviderMgtException;
 import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtConstants;
 import org.wso2.carbon.extension.identity.verification.provider.util.IdVProviderMgtExceptionManagement;
@@ -35,6 +37,32 @@ public class IdVProviderManagerImpl implements IdVProviderManager {
 
     private static final Log log = LogFactory.getLog(IdVProviderManagerImpl.class);
     IdVProviderManagementDAO idVProviderManagementDAO = new IdVProviderManagementDAO();
+    private static final IdVProviderManagerImpl instance = new IdVProviderManagerImpl();
+
+    public IdVProviderManagerImpl() {
+
+    }
+
+    /**
+     * Get the instance of IdVProviderManagerImpl.
+     *
+     * @return IdVProviderManagerImpl.
+     */
+    public static IdVProviderManagerImpl getInstance() {
+
+        return instance;
+    }
+
+    @Override
+    public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
+            throws IdVProviderMgtException {
+
+        if (StringUtils.isEmpty(idVProviderId)) {
+            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_EMPTY_IDVP_ID);
+        }
+        return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
+    }
 
     @Override
     public IdentityVerificationProvider addIdVProvider(IdentityVerificationProvider identityVerificationProvider,
@@ -43,14 +71,6 @@ public class IdVProviderManagerImpl implements IdVProviderManager {
         validateAddIdPVInputValues(identityVerificationProvider.getIdVProviderName(), tenantId);
         idVProviderManagementDAO.addIdVProvider(identityVerificationProvider, tenantId);
         return identityVerificationProvider;
-    }
-
-    @Override
-    public IdentityVerificationProvider getIdVProvider(String idVProviderId, int tenantId)
-            throws IdVProviderMgtException {
-
-        validateIdPId(idVProviderId);
-        return idVProviderManagementDAO.getIdVProvider(idVProviderId, tenantId);
     }
 
     @Override
@@ -87,36 +107,6 @@ public class IdVProviderManagerImpl implements IdVProviderManager {
         return idVProviderManagementDAO.isIdVProviderExists(idvProviderId, tenantId);
     }
 
-    /**
-     * Validate input parameters for the addIdVProvider function.
-     *
-     * @param idVPName Identity Verification Provider name.
-     * @param tenantId Tenant Id.
-     * @throws IdVProviderMgtException IdVProviderMgtException
-     */
-    private void validateAddIdPVInputValues(String idVPName, int tenantId) throws IdVProviderMgtException {
-
-        if (getIdVPByName(idVPName, tenantId) != null) {
-            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_IDVP_ALREADY_EXISTS, idVPName, null);
-        }
-    }
-
-    /**
-     * Validate input parameters for the getIdPByResourceId function.
-     *
-     * @param idVProviderId Identity Provider ID.
-     * @throws IdVProviderMgtException IdVProviderMgtException.
-     */
-    private void validateIdPId(String idVProviderId) throws IdVProviderMgtException {
-
-        if (StringUtils.isEmpty(idVProviderId)) {
-            String data = "Invalid argument: Identity Verification Provider ID value is empty";
-            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
-                    ERROR_IDVP_REQUEST_INVALID, data);
-        }
-    }
-
     @Override
     public IdentityVerificationProvider getIdVPByName(String idVPName, int tenantId)
             throws IdVProviderMgtException {
@@ -128,6 +118,22 @@ public class IdVProviderManagerImpl implements IdVProviderManager {
         }
 
         return idVProviderManagementDAO.getIdVPByName(idVPName, tenantId);
+    }
+
+
+    /**
+     * Validate input parameters for the addIdVProvider function.
+     *
+     * @param idVPName Identity Verification Provider name.
+     * @param tenantId Tenant Id.
+     * @throws IdVProviderMgtException IdVProviderMgtException
+     */
+    private void validateAddIdPVInputValues(String idVPName, int tenantId) throws IdVProviderMgtException {
+
+        if (getIdVPByName(idVPName, tenantId) != null) {
+            throw IdVProviderMgtExceptionManagement.handleClientException(IdVProviderMgtConstants.ErrorMessage.
+                    ERROR_IDVP_ALREADY_EXISTS, idVPName);
+        }
     }
 
     /**

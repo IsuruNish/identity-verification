@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.model;
 
@@ -33,28 +35,9 @@ import javax.xml.bind.annotation.*;
 
 public class VerificationPostResponse  {
   
-    private String username;
     private String identityVerificationProvider;
     private List<VerificationClaimResponse> claims = null;
 
-
-    /**
-    **/
-    public VerificationPostResponse username(String username) {
-
-        this.username = username;
-        return this;
-    }
-    
-    @ApiModelProperty(example = "username", value = "")
-    @JsonProperty("username")
-    @Valid
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     /**
     **/
@@ -112,14 +95,13 @@ public class VerificationPostResponse  {
             return false;
         }
         VerificationPostResponse verificationPostResponse = (VerificationPostResponse) o;
-        return Objects.equals(this.username, verificationPostResponse.username) &&
-            Objects.equals(this.identityVerificationProvider, verificationPostResponse.identityVerificationProvider) &&
+        return Objects.equals(this.identityVerificationProvider, verificationPostResponse.identityVerificationProvider) &&
             Objects.equals(this.claims, verificationPostResponse.claims);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, identityVerificationProvider, claims);
+        return Objects.hash(identityVerificationProvider, claims);
     }
 
     @Override
@@ -128,7 +110,6 @@ public class VerificationPostResponse  {
         StringBuilder sb = new StringBuilder();
         sb.append("class VerificationPostResponse {\n");
         
-        sb.append("    username: ").append(toIndentedString(username)).append("\n");
         sb.append("    identityVerificationProvider: ").append(toIndentedString(identityVerificationProvider)).append("\n");
         sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
         sb.append("}");

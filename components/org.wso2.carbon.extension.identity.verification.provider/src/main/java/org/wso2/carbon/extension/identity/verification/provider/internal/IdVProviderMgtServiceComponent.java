@@ -26,9 +26,12 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.extension.identity.verification.provider.IdVPSecretProcessor;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
 import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManagerImpl;
-import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.extension.identity.verification.provider.model.IdentityVerificationProvider;
+import org.wso2.carbon.identity.application.common.model.IdentityProvider;
+import org.wso2.carbon.identity.secret.mgt.core.SecretsProcessor;
 
 /**
  * OSGi declarative services component which handles registration and un-registration of
@@ -40,7 +43,7 @@ import org.wso2.carbon.user.core.service.RealmService;
 )
 public class IdVProviderMgtServiceComponent {
 
-    private static final Log log = LogFactory.getLog(IdVProviderMgtDataHolder.class);
+    private static final Log log = LogFactory.getLog(IdVProviderMgtServiceComponent.class);
 
     @Activate
     protected void activate(ComponentContext ctxt) {
@@ -57,21 +60,5 @@ public class IdVProviderMgtServiceComponent {
         if (log.isDebugEnabled()) {
             log.debug("IdentityVerificationProviderManager bundle is deactivated.");
         }
-    }
-
-    @Reference(
-            name = "RealmService",
-            service = org.wso2.carbon.user.core.service.RealmService.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetRealmService")
-    protected void setRealmService(RealmService realmService) {
-
-        IdVProviderMgtDataHolder.setRealmService(realmService);
-    }
-
-    protected void unsetRealmService(RealmService realmService) {
-
-        IdVProviderMgtDataHolder.setRealmService(null);
     }
 }

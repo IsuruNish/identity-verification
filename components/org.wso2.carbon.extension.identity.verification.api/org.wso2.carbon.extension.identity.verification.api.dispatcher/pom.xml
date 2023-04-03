@@ -113,11 +113,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.wso2.carbon.extension.identity.verification</groupId>
-                    <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
-                    <artifactId>org.wso2.carbon.extension.identity.verifier</artifactId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.mgt</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -131,11 +127,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.wso2.carbon.extension.identity.verification</groupId>
-                    <artifactId>org.wso2.carbon.extension.identity.verification.claim.mgt</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.wso2.carbon.extension.identity.verification</groupId>
-                    <artifactId>org.wso2.carbon.extension.identity.verifier</artifactId>
+                    <artifactId>org.wso2.carbon.extension.identity.verification.mgt</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

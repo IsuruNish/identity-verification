@@ -18,9 +18,8 @@
 
 package org.wso2.carbon.extension.identity.verification.api.rest.common;
 
-import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimManager;
-import  org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
-import org.wso2.carbon.extension.identity.verifier.IdentityVerificationService;
+import org.wso2.carbon.extension.identity.verification.provider.IdVProviderManager;
+import org.wso2.carbon.extension.identity.verification.mgt.IdentityVerificationMgt;
 
 /**
  * Service holder class for identity verification Rest API.
@@ -28,8 +27,7 @@ import org.wso2.carbon.extension.identity.verifier.IdentityVerificationService;
 public class IdentityVerificationServiceHolder {
 
     private static IdVProviderManager idVProviderManager;
-    private static IdVClaimManager idVClaimManager;
-    private static IdentityVerificationService identityVerificationService;
+    private static IdentityVerificationMgt identityVerificationMgt;
 
     /**
      * Get IdVProviderManager osgi service.
@@ -51,23 +49,23 @@ public class IdentityVerificationServiceHolder {
         IdentityVerificationServiceHolder.idVProviderManager = idVProviderManager;
     }
 
-    public static IdVClaimManager getIdVClaimManager() {
+    /**
+     * Set IdentityVerificationMgt osgi service.
+     *
+     * @param identityVerificationMgt IdentityVerificationMgt.
+     */
+    public static void setIdentityVerificationMgt(IdentityVerificationMgt identityVerificationMgt) {
 
-        return idVClaimManager;
+        IdentityVerificationServiceHolder.identityVerificationMgt = identityVerificationMgt;
     }
 
-    public static void setIdVClaimManager(IdVClaimManager idVClaimManager) {
+    /**
+     * Get IdentityVerificationMgt osgi service.
+     *
+     * @return IdentityVerificationMgt
+     */
+    public static IdentityVerificationMgt getIdentityVerificationMgt() {
 
-        IdentityVerificationServiceHolder.idVClaimManager = idVClaimManager;
-    }
-
-    public static void setIdentityVerificationService(IdentityVerificationService identityVerificationService) {
-
-        IdentityVerificationServiceHolder.identityVerificationService = identityVerificationService;
-    }
-
-    public static IdentityVerificationService getIdentityVerificationService () {
-
-        return identityVerificationService;
+        return identityVerificationMgt;
     }
 }

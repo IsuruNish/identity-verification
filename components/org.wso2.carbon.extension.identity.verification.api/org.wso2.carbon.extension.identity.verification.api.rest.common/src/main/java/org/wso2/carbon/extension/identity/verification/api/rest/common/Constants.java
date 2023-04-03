@@ -19,73 +19,75 @@
 package org.wso2.carbon.extension.identity.verification.api.rest.common;
 
 /**
- * Constants related to federated user association service.
+ * Constants related to identity verification service.
  */
 public class Constants {
 
+    public static final String TENANT_NAME_FROM_CONTEXT = "TenantNameFromContext";
     public static final String AUTH_USER_TENANT_DOMAIN = "authUserTenantDomain";
     public static final String CORRELATION_ID_MDC = "Correlation-ID";
-    // todo
-    public static final String CONFLICT_ASSOCIATION_CODE = "10004";
-    public static final String INVALID_IDP_CODE = "10007";
-    public static final String NON_EXISTING_USER_CODE = "30007 - ";
-
-    // Audit constants.
-    public static final String ACTION_FEDERATED_ASC_CREATE = "Federated Association - Create Association";
-    public static final String USER_NAME = "Username";
-    public static final String USER_ID = "UserId";
-    public static final String FIDP = "Federated IDP";
-    public static final String ERROR_CODE = "Error Code";
-    public static final String ERROR_MSG = "Error Message";
+    public static final String ERROR_PREFIX = "IDV-";
 
     /**
-     * Enum for federated user association creation related errors.
+     * Enum for identity verification related errors.
      * Error Code - code to identify the error.
      * Error Message - What went wrong.
      * Error Description - Why it went wrong.
      */
     public enum ErrorMessage {
 
-        // todo
-        // Client errors.
-        ERROR_CODE_IDVP_NOT_FOUND("IDV-60000",
+        // Client errors - IDVP server APIs.
+        ERROR_CODE_IDVP_NOT_FOUND("60000",
                 "Invalid identity verification provider id.",
-                "Could not find an identity verification provider with given id."),
+                "Could not find an identity verification provider with given id %s."),
+        ERROR_CODE_IDVP_EXISTS("60001",
+                "Identity Verification Provider already exists.",
+                "Identity Verification Provider: %s already exists."),
 
-        // Server errors.
-        ERROR_ADDING_IDVP("IDV-65000",
+        // Server errors - IDVP server APIs.
+        ERROR_ADDING_IDVP("65000",
                 "Unable to add identity verification provider.",
                 "Server encountered an error while adding the identity verification provider."),
-        ERROR_UPDATING_IDVP("IDV-65001",
+        ERROR_UPDATING_IDVP("65001",
                 "Unable to update identity verification provider.",
                 "Server encountered an error while updating the identity verification provider."),
-        ERROR_RETRIEVING_IDVP("IDV-65002",
+        ERROR_RETRIEVING_IDVP("65002",
                 "Unable to retrieve identity verification provider.",
-                "Server encountered an error while retrieving the identity verification provider."),
-        ERROR_DELETING_IDVP("IDV-65003",
+                "Server encountered an error while retrieving the identity verification provider: %s."),
+        ERROR_DELETING_IDVP("65003",
                 "Unable to delete identity verification provider.",
                 "Server encountered an error while deleting the identity verification provider."),
-        ERROR_RETRIEVING_IDV_CLAIM_METADATA("IDV-65004",
+        ERROR_RETRIEVING_TENANT("65004",
+                "Error retrieving tenant.",
+                "Error occurred while retrieving tenant."),
+
+        // Client errors - IDVP user APIs.
+        ERROR_CODE_IDV_CLAIM_NOT_FOUND("10000", "Resource not found.",
+                "Unable to find a resource matching the provided identity claim identifier %s."),
+        ERROR_CODE_USER_ID_NOT_FOUND("10001", "User Id not found.",
+                "Unable to find a user for the given user id: %s."),
+        ERROR_CODE_CLAIM_ID_NOT_FOUND("10002", "Claim Id not found.",
+                "Identity verification claim cannot be found with the claim id: %s."),
+        ERROR_CODE_IDVP_ID_NOT_FOUND("10003", "Identity Provider Id not found.",
+                "Provided IdVP id: %s is not found."),
+        ERROR_CODE_IDV_CLAIM_CONFLICT("10004", "Identity verification claim data already exists.",
+                "Identity verification claim data already exists for the user: %s."),
+
+        // Server errors - IDVP user APIs.
+        ERROR_RETRIEVING_IDV_CLAIM_METADATA("15000",
                 "Unable to retrieve identity verification claim metadata.",
                 "Server encountered an error while retrieving the identity verification claim metadata."),
-        ERROR_RETRIEVING_USER_IDV_CLAIMS("IDV-65005",
+        ERROR_RETRIEVING_USER_IDV_CLAIMS("15001",
                 "Unable to retrieve identity verification claims of the user %s.",
                 "Server encountered an error while retrieving the identity verification claim of the user."),
-        ERROR_CODE_ERROR_VERIFYING_IDENTITY("IDV-65006",
-                "Unable to verify the identity of the user %s.",
-                "Server encountered an error while verifying the identity of the user."),
-
-        ERROR_COMMON_SERVER_ERROR("IDV-65006",
-                "Unable to complete operation.",
-                "Error occurred while performing operation."),
-        ERROR_ADDING_VERIFICATION_CLAIM("IDV-65006", "Unable to add the verification claim.",
+        ERROR_ADDING_VERIFICATION_CLAIM("15002", "Unable to add the verification claim.",
                 "Error occurred while adding the verification claim."),
-        ERROR_GETTING_VERIFICATION_CLAIM("IDV-65006", "Unable to get the verification claim %s.",
+        ERROR_GETTING_VERIFICATION_CLAIM("15003", "Unable to get the verification claim %s.",
                 "Error occurred while getting the verification claim."),
-        ERROR_UPDATING_VERIFICATION_CLAIM("IDV-65006", "Unable to update the verification claim %s.",
+        ERROR_UPDATING_VERIFICATION_CLAIM("15004", "Unable to update the verification claim %s.",
                 "Error occurred while updating the verification claim."),
-        ERROR_CODE_IDV_CLAIM_NOT_FOUND("IDV-65006", "Resource not found.",
-                "Unable to find a resource matching the provided identity claim identifier %s.");
+        ERROR_RESOLVING_USER("15005", "Error user resolving",
+                "Error occured while resolving the user");
 
         private final String code;
         private final String message;
@@ -100,7 +102,7 @@ public class Constants {
 
         public String getCode() {
 
-            return code;
+            return ERROR_PREFIX + code;
         }
 
         public String getMessage() {

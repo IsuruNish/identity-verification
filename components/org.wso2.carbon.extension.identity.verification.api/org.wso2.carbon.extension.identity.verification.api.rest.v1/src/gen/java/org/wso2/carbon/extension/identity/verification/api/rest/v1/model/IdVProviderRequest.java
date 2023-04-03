@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.model;
 
@@ -23,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.ConfigProperty;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Verificationclaim;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaim;
 import javax.validation.constraints.*;
 
 
@@ -37,7 +39,7 @@ public class IdVProviderRequest  {
     private String name;
     private String description;
     private Boolean isEnabled;
-    private List<Verificationclaim> claims = null;
+    private List<VerificationClaim> claims = null;
 
     private List<ConfigProperty> configProperties = null;
 
@@ -102,7 +104,7 @@ public class IdVProviderRequest  {
 
     /**
     **/
-    public IdVProviderRequest claims(List<Verificationclaim> claims) {
+    public IdVProviderRequest claims(List<VerificationClaim> claims) {
 
         this.claims = claims;
         return this;
@@ -111,14 +113,14 @@ public class IdVProviderRequest  {
     @ApiModelProperty(value = "")
     @JsonProperty("claims")
     @Valid
-    public List<Verificationclaim> getClaims() {
+    public List<VerificationClaim> getClaims() {
         return claims;
     }
-    public void setClaims(List<Verificationclaim> claims) {
+    public void setClaims(List<VerificationClaim> claims) {
         this.claims = claims;
     }
 
-    public IdVProviderRequest addClaimsItem(Verificationclaim claimsItem) {
+    public IdVProviderRequest addClaimsItem(VerificationClaim claimsItem) {
         if (this.claims == null) {
             this.claims = new ArrayList<>();
         }

@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.model;
 
@@ -20,10 +22,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Claims;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Property;
+import java.util.Map;
 import javax.validation.constraints.*;
 
 
@@ -34,102 +35,90 @@ import javax.xml.bind.annotation.*;
 
 public class VerificationClaimRequest  {
   
-    private String username;
-    private String identityVerificationProvider;
-    private List<Claims> claims = null;
-
-    private List<Property> properties = null;
+    private String uri;
+    private Boolean isVerified;
+    private String idvpId;
+    private Map<String, Object> claimMetadata = null;
 
 
     /**
     **/
-    public VerificationClaimRequest username(String username) {
+    public VerificationClaimRequest uri(String uri) {
 
-        this.username = username;
+        this.uri = uri;
         return this;
     }
     
-    @ApiModelProperty(example = "username", required = true, value = "")
-    @JsonProperty("username")
+    @ApiModelProperty(example = "http://wso2.org/claims/country", value = "")
+    @JsonProperty("uri")
     @Valid
-    @NotNull(message = "Property username cannot be null.")
-
-    public String getUsername() {
-        return username;
+    public String getUri() {
+        return uri;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     /**
     **/
-    public VerificationClaimRequest identityVerificationProvider(String identityVerificationProvider) {
+    public VerificationClaimRequest isVerified(Boolean isVerified) {
 
-        this.identityVerificationProvider = identityVerificationProvider;
+        this.isVerified = isVerified;
         return this;
     }
     
-    @ApiModelProperty(example = "evidentID", required = true, value = "")
-    @JsonProperty("identityVerificationProvider")
+    @ApiModelProperty(example = "true", value = "")
+    @JsonProperty("isVerified")
     @Valid
-    @NotNull(message = "Property identityVerificationProvider cannot be null.")
-
-    public String getIdentityVerificationProvider() {
-        return identityVerificationProvider;
+    public Boolean getIsVerified() {
+        return isVerified;
     }
-    public void setIdentityVerificationProvider(String identityVerificationProvider) {
-        this.identityVerificationProvider = identityVerificationProvider;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
     /**
     **/
-    public VerificationClaimRequest claims(List<Claims> claims) {
+    public VerificationClaimRequest idvpId(String idvpId) {
 
-        this.claims = claims;
+        this.idvpId = idvpId;
         return this;
     }
     
-    @ApiModelProperty(value = "")
-    @JsonProperty("claims")
+    @ApiModelProperty(example = "2159375-r567-8524-a456-5566424414527", value = "")
+    @JsonProperty("idvpId")
     @Valid
-    public List<Claims> getClaims() {
-        return claims;
+    public String getIdvpId() {
+        return idvpId;
     }
-    public void setClaims(List<Claims> claims) {
-        this.claims = claims;
+    public void setIdvpId(String idvpId) {
+        this.idvpId = idvpId;
     }
 
-    public VerificationClaimRequest addClaimsItem(Claims claimsItem) {
-        if (this.claims == null) {
-            this.claims = new ArrayList<>();
+    /**
+    **/
+    public VerificationClaimRequest claimMetadata(Map<String, Object> claimMetadata) {
+
+        this.claimMetadata = claimMetadata;
+        return this;
+    }
+    
+    @ApiModelProperty(example = "{\"source\": \"evidentID\", \"trackingId\": \"123e4567-e89b-12d3-a456-556642440000\" }", value = "")
+    @JsonProperty("claimMetadata")
+    @Valid
+    public Map<String, Object> getClaimMetadata() {
+        return claimMetadata;
+    }
+    public void setClaimMetadata(Map<String, Object> claimMetadata) {
+        this.claimMetadata = claimMetadata;
+    }
+
+
+    public VerificationClaimRequest putClaimMetadataItem(String key, Object claimMetadataItem) {
+        if (this.claimMetadata == null) {
+            this.claimMetadata = new HashMap<>();
         }
-        this.claims.add(claimsItem);
-        return this;
-    }
-
-        /**
-    **/
-    public VerificationClaimRequest properties(List<Property> properties) {
-
-        this.properties = properties;
-        return this;
-    }
-    
-    @ApiModelProperty(value = "")
-    @JsonProperty("properties")
-    @Valid
-    public List<Property> getProperties() {
-        return properties;
-    }
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
-    }
-
-    public VerificationClaimRequest addPropertiesItem(Property propertiesItem) {
-        if (this.properties == null) {
-            this.properties = new ArrayList<>();
-        }
-        this.properties.add(propertiesItem);
+        this.claimMetadata.put(key, claimMetadataItem);
         return this;
     }
 
@@ -145,15 +134,15 @@ public class VerificationClaimRequest  {
             return false;
         }
         VerificationClaimRequest verificationClaimRequest = (VerificationClaimRequest) o;
-        return Objects.equals(this.username, verificationClaimRequest.username) &&
-            Objects.equals(this.identityVerificationProvider, verificationClaimRequest.identityVerificationProvider) &&
-            Objects.equals(this.claims, verificationClaimRequest.claims) &&
-            Objects.equals(this.properties, verificationClaimRequest.properties);
+        return Objects.equals(this.uri, verificationClaimRequest.uri) &&
+            Objects.equals(this.isVerified, verificationClaimRequest.isVerified) &&
+            Objects.equals(this.idvpId, verificationClaimRequest.idvpId) &&
+            Objects.equals(this.claimMetadata, verificationClaimRequest.claimMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, identityVerificationProvider, claims, properties);
+        return Objects.hash(uri, isVerified, idvpId, claimMetadata);
     }
 
     @Override
@@ -162,10 +151,10 @@ public class VerificationClaimRequest  {
         StringBuilder sb = new StringBuilder();
         sb.append("class VerificationClaimRequest {\n");
         
-        sb.append("    username: ").append(toIndentedString(username)).append("\n");
-        sb.append("    identityVerificationProvider: ").append(toIndentedString(identityVerificationProvider)).append("\n");
-        sb.append("    claims: ").append(toIndentedString(claims)).append("\n");
-        sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
+        sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
+        sb.append("    isVerified: ").append(toIndentedString(isVerified)).append("\n");
+        sb.append("    idvpId: ").append(toIndentedString(idvpId)).append("\n");
+        sb.append("    claimMetadata: ").append(toIndentedString(claimMetadata)).append("\n");
         sb.append("}");
         return sb.toString();
     }

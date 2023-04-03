@@ -23,6 +23,17 @@ package org.wso2.carbon.extension.identity.verification.provider.util;
 public class IdVProviderMgtConstants {
 
     public static final String IDVP_ERROR_PREFIX = "IDVP-";
+    public static final String IDVP_SECRET_TYPE_IDVP_SECRETS = "IDVP_SECRET_PROPERTIES";
+    public static final String ID = "ID";
+    public static final String UUID = "UUID";
+    public static final String NAME = "NAME";
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String IS_ENABLED = "IS_ENABLED";
+    public static final String PROPERTY_KEY = "PROPERTY_KEY";
+    public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
+    public static final String IS_SECRET = "IS_SECRET";
+    public static final String CLAIM = "CLAIM";
+    public static final String LOCAL_CLAIM = "LOCAL_CLAIM";
 
     /**
      * This class contains the constants used in the IdentityVerificationProvider.
@@ -34,7 +45,7 @@ public class IdVProviderMgtConstants {
         public static final String IS_IDVP_EXIST_SQL = "SELECT ID FROM IDVP WHERE UUID=? AND TENANT_ID=?";
         public static final String GET_IDVP_BY_NAME_SQL = "SELECT ID, UUID, NAME, DESCRIPTION, " +
                 "IS_ENABLED FROM IDVP WHERE NAME=? AND TENANT_ID=?";
-        public static final String GET_IDVP_CONFIG_SQL = "SELECT PROPERTY_KEY, PROPERTY_VALUE FROM " +
+        public static final String GET_IDVP_CONFIG_SQL = "SELECT PROPERTY_KEY, PROPERTY_VALUE, IS_SECRET FROM " +
                 "IDVP_CONFIG WHERE IDVP_ID=? AND TENANT_ID=?";
         public static final String GET_IDVP_CLAIMS_SQL = "SELECT CLAIM, LOCAL_CLAIM FROM " +
                 "IDVP_CLAIM_MAPPING WHERE IDVP_ID=? AND TENANT_ID=?";
@@ -42,13 +53,10 @@ public class IdVProviderMgtConstants {
                 "IDVP WHERE TENANT_ID=? ORDER BY UUID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         public static final String GET_COUNT_OF_IDVPS_SQL = "SELECT COUNT(*) FROM IDVP WHERE TENANT_ID=?";
         public static final String DELETE_IDV_SQL = "DELETE FROM IDVP WHERE UUID=? AND TENANT_ID=?";
-
         public static final String ADD_IDVP_SQL = "INSERT INTO IDVP(UUID, TENANT_ID, NAME, " +
                 "DESCRIPTION, IS_ENABLED) VALUES (?, ?, ?, ?, ?)";
-
         public static final String ADD_IDVP_CONFIG_SQL = "INSERT INTO IDVP_CONFIG " +
-                "(IDVP_ID, TENANT_ID, PROPERTY_KEY, PROPERTY_VALUE) VALUES (?, ?, ?, ?)";
-
+                "(IDVP_ID, TENANT_ID, PROPERTY_KEY, PROPERTY_VALUE, IS_SECRET) VALUES (?, ?, ?, ?, ?)";
         public static final String ADD_IDVP_CLAIM_SQL = "INSERT INTO IDVP_CLAIM_MAPPING " +
                 "(IDVP_ID, TENANT_ID, CLAIM, LOCAL_CLAIM) VALUES (?, ?, ?, ?)";
         public static final String UPDATE_IDVP_SQL = "UPDATE IDVP SET NAME=?, DESCRIPTION=?, " +
@@ -65,24 +73,22 @@ public class IdVProviderMgtConstants {
     public enum ErrorMessage {
 
         ERROR_DATABASE_CONNECTION("65001", "Couldn't get a database connection."),
-        ERROR_RETRIEVING_IDV_PROVIDERS("65001",
+        ERROR_RETRIEVING_IDV_PROVIDERS("65002",
                 "An error occurred while retrieving Identity Verification Providers."),
-        ERROR_RETRIEVING_IDV_PROVIDER("65001",
+        ERROR_RETRIEVING_IDV_PROVIDER("65003",
                 "An error occurred while retrieving Identity Verification Provider by %s."),
-        ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS("65002",
+        ERROR_RETRIEVING_IDV_PROVIDER_CONFIGS("65004",
                 "An error occurred while retrieving Identity Verification Provider configs."),
-        ERROR_RETRIEVING_IDV_PROVIDER_CLAIMS("65003",
+        ERROR_RETRIEVING_IDV_PROVIDER_CLAIMS("65005",
                 "An error occurred while retrieving Identity Verification Provider claims."),
-        ERROR_ADDING_IDV_PROVIDER("", "Error while adding Identity Verification Provider."),
-        ERROR_UPDATING_IDV_PROVIDER("", ""),
-        ERROR_DELETING_IDV_PROVIDER("65000",
+        ERROR_ADDING_IDV_PROVIDER("65006", "Error while adding Identity Verification Provider."),
+        ERROR_DELETING_IDV_PROVIDER("65007",
                 "An error occurred while deleting Identity Verification Provider: %s."),
-        ERROR_IDVP_NOT_EXISTS("65004",
-                "An Identity Verification Provider not exists with the id: %s."),
-        ERROR_IDVP_ALREADY_EXISTS("65004",
+        ERROR_IDVP_ALREADY_EXISTS("65008",
                 "An Identity Verification Provider already exists with the name: %s."),
-        ERROR_IDVP_REQUEST_INVALID("65005",
-                "An Identity Verification Provider already exists with the name: %s.");
+        ERROR_EMPTY_IDVP_ID("65009",
+                "Identity Verification Provider ID value is empty.");
+
         private final String code;
         private final String message;
 

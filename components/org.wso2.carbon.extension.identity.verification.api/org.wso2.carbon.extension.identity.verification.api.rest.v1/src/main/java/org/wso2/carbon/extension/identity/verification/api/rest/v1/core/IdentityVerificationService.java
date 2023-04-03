@@ -22,24 +22,26 @@ import org.wso2.carbon.extension.identity.verification.api.rest.common.Constants
 import org.wso2.carbon.extension.identity.verification.api.rest.common.IdentityVerificationServiceHolder;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Claims;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.Property;
-import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimPostRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationClaimUpdateRequest;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationGetResponse;
 import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerificationPostResponse;
-import org.wso2.carbon.extension.identity.verification.claim.mgt.IdVClaimMgtException;
-import org.wso2.carbon.extension.identity.verification.claim.mgt.model.IdVClaim;
-import org.wso2.carbon.extension.identity.verifier.IdentityVerificationException;
-import org.wso2.carbon.extension.identity.verifier.model.IdVProperty;
-import org.wso2.carbon.extension.identity.verifier.model.IdentityVerifierData;
+import org.wso2.carbon.extension.identity.verification.api.rest.v1.model.VerifyRequest;
+import org.wso2.carbon.extension.identity.verification.mgt.exception.IdentityVerificationException;
+import org.wso2.carbon.extension.identity.verification.mgt.model.IdVClaim;
+import org.wso2.carbon.extension.identity.verification.mgt.model.IdVProperty;
+import org.wso2.carbon.extension.identity.verification.mgt.model.IdentityVerifierData;
+import org.wso2.carbon.extension.identity.verification.mgt.utils.IdentityVerificationConstants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.core.Response;
 
-import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getClaimMetadataMap;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.getTenantId;
 import static org.wso2.carbon.extension.identity.verification.api.rest.v1.core.IdentityVerificationUtils.handleException;
 
@@ -51,22 +53,34 @@ public class IdentityVerificationService {
     /**
      * Add identity verification claim.
      *
-     * @param verificationClaimPostRequest verificationClaimPostRequest.
+     * @param verificationClaimRequest Verification claim request.
      * @return Verification claim response.
      */
-    public VerificationClaimResponse addIdVClaim(String userId,
-                                                 VerificationClaimPostRequest verificationClaimPostRequest) {
+    public List<VerificationClaimResponse> addIdVClaims(String userId,
+                                                        List<VerificationClaimRequest> verificationClaimRequest) {
 
-        IdVClaim idvClaim;
+        List<IdVClaim> idVClaims;
         int tenantId = getTenantId();
         try {
-            idvClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
-                    addIdVClaim(createIdVClaim(userId, verificationClaimPostRequest), tenantId);
-        } catch (IdVClaimMgtException e) {
-            throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_ADDING_VERIFICATION_CLAIM, null);
+            idVClaims = IdentityVerificationServiceHolder.getIdentityVerificationMgt().
+                    addIdVClaims(userId, createIdVClaim(userId, verificationClaimRequest), tenantId);
+        } catch (IdentityVerificationException e) {
+            if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_USER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_USER_ID_NOT_FOUND, userId);
+            } else if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_IDV_PROVIDER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_IDVP_ID_NOT_FOUND, userId);
+            } else if (IdentityVerificationConstants.ErrorMessage.ERROR_IDV_CLAIM_DATA_ALREADY_EXISTS.getCode().
+                    equals(e.getErrorCode())) {
+                throw handleException(Response.Status.CONFLICT, Constants.ErrorMessage.ERROR_CODE_IDV_CLAIM_CONFLICT,
+                        userId);
+            } else {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_ADDING_VERIFICATION_CLAIM, null);
+            }
         }
-        return createVerificationClaimResponse(idvClaim);
+        return createVerificationClaimsResponse(idVClaims);
     }
 
     /**
@@ -81,14 +95,23 @@ public class IdentityVerificationService {
         int tenantId = getTenantId();
         try {
             idVClaim = IdentityVerificationServiceHolder.
-                    getIdVClaimManager().getIdVClaim(userId, claimId, tenantId);
+                    getIdentityVerificationMgt().getIdVClaim(userId, claimId, tenantId);
             if (idVClaim == null) {
                 throw IdentityVerificationUtils.handleException(Response.Status.NOT_FOUND,
                         Constants.ErrorMessage.ERROR_CODE_IDV_CLAIM_NOT_FOUND, claimId);
             }
-        } catch (IdVClaimMgtException e) {
-            throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_GETTING_VERIFICATION_CLAIM, claimId);
+        } catch (IdentityVerificationException e) {
+            if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_USER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_USER_ID_NOT_FOUND, userId);
+            } else if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_IDV_CLAIM_ID.
+                    getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_CLAIM_ID_NOT_FOUND, claimId);
+            } else {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_GETTING_VERIFICATION_CLAIM, claimId);
+            }
         }
         return createVerificationClaimResponse(idVClaim);
     }
@@ -107,17 +130,26 @@ public class IdentityVerificationService {
         IdVClaim idVClaim;
         int tenantId = getTenantId();
         try {
-            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
+            idVClaim = IdentityVerificationServiceHolder.getIdentityVerificationMgt().
                     getIdVClaim(userId, claimId, tenantId);
             if (idVClaim == null) {
                 throw IdentityVerificationUtils.handleException(Response.Status.NOT_FOUND,
                         Constants.ErrorMessage.ERROR_CODE_IDV_CLAIM_NOT_FOUND, claimId);
             }
-            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().
+            idVClaim = IdentityVerificationServiceHolder.getIdentityVerificationMgt().
                     updateIdVClaim(createIdVClaim(verificationClaimUpdateRequest, userId, claimId), tenantId);
-        } catch (IdVClaimMgtException e) {
-            throw IdentityVerificationUtils.handleException(e,
-                    Constants.ErrorMessage.ERROR_UPDATING_VERIFICATION_CLAIM, claimId);
+        } catch (IdentityVerificationException e) {
+            if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_USER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_USER_ID_NOT_FOUND, userId);
+            } else if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_IDV_CLAIM_ID.
+                    getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_CLAIM_ID_NOT_FOUND, claimId);
+            } else {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_UPDATING_VERIFICATION_CLAIM, claimId);
+            }
         }
         return createVerificationClaimResponse(idVClaim);
     }
@@ -133,9 +165,16 @@ public class IdentityVerificationService {
         IdVClaim[] idVClaim;
         int tenantId = getTenantId();
         try {
-            idVClaim = IdentityVerificationServiceHolder.getIdVClaimManager().getIDVClaims(userId, tenantId);
-        } catch (IdVClaimMgtException e) {
-            throw handleException(e, Constants.ErrorMessage.ERROR_RETRIEVING_USER_IDV_CLAIMS, null);
+            idVClaim = IdentityVerificationServiceHolder.getIdentityVerificationMgt().
+                    getIDVClaims(userId, tenantId);
+        } catch (IdentityVerificationException e) {
+            if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_USER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_USER_ID_NOT_FOUND, userId);
+            } else {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_RETRIEVING_USER_IDV_CLAIMS, null);
+            }
         }
         return createVerificationGetResponse(userId, idVClaim);
     }
@@ -143,19 +182,26 @@ public class IdentityVerificationService {
     /**
      * Verify an identity.
      *
-     * @param verificationClaimRequest Verification claim request.
+     * @param verifyRequest Verification claim request.
      * @return Verification post response.
      */
-    public VerificationPostResponse verifyIdentity(VerificationClaimRequest verificationClaimRequest) {
+    public VerificationPostResponse verifyIdentity(String userId,
+                                                   VerifyRequest verifyRequest) {
 
         IdentityVerifierData identityVerifierResponse;
-        IdentityVerifierData identityVerifier = getIdentityVerifier(verificationClaimRequest);
+        IdentityVerifierData identityVerifier = getIdentityVerifier(verifyRequest);
         int tenantId = getTenantId();
         try {
-            identityVerifierResponse = IdentityVerificationServiceHolder.getIdentityVerificationService().
-                    verifyIdentity(identityVerifier, tenantId);
+            identityVerifierResponse = IdentityVerificationServiceHolder.getIdentityVerificationMgt().
+                    verifyIdentity(userId, identityVerifier, tenantId);
         } catch (IdentityVerificationException e) {
-            throw handleException(e, Constants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
+            if (IdentityVerificationConstants.ErrorMessage.ERROR_INVALID_USER_ID.getCode().equals(e.getErrorCode())) {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_CODE_USER_ID_NOT_FOUND, userId);
+            } else {
+                throw IdentityVerificationUtils.handleIdVException(e,
+                        Constants.ErrorMessage.ERROR_RETRIEVING_IDV_CLAIM_METADATA, null);
+            }
         }
         return getVerificationPostResponse(identityVerifierResponse);
     }
@@ -163,21 +209,25 @@ public class IdentityVerificationService {
     /**
      * Create IdVClaim object based on the VerificationClaimPostRequest.
      *
-     * @param userId                        User id.
-     * @param verificationClaimPostRequest Verification claim post request.
+     * @param userId                   User id.
+     * @param verificationClaimRequest Verification claim request.
      * @return Identity verification info.
      */
-    private IdVClaim createIdVClaim(String userId, VerificationClaimPostRequest verificationClaimPostRequest) {
+    private List<IdVClaim> createIdVClaim(String userId, List<VerificationClaimRequest> verificationClaimRequest) {
 
-        IdVClaim idVClaim = new IdVClaim();
-        idVClaim.setUuid(UUID.randomUUID().toString());
-        idVClaim.setUserId(userId);
-        idVClaim.setClaimUri(verificationClaimPostRequest.getUri());
-        idVClaim.setStatus(verificationClaimPostRequest.getIsVerified());
-        idVClaim.setIdvProviderId(verificationClaimPostRequest.getIdvpId());
-        Map<String, Object> claimMetadata = verificationClaimPostRequest.getClaimMetadata();
-        idVClaim.setMetadata(new JSONObject(claimMetadata));
-        return idVClaim;
+        List<IdVClaim> idVClaimList = new ArrayList<>();
+        for (VerificationClaimRequest verificationClaim : verificationClaimRequest) {
+            IdVClaim idVClaim = new IdVClaim();
+            idVClaim.setUuid(UUID.randomUUID().toString());
+            idVClaim.setUserId(userId);
+            idVClaim.setClaimUri(verificationClaim.getUri());
+            idVClaim.setStatus(verificationClaim.getIsVerified());
+            idVClaim.setIdVPId(verificationClaim.getIdvpId());
+            Map<String, Object> claimMetadata = verificationClaim.getClaimMetadata();
+            idVClaim.setMetadata(new JSONObject(claimMetadata));
+            idVClaimList.add(idVClaim);
+        }
+        return idVClaimList;
     }
 
     private IdVClaim createIdVClaim(VerificationClaimUpdateRequest verificationClaimUpdateRequest, String userId,
@@ -192,18 +242,17 @@ public class IdentityVerificationService {
         return idVClaim;
     }
 
-    private IdentityVerifierData getIdentityVerifier(VerificationClaimRequest verificationClaimRequest) {
+    private IdentityVerifierData getIdentityVerifier(VerifyRequest verifyRequest) {
 
         IdentityVerifierData identityVerifier = new IdentityVerifierData();
-        identityVerifier.setUserId(verificationClaimRequest.getUsername());
-        identityVerifier.setIdentityVerifierName(verificationClaimRequest.getIdentityVerificationProvider());
-        for (Claims claim : verificationClaimRequest.getClaims()) {
+        identityVerifier.setIdentityVerifierName(verifyRequest.getIdentityVerificationProvider());
+        for (Claims claim : verifyRequest.getClaims()) {
             IdVClaim idVClaim = new IdVClaim();
             idVClaim.setClaimUri(claim.getClaimUri());
             idVClaim.setClaimValue(claim.getClaimValue());
             identityVerifier.addIdVClaimProperty(idVClaim);
         }
-        for (Property property : verificationClaimRequest.getProperties()) {
+        for (Property property : verifyRequest.getProperties()) {
             IdVProperty idVProperty = new IdVProperty();
             idVProperty.setName(property.getKey());
             idVProperty.setValue(property.getValue());
@@ -215,44 +264,64 @@ public class IdentityVerificationService {
     private VerificationPostResponse getVerificationPostResponse(IdentityVerifierData identityVerifierData) {
 
         VerificationPostResponse verificationPostResponse = new VerificationPostResponse();
-        verificationPostResponse.username(identityVerifierData.getUserId());
         verificationPostResponse.setIdentityVerificationProvider(identityVerifierData.getIdentityVerifierName());
         for (IdVClaim idVClaim : identityVerifierData.getIdVClaims()) {
             VerificationClaimResponse verificationClaimResponse = new VerificationClaimResponse();
             verificationClaimResponse.setId(idVClaim.getUuid());
             verificationClaimResponse.setUri(idVClaim.getClaimUri());
             verificationClaimResponse.setIsVerified(idVClaim.getStatus());
-            verificationClaimResponse.setValue(idVClaim.getClaimValue());
             verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
             verificationPostResponse.addClaimsItem(verificationClaimResponse);
         }
         return verificationPostResponse;
     }
 
-    /**
-     * Create verification claim response.
-     *
-     * @param idVClaim IdVClaim object.
-     * @return Verification claim metadata.
-     */
     private VerificationClaimResponse createVerificationClaimResponse(IdVClaim idVClaim) {
 
         VerificationClaimResponse verificationClaimResponse = new VerificationClaimResponse();
         verificationClaimResponse.setId(idVClaim.getUuid());
         verificationClaimResponse.setUri(idVClaim.getClaimUri());
-        verificationClaimResponse.setValue(idVClaim.getClaimValue());
         verificationClaimResponse.setIsVerified(idVClaim.getStatus());
         verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
         return verificationClaimResponse;
     }
 
+    private List<VerificationClaimResponse> createVerificationClaimsResponse(List<IdVClaim> idVClaims) {
+
+        List<VerificationClaimResponse> verificationClaimResponseList = new ArrayList<>();
+        for (IdVClaim idVClaim : idVClaims) {
+            VerificationClaimResponse verificationClaimResponse = new VerificationClaimResponse();
+            verificationClaimResponse.setId(idVClaim.getUuid());
+            verificationClaimResponse.setUri(idVClaim.getClaimUri());
+            verificationClaimResponse.setIsVerified(idVClaim.getStatus());
+            verificationClaimResponse.setClaimMetadata(getClaimMetadataMap(idVClaim.getMetadata()));
+            verificationClaimResponseList.add(verificationClaimResponse);
+        }
+        return verificationClaimResponseList;
+
+    }
+
     private VerificationGetResponse createVerificationGetResponse(String userId, IdVClaim[] idVClaims) {
 
         VerificationGetResponse verificationGetResponse = new VerificationGetResponse();
-        verificationGetResponse.setUserId(userId);
         for (IdVClaim idVClaim : idVClaims) {
             verificationGetResponse.addClaimsItem(createVerificationClaimResponse(idVClaim));
         }
         return verificationGetResponse;
+    }
+
+    /**
+     * Get the claim metadata map from the JSON object.
+     *
+     * @param claimMetadataJson JSON object of the claim metadata.
+     * @return Map of the claim metadata.
+     */
+    private Map<String, Object> getClaimMetadataMap(JSONObject claimMetadataJson) {
+
+        Map<String, Object> claimMetadata = new HashMap<>();
+        for (String key : claimMetadataJson.keySet()) {
+            claimMetadata.put(key, claimMetadataJson.get(key));
+        }
+        return claimMetadata;
     }
 }

@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.wso2.carbon.extension.identity.verification.api.rest.v1.model;
 
@@ -28,14 +30,14 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.xml.bind.annotation.*;
 
-public class Verificationclaim  {
+public class VerificationClaim  {
   
     private String localClaim;
     private String idvpClaim;
 
     /**
     **/
-    public Verificationclaim localClaim(String localClaim) {
+    public VerificationClaim localClaim(String localClaim) {
 
         this.localClaim = localClaim;
         return this;
@@ -53,7 +55,7 @@ public class Verificationclaim  {
 
     /**
     **/
-    public Verificationclaim idvpClaim(String idvpClaim) {
+    public VerificationClaim idvpClaim(String idvpClaim) {
 
         this.idvpClaim = idvpClaim;
         return this;
@@ -80,9 +82,9 @@ public class Verificationclaim  {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Verificationclaim verificationclaim = (Verificationclaim) o;
-        return Objects.equals(this.localClaim, verificationclaim.localClaim) &&
-            Objects.equals(this.idvpClaim, verificationclaim.idvpClaim);
+        VerificationClaim verificationClaim = (VerificationClaim) o;
+        return Objects.equals(this.localClaim, verificationClaim.localClaim) &&
+            Objects.equals(this.idvpClaim, verificationClaim.idvpClaim);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class Verificationclaim  {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("class Verificationclaim {\n");
+        sb.append("class VerificationClaim {\n");
         
         sb.append("    localClaim: ").append(toIndentedString(localClaim)).append("\n");
         sb.append("    idvpClaim: ").append(toIndentedString(idvpClaim)).append("\n");
